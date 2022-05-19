@@ -10,7 +10,7 @@ class signupscreen extends Component {
     render(){
 
         return(
-            <View>
+            <View style={Styles.main}>
                 <Text>Sign up screen</Text>
             </View>
         );
@@ -20,6 +20,15 @@ class signupscreen extends Component {
 }
 
 const Styles = StyleSheet.create({
+
+    main : {
+        flex : 1,
+        backgroundColor : "#FFFFFF",
+        flexDirection:'row',
+        alignContent:'center',
+        alignItems:'center'
+        
+    }
 
 });
 
