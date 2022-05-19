@@ -14,6 +14,10 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		7699B88040F8A987B510C191 /* libPods-relaks_cafe-relaks_cafeTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-relaks_cafe-relaks_cafeTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		D5177EF36039433A80AF69EA /* NexaDemo-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 5B0C5B2972DC4046B5536629 /* NexaDemo-Bold.otf */; };
+		236625B19FDB47FBBD990749 /* NexaDemo-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 5E8C45297CBF49CA93C48975 /* NexaDemo-Light.otf */; };
+		3D7D31D0F364408FA4075612 /* NexaTextDemo-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = B45560F2BD144139AE924F3F /* NexaTextDemo-Bold.otf */; };
+		CD634782B6B1452AAA30B946 /* NexaTextDemo-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1F9C7C72692446CCA0DC3975 /* NexaTextDemo-Light.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +48,10 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = relaks_cafe/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-relaks_cafe-relaks_cafeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-relaks_cafe-relaks_cafeTests.release.xcconfig"; path = "Target Support Files/Pods-relaks_cafe-relaks_cafeTests/Pods-relaks_cafe-relaks_cafeTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		5B0C5B2972DC4046B5536629 /* NexaDemo-Bold.otf */ = {isa = PBXFileReference; name = "NexaDemo-Bold.otf"; path = "../src/assert/fonts/NexaDemo-Bold.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		5E8C45297CBF49CA93C48975 /* NexaDemo-Light.otf */ = {isa = PBXFileReference; name = "NexaDemo-Light.otf"; path = "../src/assert/fonts/NexaDemo-Light.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		B45560F2BD144139AE924F3F /* NexaTextDemo-Bold.otf */ = {isa = PBXFileReference; name = "NexaTextDemo-Bold.otf"; path = "../src/assert/fonts/NexaTextDemo-Bold.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		1F9C7C72692446CCA0DC3975 /* NexaTextDemo-Light.otf */ = {isa = PBXFileReference; name = "NexaTextDemo-Light.otf"; path = "../src/assert/fonts/NexaTextDemo-Light.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +130,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				4EC083EB646348B5964F05FE /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -147,6 +156,18 @@
 			);
 			path = Pods;
 			sourceTree = "<group>";
+		};
+		4EC083EB646348B5964F05FE /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				5B0C5B2972DC4046B5536629 /* NexaDemo-Bold.otf */,
+				5E8C45297CBF49CA93C48975 /* NexaDemo-Light.otf */,
+				B45560F2BD144139AE924F3F /* NexaTextDemo-Bold.otf */,
+				1F9C7C72692446CCA0DC3975 /* NexaTextDemo-Light.otf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -244,6 +265,10 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				D5177EF36039433A80AF69EA /* NexaDemo-Bold.otf in Resources */,
+				236625B19FDB47FBBD990749 /* NexaDemo-Light.otf in Resources */,
+				3D7D31D0F364408FA4075612 /* NexaTextDemo-Bold.otf in Resources */,
+				CD634782B6B1452AAA30B946 /* NexaTextDemo-Light.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
