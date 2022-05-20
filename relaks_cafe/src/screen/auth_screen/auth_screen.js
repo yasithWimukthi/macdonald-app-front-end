@@ -10,7 +10,7 @@ class authscreen extends Component {
     render(){
 
         return(
-            <View>
+            <View style={Styles.main}>
                 <Text>Auth screen</Text>
             </View>
         );
@@ -20,7 +20,12 @@ class authscreen extends Component {
 }
 
 const Styles = StyleSheet.create({
-
+    main : {
+        flex : 1,
+        alignContent:'center',
+        alignItems :'center',
+        backgroundColor : 'red'
+    }
 });
 
 

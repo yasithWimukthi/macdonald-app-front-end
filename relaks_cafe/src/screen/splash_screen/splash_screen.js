@@ -6,6 +6,9 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 //import fils
 import app_logo from '../../assert/images/splash_app_logo.png';
 
+
+
+
 class splashscreeen extends Component {
 
     constructor(props) {
