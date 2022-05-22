@@ -28,6 +28,10 @@ import {
 
 import SplashScreeen from './src/screen/splash_screen/splash_screen';
 import AuthenticationScreen from './src/screen/authication_screen/authentication_screen';
+import AuthScreen from './src/screen/auth_screen/auth_screen';
+import RegisterScreen from './src/screen/signup_screen/signup_screen';
+import SignupFormScreen from './src/screen/signup_form_screen/signup_form_screen';
+import Home_Screen from './src/screen/home_screen/home_screen';
 
 
 const App: () => Node = () => {
@@ -38,8 +42,9 @@ const App: () => Node = () => {
   };
 
   return (
-     <SplashScreeen/>
-    // <AuthenticationScreen/>
+    //  <SplashScreeen/>
+    // <RegisterScreen/>
+     <Home_Screen/>
   );
 };
 
