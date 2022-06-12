@@ -46,13 +46,14 @@ import SingleMenuItemScreen from './src/screen/MenuList_screen/MenuList_screen';
 import WriteToUs_Screen from './src/screen/WriteToUs_Screen/WriteToUs_Screen';
 import PrivencySettingScreen from './src/screen/Privancy_Setting/Privancy_Setting_Screen';
 import Single_FoodInfo_Screen from './src/screen/single_food_item_screen/single_food_item_screen';
-import Tabel_Reservation_Screen from './src/screen/table_reservation/table_reservation';
+import Tabel_Reservation_Screen from './src/screen/Tabs/tabel_reservation_screen';
 import Cart_Screen from './src/screen/cart_screen/cart_screen';
 import StripeGateway from './src/screen/stripegateway_screen/stripegateway_screen';
 import Single_Tranding_Screen from './src/screen/trinding_item_screen/trinding_item_screen';
 import Location_Pickup_Screen from './src/screen/Location_pickup_screen/location_pickup_screen';
 import Search_Address_Screen from './src/screen/Location_pickup_screen/serch_address_screen';
 import Current_Location_Pick_Screen from './src/screen/Location_pickup_screen/curren_location_screen';
+import Single_Deals_Info_Screen from './src/screen/single_deals_screen/single_deals_screen';
 
 import { Stack, Router, Scene } from 'react-native-router-flux';
 
@@ -358,6 +359,18 @@ const App: () => Node = () => {
           <Scene
             key="CurrentLoc"
             component={Current_Location_Pick_Screen}
+            title=""
+            // backButtonTextStyle = {{color:'#FFFFFF'}}
+            // barButtonIconStyle={{ tintColor: '#fff' }}
+            // titleStyle = {{color : '#ffffff',fontFamily : 'Roboto-Regular',}}
+            // navigationBarStyle = {{backgroundColor : '#5B0492'}}
+            // backButtonTintColor = '#fff'
+            // leftButtonStyle = {{color : '#fff',tintColor : '#fff'}}
+            // hideNavBar={true}
+          />
+          <Scene
+            key="SingleDeal"
+            component={Single_Deals_Info_Screen}
             title=""
             // backButtonTextStyle = {{color:'#FFFFFF'}}
             // barButtonIconStyle={{ tintColor: '#fff' }}

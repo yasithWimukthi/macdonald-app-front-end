@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import { useSelector, useDispatch } from 'react-redux';
 import { setCartItems } from '../../redux/actions';
 
-import {Funtion_Single_Foods_Info} from '../../assert/networks/api_calls';
+import { Funtion_Single_Foods_Info } from '../../assert/networks/api_calls';
 
 const FoodName = ({ foodName }) => {
     return (
@@ -37,7 +37,6 @@ const PortionTitel = ({ protionList, updateSeletedPortion }) => {
             <View style={Styles.portion_Holder}>
 
                 <ScrollView horizontal>
-
                     <FlatList
                         horizontal
                         data={protionList}
@@ -57,7 +56,6 @@ const PortionTitel = ({ protionList, updateSeletedPortion }) => {
                                 </TouchableOpacity>
                             );
                         }}
-
                     />
                 </ScrollView>
             </View>
@@ -148,22 +146,22 @@ const Single_Tranding_Screen = ({ ...props }) => {
     const [selectdPortion, setSeletedPortion] = useState(null);
 
 
-    function getSingleFoodInfo(id){
+    function getSingleFoodInfo(id) {
 
-        Funtion_Single_Foods_Info(id).then((response)=>{
+        Funtion_Single_Foods_Info(id).then((response) => {
             var dt = response.data;
             setFoodName(dt.name);
             setPortionList(dt.portions);
             setItem(dt);
             setItemImage(dt.imgUrl);
-        }).catch((error)=>{
-            console.log("error on data getting tranding screen "+error);
+        }).catch((error) => {
+            console.log("error on data getting tranding screen " + error);
         });
     }
 
     useEffect(() => {
         getSingleFoodInfo(props.foodId);
-    },[]);
+    }, []);
 
     function AddToCart() {
         //alert(" cart item " + JSON.stringify(item) + " qty " + qty + " note " + note);
@@ -173,28 +171,30 @@ const Single_Tranding_Screen = ({ ...props }) => {
             "quantity": qty,
             "portionId": selectdPortion.id,
             "note": (note != "") ? note : " ",
-            "itemName" : item.name,
-            "image" : item.imgUrl,
-            "cal" : selectdPortion.calories,
-            "potionName" : selectdPortion.name,
-            "potionPrice" : selectdPortion.price
+            "itemName": item.name,
+            "image": item.imgUrl,
+            "cal": selectdPortion.calories,
+            "potionName": selectdPortion.name,
+            "potionPrice": selectdPortion.price,
+            "dealID": "0",
+            "dealType": "item",
+            "dealItem": [],
         };
 
-        if(portionLit.length == 0) {
+        if (portionLit.length == 0) {
             portionLit.push(seleted_po);
-        }else{
+        } else {
             portionLit.forEach(element => {
-                if(element.id == seleted_po.id){
+                if (element.id == seleted_po.id & element.dealType == "item") {
                     element.quantity = element.quantity + seleted_po.quantity;
                     element.note = element.note != "" ? element.note + seleted_po.note : note
-                }else{
+                } else {
                     portionLit.push(seleted_po);
                 }
             });
         }
 
-        console.log("portion array "+JSON.stringify(portionLit));
-
+        console.log("portion array " + JSON.stringify(portionLit));
 
         var orderObj = {
             // "type": items.type != "" ? items.type : "order", //"order"
@@ -207,12 +207,12 @@ const Single_Tranding_Screen = ({ ...props }) => {
                 "latitude": items.location.latitude,
                 "longitude": items.location.longitude
             },
-            "foodItems": portionLit, 
+            "foodItems": portionLit,
         };
 
         dispatch(setCartItems(orderObj));
-        console.log("location array "+JSON.stringify(items));
-       // alert("set values "+JSON.stringify(items));
+        console.log("location array " + JSON.stringify(items));
+        // alert("set values "+JSON.stringify(items));
     }
 
     return (

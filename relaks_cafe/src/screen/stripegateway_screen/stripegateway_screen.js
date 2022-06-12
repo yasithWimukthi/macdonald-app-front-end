@@ -125,13 +125,28 @@ const StripeGateway = () => {
             var dummyData = [];
 
             list.forEach(element => {
-                var obj = {
-                    "foodItemId": element.foodItemId,
-                    "portionId": element.portionId,
-                    "quantity": element.quantity,
-                    "note": element.note
-                }
-                dummyData.push(obj);
+
+                if(element.dealType == "item"){
+                    var obj = {
+                        "foodItemId": element.foodItemId,
+                        "portionId": element.portionId,
+                        "quantity": element.quantity,
+                        "note": element.note
+                    }
+                    dummyData.push(obj);
+                }else{
+
+                    var tmpList = element.dealItem;
+                    tmpList.forEach((dels)=>{
+                        var obj = {
+                            "foodItemId": dels.foodItem.id,
+                            "portionId": dels.portion.id,
+                            "quantity": (parseInt(dels.quantity) * parseInt(element.quantity)),
+                            "note": element.note
+                        }
+                        dummyData.push(obj);
+                    });
+                }  
             });
 
             orderObj.foodItems = dummyData;

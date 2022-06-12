@@ -11,6 +11,7 @@ import Order_Tab_Screen from '../Tabs/order_tab_screen';
 import More_Tab_Screen from '../Tabs/more_tab_screen';
 import Deals_Tab_Screen from '../Tabs/deals_tab_screen';
 import Resent_Tab_Screen from '../Tabs/resent_tab_screen';
+import Tabel_Reservation_Screen from '../Tabs/tabel_reservation_screen';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -56,6 +57,25 @@ const home_screen = () => {
                                 {/* <Icon color="#000" name="home" size={20} /> */}
                                 <Image source={{ uri: (focused) ? 'bottombar' : 'home_inactive' }} style={Styles.app_logs} />
                                 <Text style={[Styles.tabBartext, { color: (focused) ? "#EB1F25" : "#757575" }]}>Home</Text>
+                            </View>
+                        );
+                    },
+                    tabBarActiveTintColor: 'tomato',
+                    tabBarInactiveTintColor: 'gray',
+                    headerShown: false
+                })}
+                />
+                <Tab.Screen name="Tabel" component={Tabel_Reservation_Screen} options={({ route }) => ({
+                    tabBarIcon: ({ focused }) => {
+
+                        return (
+                            <View style={Styles.bootmIconHolder}>
+                                {/* <Icon color="#000" name="team" size={20} /> */}
+                                {/* <Image source={{ uri: (focused) ? 'bottombar' : 'home_inactive' }} style={Styles.app_logs} /> */}
+                                {
+                                    (focused) ? <Icon color="#EB1F25" name="team" size={20} /> : <Icon color="#757575" name="team" size={20} />
+                                }
+                                <Text style={[Styles.tabBartext, { color: (focused) ? "#EB1F25" : "#757575" }]}>Tabel</Text>
                             </View>
                         );
                     },

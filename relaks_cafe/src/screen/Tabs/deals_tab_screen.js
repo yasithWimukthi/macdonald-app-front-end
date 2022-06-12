@@ -1,5 +1,5 @@
 import React, { PropTypes, Component, useEffect, useState } from 'react';
-import { View, Image, StyleSheet, Text, TouchableOpacity, FlatList } from 'react-native';
+import { View, Image, StyleSheet, Text, TouchableOpacity, FlatList, ScrollView } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/EvilIcons';
 
@@ -8,6 +8,8 @@ import NetInfo from "@react-native-community/netinfo";
 
 import { useSelector, useDispatch } from 'react-redux';
 import { setCartItems } from '../../redux/actions';
+
+import { Actions } from 'react-native-router-flux';
 
 
 const TitelsComponet = () => {
@@ -39,40 +41,40 @@ const Details_tile = () => {
     );
 }
 
-const BannerComponet = ({dealList}) => {
+const BannerComponet = ({ dealList }) => {
 
     const { items } = useSelector(state => state.userReducer);
     const dispatch = useDispatch();
 
-    function addDealToCart (deal) {
+    function addDealToCart(deal) {
         var portionLit = items.foodItems;
 
         var seleted_po = {
             "id": deal.id,
             "quantity": 1,
-            "portionId": "1" , //selectdPortion.id
-            "note":  " ",
-            "itemName" : deal.description,
-            "image" : deal.imgUrl,
-            "cal" : "1000",
-            "potionName" : " ",
-            "potionPrice" : (parseInt(deal.totalPrice) - (parseInt(deal.totalPrice) * parseInt(deal.discount) / 100))
+            "portionId": "1", //selectdPortion.id
+            "note": " ",
+            "itemName": deal.description,
+            "image": deal.imgUrl,
+            "cal": "1000",
+            "potionName": " ",
+            "potionPrice": (parseInt(deal.totalPrice) - (parseInt(deal.totalPrice) * parseInt(deal.discount) / 100))
         };
 
-        if(portionLit.length == 0) {
+        if (portionLit.length == 0) {
             portionLit.push(seleted_po);
-        }else{
+        } else {
             portionLit.forEach(element => {
-                if(element.id == seleted_po.id){
+                if (element.id == seleted_po.id) {
                     element.quantity = element.quantity + seleted_po.quantity;
                     element.note = element.note != "" ? element.note + seleted_po.note : note
-                }else{
+                } else {
                     portionLit.push(seleted_po);
                 }
             });
         }
 
-        console.log("portion array "+JSON.stringify(portionLit));
+        console.log("portion array " + JSON.stringify(portionLit));
 
 
         var orderObj = {
@@ -86,7 +88,7 @@ const BannerComponet = ({dealList}) => {
                 "latitude": items.location.latitude,
                 "longitude": items.location.longitude
             },
-            "foodItems": portionLit, 
+            "foodItems": portionLit,
         };
 
         dispatch(setCartItems(orderObj));
@@ -98,7 +100,10 @@ const BannerComponet = ({dealList}) => {
             keyExtractor={(item, index) => index}
             renderItem={({ item }) => {
                 return (
-                    <TouchableOpacity onPress={() => { addDealToCart(item); }}>
+                    <TouchableOpacity onPress={() => {
+                        //addDealToCart(item); 
+                        Actions.SingleDeal({ dealObj: item });
+                    }}>
                         <View style={Styles.tileConten}>
                             <View elevation={2} style={Styles.bannerHolder}>
                                 <View style={Styles.bannerImageHolder}>
@@ -125,7 +130,7 @@ const BannerComponet = ({dealList}) => {
                                     </View>
                                     <View style={[Styles.bannerDteials, { marginTop: hp('2%') }]}>
                                         <View style={{ width: wp('54%'), }}>
-                                            <Text style={Styles.bannertextLightInfo}>{"Expire "+item.expiryDate} </Text>
+                                            <Text style={Styles.bannertextLightInfo}>{"Expire " + item.expiryDate} </Text>
                                         </View>
                                     </View>
                                 </View>
@@ -141,7 +146,7 @@ const BannerComponet = ({dealList}) => {
 
 function Deals_Tab_Screen() {
 
-    
+
 
     const [dealsList, setDealsList] = useState([]);
 
@@ -174,24 +179,19 @@ function Deals_Tab_Screen() {
     }
 
 
-    
+
 
     return (
         <View style={Styles.main}>
-            {/* <TitelsComponet /> */}
-            <View >
-                <Details_tile />
-            </View>
+            <ScrollView>
+                <View >
+                    <Details_tile />
+                </View>
 
-            <View style={{ marginTop: hp('3%') }}>
-                <BannerComponet dealList={dealsList} />
-            </View>
-
-            {/* <View style={{ marginTop: hp('1%') }}>
-                <BannerComponet />
-            </View> */}
-
-
+                <View style={{ marginTop: hp('3%') }}>
+                    <BannerComponet dealList={dealsList} />
+                </View>
+            </ScrollView>
         </View>
 
     );

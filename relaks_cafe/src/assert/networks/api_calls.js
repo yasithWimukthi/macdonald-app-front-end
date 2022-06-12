@@ -77,6 +77,9 @@ const Funtion_Auth = async (user) => {
         "email": user.email,
         "password": user.password
     });
+
+    console.log("pass auth "+JSON.stringify(data));
+
     var url = BASE_URL + "api/v1/auth/login";
     // var config = {
     //     method: 'post',
@@ -270,6 +273,80 @@ const Funtion_Single_Foods_Info = async (id) => {
         console.log("error on funtion_get_deals_list : " + error);
     }
 }
+const Funtion_Check_Avalible_tabel = async (times) => {
+
+   // console.log("pass parm "+JSON.stringify(times));
+
+    try {
+        var url = BASE_URL + "api/v1/tables/available-tables";
+
+        var raw = JSON.stringify({
+            'checkIn': times.checkIn,
+            'checkOut': times.checkOut
+          });
+       //console.log("check "+raw);
+        let responce = await fetch(url, {
+            method: 'POST',
+            headers: {
+                "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRpbmVzaG1hZHVzaGFua2Fnc3MyMDE1QGdtYWlsLmNvbSIsImlhdCI6MTY1NTAzMzk5NCwiZXhwIjoxNjU1NjM4Nzk0fQ.s7RCF400GObJiqV-vk2qynaIUkq0W9RbyxcONss0wNQ",
+                'Content-Type': 'application/json',
+            },
+            body : raw,
+        });
+        // let responce_Values = await responce.json();
+        // return responce_Values;
+        let code = responce.status;
+        let responce_Values = await responce.json();
+        var data = {
+            "code" : code,
+            "responce" : responce_Values
+        }
+        return data;
+
+
+    } catch (error) {
+        console.log("error on funtion_get_deals_list : " + error);
+    }
+}
+
+const Funtion_Reservation_tabel = async (table) => {
+
+    //console.log("bookings "+JSON.stringify(table));
+
+    try {
+        var url = BASE_URL + "api/v1/tables/reserve-table";
+
+        var data = JSON.stringify({
+            "tableId": table.tableId,
+            "note" : table.note,
+            "checkIn": table.checkIn,
+            "checkOut": table.checkOut
+        });
+       // console.log("url "+url);
+       //console.log("pass "+JSON.stringify(data));
+        let responce = await fetch(url, {
+            method: 'POST',
+            headers: {
+                "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRpbmVzaG1hZHVzaGFua2Fnc3MyMDE1QGdtYWlsLmNvbSIsImlhdCI6MTY1NTAzMzk5NCwiZXhwIjoxNjU1NjM4Nzk0fQ.s7RCF400GObJiqV-vk2qynaIUkq0W9RbyxcONss0wNQ",
+                'Content-Type': 'application/json',
+            },
+            body : data,
+        });
+        let code = responce.status;
+        let responce_Values = await responce.json();
+        var data = {
+            "code" : code,
+            "responce" : responce_Values
+        }
+        return data;
+        
+
+
+    } catch (error) {
+        console.log("error on funtion_get_deals_list : " + error);
+    }
+}
+
 
 
 export {Funtion_FaceBook_Register};
@@ -284,4 +361,6 @@ export {Funtion_Get_Deals_Info_List};
 export {Funtion_Get_Foods_List};
 export {Funtion_Place_Foods_Order};
 export {Funtion_Single_Foods_Info};
+export {Funtion_Check_Avalible_tabel};
+export {Funtion_Reservation_tabel};
 

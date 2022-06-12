@@ -9,6 +9,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setCartItems } from '../../redux/actions';
 
 const Details_View = () => {
+    const { address } = useSelector(state => state.userReducer);
+
     return (
         <View style={Styles.detail_Container}>
             <View style={Styles.detail_Holder}>
@@ -17,12 +19,14 @@ const Details_View = () => {
                         <Image source={{ uri: 'pickup' }} style={Styles.pickup} />
                     </View>
                     <View style={Styles.detail_dtails_holder}>
-                        <Text style={Styles.cartInfos}>Pickup</Text>
-                        <Text style={Styles.subCartInfo}>Adress</Text>
+                        <Text style={Styles.cartInfos}>{address.mainAddress}</Text>
+                        <Text style={Styles.subCartInfo}>{address.subAddress}</Text>
                     </View>
-                    <View style={Styles.detail_change_holder}>
-                        <Text style={Styles.chageText}>Change</Text>
-                    </View>
+                    <TouchableOpacity onPress={() => { Actions.Location(); }}>
+                        <View style={Styles.detail_change_holder}>
+                            <Text style={Styles.chageText}>Change</Text>
+                        </View>
+                    </TouchableOpacity>
                 </View>
                 <View style={Styles.desciption}>
                     <Text style={Styles.subCartInfo}>Adults need around 2000 kcal per day, Equalent to {'\n'}B400KJ. Additional nutrition information is avalible {'\n'}in the more tab of your app.</Text>
@@ -42,68 +46,190 @@ const ItemTile = ({ portionList }) => {
 
     function updatePortion(item) {
 
+        console.log("strart update ");
+        console.log("update item type " + item.dealType);
+        console.log("sore list " + JSON.stringify(items.foodItems));
+        console.log("update size " + items.foodItems.length);
+        //console.log("list " + JSON.stringify(items));
+
         if (editStatus == "Edit") {
             setQty(item.quantity);
             setEditStatus("Update");
             setEditEnable(!editEnable);
         } else {
-            var obj = {
-                "id": item.id,
-                "quantity": qty,
-                "portionId": item.portionId,
-                "note": item.note,
-                "itemName": item.itemName,
-                "image": item.image,
-                "cal": item.cal,
-                "potionName": item.potionName,
-                "potionPrice": item.potionPrice
+            //check seletct item is food or deal
+
+            if (item.dealType == "deal") {
+                //this item is deal
+                var obj = {
+                    "id": item.id,
+                    "quantity": qty,
+                    "portionId": item.portionId,
+                    "note": item.note,
+                    "itemName": item.itemName,
+                    "image": item.image,
+                    "cal": item.cal,
+                    "potionName": item.potionName,
+                    "potionPrice": item.potionPrice,
+                    "dealID": item.id,
+                    "dealType": "deal",
+                    "dealItem": item.promotionItems,
+                }
+
+                var list = items.foodItems;
+
+                const tempArry = list.filter(item => item.dealType == "item");
+                const filteredItems = list.filter(item => item.id !== obj.id && item.dealType == "deal");
+
+                filteredItems.forEach(element => {
+                    tempArry.push(element);
+                });
+
+                
+
+                list = tempArry;
+
+                list.push(obj);
+
+                var total = 0;
+
+                list.forEach(element => {
+                    total = total + (parseFloat(element.potionPrice) * parseFloat(element.quantity));
+                });
+
+                var orderObj = {
+                    "isDelivery": items.isDelivery,
+                    "refId": "",
+                    "noOfItems": items.noOfItems,
+                    "totalPrice": total, //(items.totalPrice + ((qty * parseInt(item.potionPrice) - parseInt(item.potionPrice))))
+                    "promotionId": items.promotionId,
+                    "location": {
+                        "latitude": items.location.latitude,
+                        "longitude": items.location.longitude
+                    },
+                    "foodItems": list,
+                };
+                dispatch(setCartItems(orderObj));
+
+            } else {
+                // this item is food
+
+                var obj = {
+                    "id": item.id,
+                    "quantity": qty,
+                    "portionId": item.portionId,
+                    "note": item.note,
+                    "itemName": item.itemName,
+                    "image": item.image,
+                    "cal": item.cal,
+                    "potionName": item.potionName,
+                    "potionPrice": item.potionPrice,
+                    "dealID": "0",
+                    "dealType": "item",
+                    "dealItem": [],
+                }
+
+                var list = items.foodItems;
+
+                const tempArry = list.filter(item => item.dealType == "deal");
+
+                const filteredItems = list.filter(item => item.id !== obj.id && item.dealType == "item");
+
+                filteredItems.forEach(element => {
+                    tempArry.push(element);
+                });
+
+                list = tempArry;
+
+                list.push(obj);
+
+                var total = 0;
+
+                list.forEach(element => {
+                    total = total + (parseFloat(element.potionPrice) * parseFloat(element.quantity));
+                });
+
+                var orderObj = {
+                    "isDelivery": items.isDelivery,
+                    "refId": "",
+                    "noOfItems": items.noOfItems, //qty
+                    "totalPrice": total, //(items.totalPrice + ((qty * parseInt(item.potionPrice) - parseInt(item.potionPrice))))
+                    "promotionId": items.promotionId,
+                    "location": {
+                        "latitude": items.location.latitude,
+                        "longitude": items.location.longitude
+                    },
+                    "foodItems": list,
+                };
+                dispatch(setCartItems(orderObj));
             }
-
-            var list = items.foodItems;
-
-            const filteredItems = list.filter(item => item.id !== obj.id);
-
-            list = filteredItems;
-        
-            list.push(obj);
-
-            var orderObj = {
-                "isDelivery": items.isDelivery,
-                "refId": "",
-                "noOfItems": items.noOfItems, //qty
-                "totalPrice": (items.totalPrice + ((qty * parseInt(item.potionPrice) - parseInt(item.potionPrice)))),
-                "promotionId": items.promotionId,
-                "location": {
-                    "latitude": items.location.latitude,
-                    "longitude": items.location.longitude
-                },
-                "foodItems": list,
-            };
-            dispatch(setCartItems(orderObj));
             setEditStatus("Edit");
             setEditEnable(!editEnable);
-            
-
         }
 
     }
 
     function removePortion(seleted_po) {
-        var list = items.foodItems;
-        const filteredItems = list.filter(item => item.id !== seleted_po.id);
-        var orderObj = {
-            "isDelivery": items.isDelivery,
-            "refId": "",
-            "noOfItems": items.noOfItems, //qty
-            "totalPrice": (items.totalPrice - (parseInt(seleted_po.quantity) * (parseInt(seleted_po.potionPrice)))),
-            "promotionId": items.promotionId,
-            "location": {
-                "latitude": items.location.latitude,
-                "longitude": items.location.longitude
-            },
-            "foodItems": filteredItems,
-        };
-        dispatch(setCartItems(orderObj));
+
+        if (seleted_po.dealType == "deal") {
+            // deal remove
+            var list = items.foodItems;
+            const tempArry = list.filter(item => item.dealType == "item");
+            const filteredItems = list.filter(item => item.id !== seleted_po.id && item.dealType == "deal");
+
+            filteredItems.forEach(element => {
+                tempArry.push(element);
+            });
+
+            var total = 0;
+
+            tempArry.forEach(element => {
+                total = total + (parseFloat(element.potionPrice) * parseFloat(element.quantity));
+            });
+
+            var orderObj = {
+                "isDelivery": items.isDelivery,
+                "refId": "",
+                "noOfItems": items.noOfItems, //qty
+                "totalPrice": total, //(items.totalPrice - (parseInt(seleted_po.quantity) * (parseInt(seleted_po.potionPrice))))
+                "promotionId": items.promotionId,
+                "location": {
+                    "latitude": items.location.latitude,
+                    "longitude": items.location.longitude
+                },
+                "foodItems": tempArry,
+            };
+            dispatch(setCartItems(orderObj));
+
+        } else {
+            // food remove
+            var list = items.foodItems;
+            const tempArry = list.filter(item => item.dealType == "deal");
+            const filteredItems = list.filter(item => item.id !== seleted_po.id && item.dealType == "item");
+            filteredItems.forEach(element => {
+                tempArry.push(element);
+            });
+
+            var total = 0;
+
+            tempArry.forEach(element => {
+                total = total + (parseFloat(element.potionPrice) * parseFloat(element.quantity));
+            });
+
+            var orderObj = {
+                "isDelivery": items.isDelivery,
+                "refId": "",
+                "noOfItems": items.noOfItems, //qty
+                "totalPrice": total, //(items.totalPrice - (parseInt(seleted_po.quantity) * (parseInt(seleted_po.potionPrice))))
+                "promotionId": items.promotionId,
+                "location": {
+                    "latitude": items.location.latitude,
+                    "longitude": items.location.longitude
+                },
+                "foodItems": tempArry,
+            };
+            dispatch(setCartItems(orderObj));
+        }
     }
 
     return (
@@ -114,6 +240,7 @@ const ItemTile = ({ portionList }) => {
 
                 <FlatList
                     data={portionList}
+                    extraData={editEnable}
                     // keyExtractor={item => item.id}
                     keyExtractor={(item, index) => index}
                     renderItem={({ item }) => {
@@ -190,27 +317,21 @@ const ItemTile = ({ portionList }) => {
                     }}
 
                 />
-
             </ScrollView>
-
-
         </View>
-
-
-
     );
 }
 
-const ProcessCheckOutBtn = ({funtions,totalPrice}) => {
+const ProcessCheckOutBtn = ({ funtions, totalPrice }) => {
     return (
         <View style={Styles.btnContainer}>
-            <TouchableOpacity  onPress={funtions}>
+            <TouchableOpacity onPress={funtions}>
                 <View style={Styles.btnBorder}>
                     <View style={Styles.btn_icon_holder}>
                         {/* <Icon color="#4285F4" name="google" size={30} /> */}
                     </View>
                     <View style={Styles.btn_text_holder_login}>
-                        <Text style={Styles.brtn_text_content}>{"checkout € "+totalPrice}</Text>
+                        <Text style={Styles.brtn_text_content}>{"checkout € " + totalPrice}</Text>
                     </View>
                     <View style={Styles.btn_icon_holder}>
                         {/* <Icon color="#000" name="right" size={30} /> */}
@@ -226,16 +347,17 @@ const Cart_Screen = () => {
     const { items } = useSelector(state => state.userReducer);
     const dispatch = useDispatch();
 
-  //  alert("datas "+JSON.stringify(items));
+    //  alert("datas "+JSON.stringify(items));
+
 
     return (
         <View style={Styles.main}>
-            <View style={{ marginTop: hp('5%') }}></View>
+            {/* <View style={{ marginTop: hp('5%') }}></View> */}
             <Details_View />
             <ItemTile portionList={items.foodItems} />
 
             <View style={Styles.screenTitel}>
-                <ProcessCheckOutBtn funtions={() => { Actions.Pay();}} totalPrice={items.totalPrice} />
+                <ProcessCheckOutBtn funtions={() => { Actions.Pay(); }} totalPrice={items.totalPrice} />
             </View>
         </View>
     );
@@ -251,21 +373,21 @@ const Styles = StyleSheet.create({
     },
     detail_Container: {
         width: wp('100%'),
-        height: hp('30%'),
+        height: hp('28%'),
         alignItems: 'center',
         justifyContent: 'center',
     },
     detail_Holder: {
         width: wp('90%'),
-        height: hp('28%'),
+        height: hp('26%'),
         justifyContent: 'center',
 
     },
     detail_row_holder: {
         width: wp('90%'),
-        height: hp('15%'),
+        height: hp('12%'),
         justifyContent: 'center',
-        flexDirection: 'row'
+        flexDirection: 'row',
     },
     desciption: {
         width: wp('90%'),
@@ -275,17 +397,17 @@ const Styles = StyleSheet.create({
     },
     detail_icon_holder: {
         width: wp('20%'),
-        height: hp('15%'),
+        height: hp('12%'),
         justifyContent: 'center',
     },
     detail_dtails_holder: {
         width: wp('50%'),
-        height: hp('15%'),
+        height: hp('12%'),
         justifyContent: 'center',
     },
     detail_change_holder: {
         width: wp('20%'),
-        height: hp('15%'),
+        height: hp('12%'),
         justifyContent: 'center',
     },
     pickup: {
@@ -449,10 +571,10 @@ const Styles = StyleSheet.create({
         borderColor: '#000',
         borderWidth: 1,
         borderRadius: 5,
-        borderColor : 'yellow',
+        borderColor: 'yellow',
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor:'yellow',
+        backgroundColor: 'yellow',
         justifyContent: 'center'
     },
     btn_icon_holder: {

@@ -17,12 +17,11 @@ class splashscreeen extends Component {
     }
 
     componentDidMount(){
-
         // Start counting when the page is loaded
         this.timeoutHandle = setTimeout(()=>{
              // Add your logic for the transition
             Actions.auth();
-            // Actions.Tabel();
+           //  Actions.authenticated();
         }, 3000);
    }
    

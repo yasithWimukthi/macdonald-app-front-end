@@ -107,56 +107,8 @@ const MenuTile = ({ menuList }) => {
 
 const DealsTile = ({ dealList }) => {
 
-    const { items } = useSelector(state => state.userReducer);
-    const dispatch = useDispatch();
-
-    function addDealToCart(deal) {
-        var portionLit = items.foodItems;
-
-        var seleted_po = {
-            "id": deal.id,
-            "quantity": 1,
-            "portionId": "1", //selectdPortion.id
-            "note": " ",
-            "itemName": deal.description,
-            "image": deal.imgUrl,
-            "cal": "1000",
-            "potionName": " ",
-            "potionPrice": (parseInt(deal.totalPrice) - (parseInt(deal.totalPrice) * parseInt(deal.discount) / 100))
-        };
-
-        if (portionLit.length == 0) {
-            portionLit.push(seleted_po);
-        } else {
-            portionLit.forEach(element => {
-                if (element.id == seleted_po.id) {
-                    element.quantity = element.quantity + seleted_po.quantity;
-                    element.note = element.note != "" ? element.note + seleted_po.note : note
-                } else {
-                    portionLit.push(seleted_po);
-                }
-            });
-        }
-
-        console.log("portion array " + JSON.stringify(portionLit));
-
-
-        var orderObj = {
-            // "type": items.type != "" ? items.type : "order", //"order"
-            "isDelivery": (items.isDelivery) ? true : false,
-            "refId": "",
-            "noOfItems": items.noOfItems + 1, //qty
-            "totalPrice": items.totalPrice,
-            "promotionId": 0,
-            "location": {
-                "latitude": items.location.latitude,
-                "longitude": items.location.longitude
-            },
-            "foodItems": portionLit,
-        };
-
-        dispatch(setCartItems(orderObj));
-    }
+    // const { items } = useSelector(state => state.userReducer);
+    // const dispatch = useDispatch();
 
     return (
         <View style={Styles.MenuContainer}>
@@ -183,7 +135,10 @@ const DealsTile = ({ dealList }) => {
                                 keyExtractor={(item, index) => index}
                                 renderItem={({ item }) => {
                                     return (
-                                        <TouchableOpacity onPress={() => { addDealToCart(item); }}>
+                                        <TouchableOpacity onPress={() => { 
+                                            //addDealToCart(item); 
+                                            Actions.SingleDeal({dealObj:item});
+                                            }}>
                                             <View style={Styles.menuItemSingleTileConatiner}>
                                                 <View style={Styles.menuItemSingleTileHolder}>
                                                     <Image resizeMode='cover' style={{ width: '100%', height: '100%', borderRadius: wp('2%') }} source={{ uri: item.imgUrl }} />
@@ -197,26 +152,6 @@ const DealsTile = ({ dealList }) => {
                                 }}
 
                             />
-
-
-
-                            {/* <View style={Styles.menuItemSingleTileConatiner}>
-                                <View style={Styles.menuItemSingleTileHolder}>
-                                    <Image resizeMode='cover' style={{ width: '100%', height: '100%', borderRadius: wp('2%') }} source={{ uri: 'https://www.mashed.com/img/gallery/what-you-dont-know-about-mcdonalds-hotcakes/intro-1553105326.jpg' }} />
-                                </View>
-                                <View style={Styles.menuItemSingleTextHolder}>
-                                    <Text style={Styles.menu_item_name}>Pancakes</Text>
-                                </View>
-                            </View>
-
-                            <View style={Styles.menuItemSingleTileConatiner}>
-                                <View style={Styles.menuItemSingleTileHolder}>
-                                    <Image resizeMode='cover' style={{ width: '100%', height: '100%', borderRadius: wp('2%') }} source={{ uri: 'https://www.mashed.com/img/gallery/what-you-dont-know-about-mcdonalds-hotcakes/intro-1553105326.jpg' }} />
-                                </View>
-                                <View style={Styles.menuItemSingleTextHolder}>
-                                    <Text style={Styles.menu_item_name}>Pancakes</Text>
-                                </View>
-                            </View> */}
                         </ScrollView>
                     </View>
                 </View>
@@ -286,42 +221,10 @@ const TrandingTile = ({ trandingList }) => {
 
                 />
             </ScrollView>
-
-
-
-            {/* <View elevation={2} style={Styles.tileHolder}>
-                <Image resizeMode='cover' style={{ width: '100%', height: '100%', borderRadius: wp('5%') }} source={{ uri: 'https://st4.depositphotos.com/14582236/22073/v/950/depositphotos_220731050-stock-illustration-cold-brewed-coffee-banner-ads.jpg' }} />
-
-                <View style={Styles.titelUIText}>
-                    <Text style={Styles.Btn_ui_Bold}>Festival Snack</Text>
-                </View>
-
-                <View style={[Styles.titelUIBtn, { color: '#FFE800', }]}>
-                    <Text style={Styles.Btn_ui}>Order Now</Text>
-                </View>
-            </View> */}
-
             <View style={Styles.tileDescriptionHolder}>
                 <Text style={Styles.details_ui}>* Offer valid only for full-price Relacas Cafe drinks.</Text>
                 <Text style={Styles.details_ui}>Valid at part RcD true 31/05/2022</Text>
             </View>
-
-            {/* <View elevation={2} style={Styles.tileHolder}>
-                <Image resizeMode='cover' style={{ width: '100%', height: '100%', borderRadius: wp('5%') }} source={{ uri: 'https://st4.depositphotos.com/14582236/22073/v/950/depositphotos_220731050-stock-illustration-cold-brewed-coffee-banner-ads.jpg' }} />
-
-                <View style={Styles.titelUIText}>
-                    <Text style={Styles.Btn_ui_Bold}>Festival Snack</Text>
-                </View>
-
-                <View style={[Styles.titelUIBtn,{color: '#FFE800',}]}>
-                    <Text style={Styles.Btn_ui}>Order Now</Text>
-                </View>
-            </View>
-            <View style={Styles.tileDescriptionHolder}>
-                <Text style={Styles.details_ui}>* Offer valid only for full-price Relacas Cafe drinks.</Text>
-                <Text style={Styles.details_ui}>Valid at part RcD true 31/05/2022</Text>
-            </View> */}
-
         </View>
     );
 }
@@ -352,90 +255,7 @@ function Home_Tab_Screen() {
         getDealsInfo();
         getTrandingInfo();
 
-        // const requestLocationPermission = async () => {
-        //     if (Platform.OS === 'ios') {
-        //         getOneTimeLocation();
-        //     } else {
-        //         try {
-        //             const granted = await PermissionsAndroid.request(
-        //                 PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-        //                 {
-        //                     title: 'Location Access Required',
-        //                     message: 'This App needs to Access your location',
-        //                 },
-        //             );
-        //             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        //                 //To Check, If Permission is granted
-        //                 getOneTimeLocation();
-        //             } else {
-        //                 setLocationStatus('Permission Denied');
-        //             }
-        //         } catch (err) {
-        //             console.warn(err);
-        //         }
-        //     }
-        // };
-        // requestLocationPermission();
-        // return () => {
-        //     Geolocation.clearWatch(watchID);
-        // };
-
-
     }, []);
-
-
-    const getOneTimeLocation = () => {
-
-        const { items } = useSelector(state => state.userReducer);
-        const dispatch = useDispatch();
-
-        // setLocationStatus('Getting Location ...');
-        Geolocation.getCurrentPosition(
-            //Will give you the current location
-            (position) => {
-
-                //getting the Longitude from the location json
-                const currentLongitude =
-                    JSON.stringify(position.coords.longitude);
-
-                //getting the Latitude from the location json
-                const currentLatitude =
-                    JSON.stringify(position.coords.latitude);
-
-                //Setting Longitude state
-                setCurrentLongitude(currentLongitude);
-
-                //Setting Longitude state
-                setCurrentLatitude(currentLatitude);
-
-                var orderObj = {
-                    // "type": items.type != "" ? items.type : "order", //"order"
-                    "isDelivery": (items.isDelivery) ? true : false,
-                    "refId": "",
-                    "noOfItems": items.noOfItems, //qty
-                    "totalPrice": items.totalPrice,
-                    "promotionId": 0,
-                    "location": {
-                        "latitude": currentLatitude,
-                        "longitude": currentLongitude
-                    },
-                    "foodItems": items.foodItems,
-                };
-
-                // dispatch(setCartItems(orderObj));
-                console.log("finla array " + JSON.stringify(items));
-
-            },
-            (error) => {
-                setLocationStatus(error.message);
-            },
-            {
-                enableHighAccuracy: false,
-                timeout: 30000,
-                maximumAge: 1000
-            },
-        );
-    };
 
     function getMenuInfo() {
         NetInfo.fetch().then(state => {

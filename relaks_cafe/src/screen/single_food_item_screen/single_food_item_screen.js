@@ -146,7 +146,6 @@ const Single_FoodInfo_Screen = ({ ...props }) => {
     const [selectdPortion, setSeletedPortion] = useState(null);
 
     function AddToCart() {
-        //alert(" cart item " + JSON.stringify(item) + " qty " + qty + " note " + note);
         var portionLit = items.foodItems;
         var seleted_po = {
             "id": item.id,
@@ -157,24 +156,31 @@ const Single_FoodInfo_Screen = ({ ...props }) => {
             "image" : item.imgUrl,
             "cal" : selectdPortion.calories,
             "potionName" : selectdPortion.name,
-            "potionPrice" : selectdPortion.price
+            "potionPrice" : selectdPortion.price,
+            "dealID" : "0",
+            "dealType" : "item",
+            "dealItem" : [],
         };
 
         if(portionLit.length == 0) {
             portionLit.push(seleted_po);
         }else{
+            var updte_st = true;
             portionLit.forEach(element => {
-                if(element.id == seleted_po.id){
+                if(element.id == seleted_po.id & element.dealType == "item"){
                     element.quantity = element.quantity + seleted_po.quantity;
-                    element.note = element.note != "" ? element.note + seleted_po.note : note
+                    element.note = element.note != "" ? element.note + seleted_po.note : note;
+                    updte_st = false;
+
                 }else{
-                    portionLit.push(seleted_po);
+                    
                 }
             });
+            if(updte_st){
+                portionLit.push(seleted_po);
+            }
+            
         }
-
-        console.log("portion array "+JSON.stringify(portionLit));
-
 
         var orderObj = {
             // "type": items.type != "" ? items.type : "order", //"order"
@@ -191,7 +197,6 @@ const Single_FoodInfo_Screen = ({ ...props }) => {
         };
 
         dispatch(setCartItems(orderObj));
-        console.log("location array "+JSON.stringify(items));
        // alert("set values "+JSON.stringify(items));
     }
 
