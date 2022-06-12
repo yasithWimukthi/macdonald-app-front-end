@@ -7,19 +7,20 @@ import Icon3 from 'react-native-vector-icons/Ionicons';
 import Icon4 from 'react-native-vector-icons/Fontisto';
 
 import { Container } from 'native-base';
+import { Actions } from 'react-native-router-flux';
 
-function more_tab_screen() {
+function More_Tab_Screen() {
     return (
         <View style={Styles.main}>
             <View>
 
             </View>
 
-            <TouchableOpacity onPress={() => { alert("you press Profile") }}>
+            <TouchableOpacity onPress={() => { Actions.Profile(); }}>
                 <View style={Styles.tileMian}>
                     <View style={Styles.tileHolder}>
                         <View style={Styles.tileIconHolder}>
-                            <Icon color="#000" name="home" size={20} />
+                            <Icon color="#000" name="user" size={20} />
                         </View>
                         <View style={Styles.tileTextHolder}>
                             <Text style={Styles.titelUI}>Profile</Text>
@@ -31,7 +32,7 @@ function more_tab_screen() {
                 </View>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => { alert("you press Recents") }}>
+            {/* <TouchableOpacity onPress={() => {  }}>
                 <View style={Styles.tileMian}>
                     <View style={Styles.tileHolder}>
                         <View style={Styles.tileIconHolder}>
@@ -45,13 +46,13 @@ function more_tab_screen() {
                         </View>
                     </View>
                 </View>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
-            <TouchableOpacity onPress={() => { alert("you press Locations") }}>
+            {/* <TouchableOpacity onPress={() => {  }}>
                 <View style={Styles.tileMian}>
                     <View style={Styles.tileHolder}>
                         <View style={Styles.tileIconHolder}>
-                        <Icon color="#000" name="location" size={20} />
+                        <Icon color="#000" name="enviromento" size={20} />
                         </View>
                         <View style={Styles.tileTextHolder}>
                             <Text style={Styles.titelUI}>Locations</Text>
@@ -61,10 +62,10 @@ function more_tab_screen() {
                         </View>
                     </View>
                 </View>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
 
-            <TouchableOpacity onPress={() => { alert("you press Nutrition") }}>
+            {/* <TouchableOpacity onPress={() => {  }}>
                 <View style={Styles.tileMian}>
                     <View style={Styles.tileHolder}>
                         <View style={Styles.tileIconHolder}>
@@ -78,13 +79,13 @@ function more_tab_screen() {
                         </View>
                     </View>
                 </View>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
-            <TouchableOpacity onPress={() => { alert("you press ") }}>
+            {/* <TouchableOpacity onPress={() => {  }}>
                 <View style={Styles.tileMian}>
                     <View style={Styles.tileHolder}>
                         <View style={Styles.tileIconHolder}>
-                        <Icon color="#000" name="home" size={20} />
+                        <Icon color="#000" name="appstore-o" size={20} />
                         </View>
                         <View style={Styles.tileTextHolder}>
                             <Text></Text>
@@ -94,9 +95,9 @@ function more_tab_screen() {
                         </View>
                     </View>
                 </View>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
-            <TouchableOpacity onPress={() => { alert("you press FAQ") }}>
+            <TouchableOpacity onPress={() => { Actions.FAQ();}}>
                 <View style={Styles.tileMian}>
                     <View style={Styles.tileHolder}>
                         <View style={Styles.tileIconHolder}>
@@ -112,7 +113,7 @@ function more_tab_screen() {
                 </View>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => { alert("you press NOT USED IN DAP US") }}>
+            {/* <TouchableOpacity onPress={() => {  }}>
                 <View style={Styles.tileMian}>
                     <View style={Styles.tileHolder}>
                         <View style={Styles.tileIconHolder}>
@@ -126,9 +127,9 @@ function more_tab_screen() {
                         </View>
                     </View>
                 </View>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
-            <TouchableOpacity onPress={() => { alert("you press NOT USED IN DAP US") }}>
+            {/* <TouchableOpacity onPress={() => {  }}>
                 <View style={Styles.tileMian}>
                     <View style={Styles.tileHolder}>
                         <View style={Styles.tileIconHolder}>
@@ -142,13 +143,13 @@ function more_tab_screen() {
                         </View>
                     </View>
                 </View>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
-            <TouchableOpacity onPress={() => { alert("you press Careers, Contact & Legal") }}>
+            <TouchableOpacity onPress={() => { Actions.Legal(); }}>
                 <View style={Styles.tileMian}>
                     <View style={Styles.tileHolder}>
                         <View style={Styles.tileIconHolder}>
-                        <Icon color="#000" name="home" size={20} />
+                        <Icon color="#000" name="solution1" size={20} />
                         </View>
                         <View style={Styles.tileTextHolder}>
                             <Text style={Styles.titelUI}>Careers, Contact & Legal</Text>
@@ -206,4 +207,4 @@ const Styles = StyleSheet.create({
 
 });
 
-export default more_tab_screen;
+export default More_Tab_Screen;

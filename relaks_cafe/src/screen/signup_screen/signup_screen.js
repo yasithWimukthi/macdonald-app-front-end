@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { View, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { Actions } from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/AntDesign';
 
 
@@ -8,7 +9,7 @@ import Icon from 'react-native-vector-icons/AntDesign';
 const BtnEmailView = () => {
     return (
         <View style={Styles.btnContainer}>
-            <TouchableOpacity onPress={()=>{alert("ypu press me")}}>
+            <TouchableOpacity onPress={()=>{Actions.Register();}}>
                 <View style={Styles.btnBorder}>
                     <View style={Styles.btn_icon_holder}>
                         <Icon color="#000" name="mail" size={30} />

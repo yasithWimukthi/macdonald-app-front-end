@@ -72,7 +72,7 @@ const RightCenterView = () => {
         <View style={Styles.rightCenterContainer}>
             <View style={Styles.rightCenterHolder}>
                 <View style={Styles.rightCenterRowCont}>
-                    <Icon color="blue" name="link" size={20} />
+                    <Icon color="#EB1F25" name="link" size={20} />
                     <Text style={Styles.righttextlight}>Right Center</Text>
                 </View>
             </View>
@@ -170,7 +170,7 @@ const Styles = StyleSheet.create({
     decriptionTextUnderLine: {
         fontFamily: 'NexaTextDemo-Light',
         fontSize: 12,
-        color: 'blue',
+        color: '#EB1F25',
         letterSpacing: 0.2,
         textDecorationLine: 'underline',
     },
@@ -245,7 +245,7 @@ const Styles = StyleSheet.create({
     righttextlight : {
         fontFamily: 'NexaTextDemo-light',
         fontSize: 14,
-        color: 'blue',
+        color: '#EB1F25',
         letterSpacing: 0.2,
         textDecorationLine: 'underline',
     },

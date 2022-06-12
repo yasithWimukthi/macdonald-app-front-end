@@ -1,59 +1,77 @@
-import React, { PropTypes, Component } from 'react';
-import { View, Image, StyleSheet, Text, TouchableOpacity, ScrollView } from 'react-native';
+import React, { PropTypes, Component, useEffect, useState } from 'react';
+import { View, Image, StyleSheet, Text, TouchableOpacity, ScrollView,FlatList } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/AntDesign';
 import { Container, } from 'native-base';
 import ToggleBtn from '../../componet/toggleBtn';
+import { Actions } from 'react-native-router-flux';
 
+import ZigzagView from "react-native-zigzag-view";
 
+import { Funtion_Order_Menu_List } from '../../assert/networks/api_calls';
+import NetInfo from "@react-native-community/netinfo";
+
+import { useSelector, useDispatch } from 'react-redux';
 
 const OderHeader = () => {
+
+    const { address } = useSelector(state => state.userReducer);
 
     const onSelectSwitch = index => {
         alert('Selected index: ' + index);
     };
 
     return (
-        <View elevation={5} style={Styles.orderHederContent}>
-            <View style={Styles.orderHederHolder}>
-                <View style={Styles.titelHederHolder}>
-                    <View style={Styles.titelHederTextContent}>
-                        <Text style={Styles.titelText}>Order</Text>
+        <ZigzagView
+            backgroundColor="#E9E9E9"
+            surfaceColor="#FFF"
+            bottom={true}
+            top={false}
+        >
+            <View elevation={5} style={Styles.orderHederContent}>
+                <View style={Styles.orderHederHolder}>
+                    <View style={Styles.titelHederHolder}>
+                        <View style={Styles.titelHederTextContent}>
+                            <Text style={Styles.titelText}>Order</Text>
+                        </View>
+                        <View style={Styles.titelHederIconContent}>
+                            <Icon color="#000" name="search1" size={25} />
+                        </View>
                     </View>
-                    <View style={Styles.titelHederIconContent}>
-                        <Icon color="#000" name="search1" size={25} />
-                    </View>
-                </View>
-                <View style={Styles.toggleHederHolder}>
-                    {/* make toogle button */}
-                    <View style={Styles.toggleSectionHolder1}>
-                        <ToggleBtn
-                            selectionMode={1}
-                            roundCorner={true}
-                            option1={'Pickup'}
-                            option2={'RcDelivery'}
-                            onSelectSwitch={onSelectSwitch}
-                            selectionColor={'#FFD800'}
-                        />
-                    </View>
-                    <View style={Styles.toggleSectionHolder2}>
+                    <View style={Styles.toggleHederHolder}>
+                        {/* make toogle button */}
+                        <View style={Styles.toggleSectionHolder1}>
+                            <ToggleBtn
+                                selectionMode={1}
+                                roundCorner={true}
+                                option1={'Pickup'}
+                                option2={'RcDelivery'}
+                                onSelectSwitch={onSelectSwitch}
+                                selectionColor={'#EB1F25'}
+                            />
+                        </View>
+                        <View style={Styles.toggleSectionHolder2}>
 
+                        </View>
                     </View>
-                </View>
-                <View style={Styles.LocationHederHolder}>
-                    <View style={Styles.LocationIconHolder}>
-                        <Icon color="red" name="enviroment" size={25} />
-                    </View>
-                    <View style={Styles.LocationTextHolder}>
-                        <Text style={Styles.titelTextBold}>2 BELLFIELD EXCHANGE</Text>
-                        <Text style={Styles.titelTextLight}>Now serving Breakfast untill</Text>
-                    </View>
-                    <View style={Styles.LocationUnderLineHolder}>
-                        <Text style={Styles.underLineTextBold}>Change Location</Text>
+                    <View style={Styles.LocationHederHolder}>
+                        <View style={Styles.LocationIconHolder}>
+                            {/* <Icon color="red" name="enviroment" size={25} /> */}
+                            <Image source={{ uri: 'pickup' }} style={Styles.pickup} />
+                        </View>
+                        <View style={Styles.LocationTextHolder}>
+                            <Text style={[Styles.titelTextBold, { fontSize: 12, }]}>{address.mainAddress}</Text>
+                            <Text style={Styles.titelTextLight}>{address.subAddress}</Text>
+                        </View>
+                        <View style={Styles.LocationUnderLineHolder}>
+                            <TouchableOpacity onPress={()=>{Actions.Location();}}>
+                                <Text style={Styles.underLineTextBold}>Change Location</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
             </View>
-        </View>
+        </ZigzagView>
     );
 }
 
@@ -96,36 +114,81 @@ const ExpoureMenuText = () => {
     );
 }
 
-const ExpolourMenu = () => {
+const ExpolourMenu = ({ menuList }) => {
     return (
-        <View style={Styles.ExpolurMenuContent}>
-            <View style={Styles.ExpolurMenuHolder}>
-                <View style={Styles.ExpolurMenuImageHolder}>
-                    <Image resizeMode='cover' style={{ width: '100%', height: '100%', borderRadius: wp('2%') }} source={{ uri: 'https://www.mashed.com/img/gallery/what-you-dont-know-about-mcdonalds-hotcakes/intro-1553105326.jpg' }} />
-                </View>
-                <View style={Styles.ExpolurMenuTextHolder}>
-                    <Text style={Styles.MenuTextBold}>RcMuffine</Text>
-                </View>
-                <View style={Styles.ExpolurMenuIconHolder}>
-                    <Icon color="#000" name="right" size={25} />
-                </View>
-            </View>
-        </View>
+
+        <FlatList
+            data={menuList}
+            keyExtractor={(item, index) => index}
+            renderItem={({ item }) => {
+                return (
+                    <TouchableOpacity onPress={() => { Actions.MenuList({ cat_id: item.id }); }}>
+                        <View style={Styles.ExpolurMenuContent}>
+                            <View style={Styles.ExpolurMenuHolder}>
+                                <View style={Styles.ExpolurMenuImageHolder}>
+                                    <Image resizeMode='cover' style={{ width: '90%', height: '100%', borderRadius: wp('2%') }} source={{ uri: item.imgUrl }} />
+                                </View>
+                                <View style={Styles.ExpolurMenuTextHolder}>
+                                    <Text style={Styles.MenuTextBold}>{item.name}</Text>
+                                </View>
+                                <View style={Styles.ExpolurMenuIconHolder}>
+                                    <Icon color="#000" name="right" size={25} />
+                                </View>
+                            </View>
+                        </View>
+                    </TouchableOpacity>
+                );
+            }}
+
+        />
+
+
     );
 }
 
 
-function order_tab_screen() {
+function Order_Tab_Screen() {
+
+    const [menuList, setMenuList] = useState([]);
+
+    useEffect(() => {
+        getMenuInfos();
+    });
+
+    function getMenuInfos() {
+        NetInfo.fetch().then(state => {
+            if (state.isConnected) {
+                Funtion_Order_Menu_List().then((response) => {
+                    setMenuList(response.data);
+                }).catch((error) => {
+                    console.log("error on get data in menu screen " + error);
+                });
+
+                // if(response.status == '200'){
+                //     //sucessfully created
+                // }else if (response.status == '401'){
+                //     // token expire redirct to login page
+                // }else if (response.status == '500') {
+                //     // request body validation
+                // }
+
+            } else {
+                //show error alert for not connect to internet
+            }
+        });
+    }
+
     return (
         <View style={Styles.main}>
             <OderHeader />
-            <ScrollView style={{ marginTop:hp('0.5%') }}>
+            <ScrollView style={{ marginTop: hp('0.5%') }}>
                 <ScrolleTitle />
                 <ExpoureMenuText />
-                <ExpolourMenu />
-                <ExpolourMenu />
-                <ExpolourMenu />
-                <ExpolourMenu />
+                <ExpolourMenu menuList={menuList} />
+                {/* <ExpolourMenu foodName={"Toasted bread "} />
+                <ExpolourMenu foodName={"Cheese Toasted sandwich"} />
+                <ExpolourMenu foodName={"Halwa sandwich "} />
+                <ExpolourMenu foodName={"Pancake"} /> */}
             </ScrollView>
         </View>
     );
@@ -134,8 +197,8 @@ function order_tab_screen() {
 const Styles = StyleSheet.create({
     main: {
         flex: 1,
-       // backgroundColor: "#FFFFFF",
-         backgroundColor: "#F5F5F5",
+        // backgroundColor: "#FFFFFF",
+        backgroundColor: "#F5F5F5",
         //flexDirection: 'row',
         alignContent: 'center',
         //alignItems: 'center'
@@ -231,14 +294,14 @@ const Styles = StyleSheet.create({
     },
     titelTextBold: {
         fontFamily: 'NexaTextDemo-Bold',
-        fontSize: 12,
+        fontSize: 14,
         color: '#000',
         letterSpacing: 0.25,
     },
     underLineTextBold: {
         fontFamily: 'NexaTextDemo-Light',
         fontSize: 13,
-        color: 'blue',
+        color: '#EB1F25',
         textDecorationLine: 'underline',
         letterSpacing: 0.25,
     },
@@ -295,14 +358,14 @@ const Styles = StyleSheet.create({
     titelTextScrolleUnder: {
         fontFamily: 'NexaTextDemo-Light',
         fontSize: 15,
-        color: 'blue',
+        color: '#EB1F25',
         letterSpacing: 0.25,
         textDecorationLine: 'underline',
 
     },
     ExpolurMenuContent: {
         width: wp('100%'),
-        height: hp('10%'),
+        height: hp('15%'),
         justifyContent: 'center',
         borderBottomColor: '#000',
         borderBottomWidth: 1,
@@ -311,25 +374,25 @@ const Styles = StyleSheet.create({
     },
     ExpolurMenuHolder: {
         width: wp('90%'),
-        height: hp('8%'),
+        height: hp('12%'),
         justifyContent: 'center',
         flexDirection: 'row'
     },
     ExpolurMenuImageHolder: {
         width: wp('20%'),
-        height: hp('7%'),
+        height: hp('10%'),
         justifyContent: 'center',
         alignItems: 'center'
     },
     ExpolurMenuTextHolder: {
         width: wp('60%'),
-        height: hp('7%'),
+        height: hp('10%'),
         justifyContent: 'center',
-        marginLeft:wp('2%')
+        marginLeft: wp('2%')
     },
     ExpolurMenuIconHolder: {
         width: wp('10%'),
-        height: hp('7%'),
+        height: hp('10%'),
         justifyContent: 'center',
         alignItems: 'center'
     },
@@ -341,7 +404,7 @@ const Styles = StyleSheet.create({
     },
     MenuTextBold: {
         fontFamily: 'NexaTextDemo-Bold',
-        fontSize: 15,
+        fontSize: 24,
         color: '#000',
         letterSpacing: 0.25,
     },
@@ -358,6 +421,13 @@ const Styles = StyleSheet.create({
         justifyContent: 'center',
         flexDirection: 'row'
     },
+    pickup: {
+        width: wp('8%'),
+        height: hp('4%'),
+        justifyContent: 'center',
+        alignItems: 'center',
+        resizeMode: 'contain'
+    }
 });
 
-export default order_tab_screen;
+export default Order_Tab_Screen;

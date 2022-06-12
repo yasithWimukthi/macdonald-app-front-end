@@ -3,17 +3,27 @@ import { View, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/AntDesign';
 import { Container } from 'native-base';
+import ZigzagView from "react-native-zigzag-view"
 
 const TitelComponet = () => {
     return (
-        <View style={Styles.titel_content}>
-            <View style={Styles.titel_hold}>
-                <Text style={Styles.titel_heder}>Strat an Order</Text>
+        <ZigzagView
+            backgroundColor="#E9E9E9"
+            surfaceColor="#FFF"
+            bottom={true}
+            top={false}
+        >
+            <View style={Styles.titel_holder}>
+                <View style={Styles.titel_content}>
+                    <View style={Styles.titel_hold}>
+                        <Text style={Styles.titel_heder}>Strat an Order</Text>
+                    </View>
+                    <View style={Styles.titel_discription_holder}>
+                        <Text style={Styles.titel_description}>product pricing and avalibility may change depend upon {"\n"}your location.</Text>
+                    </View>
+                </View>
             </View>
-            <View style={Styles.titel_discription_holder}>
-                <Text style={Styles.titel_description}>product pricing and avalibility may change depend upon {"\n"}your location.</Text>
-            </View>
-        </View>
+        </ZigzagView>
     );
 }
 
@@ -23,14 +33,14 @@ const PicupTiles = () => {
             <View style={Styles.tileContent}>
                 <View style={Styles.tile_row}>
                     {/* add picup icon */}
-
+                    <Image source={{ uri: 'pickup' }} style={Styles.app_logs} />
                 </View>
                 <View style={Styles.tile_row_text}>
                     <Text style={Styles.titel_description_hed}>PickUp</Text>
                     <Text style={Styles.titel_description}>2 BELLFIELD INTERCHANGE SERVICE {"\n"}KILMARNROCK,</Text>
                 </View>
                 <View style={Styles.tile_row}>
-                    <Icon color="#000" name="right" size={40} />
+                    <Icon color="#000" name="right" size={30} />
                 </View>
             </View>
         </View>
@@ -41,15 +51,16 @@ const DelivaryTile = () => {
     return (
         <View style={Styles.tileHolder}>
             <View style={Styles.tileContent}>
-            <View style={Styles.tile_row}>
+                <View style={Styles.tile_row}>
                     {/* add picup icon */}
+                    <Image source={{ uri: 'delivary' }} style={Styles.app_logs} />
                 </View>
                 <View style={Styles.tile_row_text}>
                     <Text style={Styles.titel_description_hed}>RcDelivery</Text>
                     <Text style={Styles.titel_description}>Delivery/service fee will apply.</Text>
                 </View>
                 <View style={Styles.tile_row}>
-                <Icon color="#000" name="right" size={40} />
+                    <Icon color="#000" name="right" size={30} />
                 </View>
             </View>
         </View>
@@ -101,7 +112,7 @@ const Styles = StyleSheet.create({
     },
     titel_holder: {
         width: wp('100%'),
-        height: hp('20%'),
+        height: hp('25%'),
         alignItems: 'center',
         justifyContent: 'center'
     },
@@ -174,7 +185,7 @@ const Styles = StyleSheet.create({
         fontFamily: 'NexaTextDemo-Light',
         fontSize: 12,
         color: '#000',
-        letterSpacing: 0.15,
+        letterSpacing: 0.1,
     },
     titel_botttom_titel: {
         fontFamily: 'NexaTextDemo-Bold',
@@ -182,16 +193,23 @@ const Styles = StyleSheet.create({
         color: '#000',
         letterSpacing: 0.25,
     },
-    tile_row : {
-        width: wp('10%'),
+    tile_row: {
+        width: wp('15%'),
         height: hp('15%'),
         alignItems: 'center',
         justifyContent: 'center',
     },
-    tile_row_text : {
-        width: wp('70%'),
+    app_logs: {
+        width: wp('8%'),
+        height: hp('6%'),
+        alignContent: 'center',
+        alignItems: 'center',
+        resizeMode: "contain",
+    },
+    tile_row_text: {
+        width: wp('60%'),
         height: hp('15%'),
-       // alignItems: 'center',
+        // alignItems: 'center',
         justifyContent: 'center',
     }
 

@@ -1,7 +1,13 @@
-import React, { PropTypes, Component } from 'react';
-import { View, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import React, { PropTypes, Component, useEffect, useState } from 'react';
+import { View, Image, StyleSheet, Text, TouchableOpacity, FlatList } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/EvilIcons';
+
+import { Funtion_Get_Deals_Info_List } from '../../assert/networks/api_calls';
+import NetInfo from "@react-native-community/netinfo";
+
+import { useSelector, useDispatch } from 'react-redux';
+import { setCartItems } from '../../redux/actions';
 
 
 const TitelsComponet = () => {
@@ -33,34 +39,143 @@ const Details_tile = () => {
     );
 }
 
-const BannerComponet = () => {
+const BannerComponet = ({dealList}) => {
+
+    const { items } = useSelector(state => state.userReducer);
+    const dispatch = useDispatch();
+
+    function addDealToCart (deal) {
+        var portionLit = items.foodItems;
+
+        var seleted_po = {
+            "id": deal.id,
+            "quantity": 1,
+            "portionId": "1" , //selectdPortion.id
+            "note":  " ",
+            "itemName" : deal.description,
+            "image" : deal.imgUrl,
+            "cal" : "1000",
+            "potionName" : " ",
+            "potionPrice" : (parseInt(deal.totalPrice) - (parseInt(deal.totalPrice) * parseInt(deal.discount) / 100))
+        };
+
+        if(portionLit.length == 0) {
+            portionLit.push(seleted_po);
+        }else{
+            portionLit.forEach(element => {
+                if(element.id == seleted_po.id){
+                    element.quantity = element.quantity + seleted_po.quantity;
+                    element.note = element.note != "" ? element.note + seleted_po.note : note
+                }else{
+                    portionLit.push(seleted_po);
+                }
+            });
+        }
+
+        console.log("portion array "+JSON.stringify(portionLit));
+
+
+        var orderObj = {
+            // "type": items.type != "" ? items.type : "order", //"order"
+            "isDelivery": (items.isDelivery) ? true : false,
+            "refId": "",
+            "noOfItems": items.noOfItems + 1, //qty
+            "totalPrice": items.totalPrice,
+            "promotionId": 0,
+            "location": {
+                "latitude": items.location.latitude,
+                "longitude": items.location.longitude
+            },
+            "foodItems": portionLit, 
+        };
+
+        dispatch(setCartItems(orderObj));
+    }
+
     return (
-        <View style={Styles.tileConten}>
-            <View elevation={2} style={Styles.bannerHolder}>
-                <View style={Styles.bannerImageHolder}>
-                    <Image style={{ width: '100%', height: '100%', borderRadius: wp('1%') }} source={{ uri: 'https://img.freepik.com/free-photo/big-hamburger-with-double-beef-french-fries_252907-8.jpg' }} resizeMode='cover' />
-                </View>
-                <View style={Styles.bannerDetailsHolder}>
-                    <View style={Styles.bannerRowDteials}>
-                        <Icon color="#FFE800" name="tag" size={25} />
-                        <Text style={Styles.bannertextBold}>Pickup Only</Text>
-                    </View>
-                    <View style={Styles.bannerDteials}>
-                        <Text style={Styles.bannertextBold}>99p Quarter PounderTM with {'\n'} Cheese! </Text>
-                    </View>
-                    <View style={Styles.bannerDteials}>
-                        <Text style={Styles.bannertextLight}>Make it a Relaca's Monday! {'\n'}Order and pick-up now! </Text>
-                    </View>
-                    <View style={[Styles.bannerDteials, { marginTop: hp('2%') }]}>
-                        <Text style={Styles.bannertextLightInfo}>Expire Today </Text>
-                    </View>
-                </View>
-            </View>
-        </View>
+        <FlatList
+            data={dealList}
+            keyExtractor={(item, index) => index}
+            renderItem={({ item }) => {
+                return (
+                    <TouchableOpacity onPress={() => { addDealToCart(item); }}>
+                        <View style={Styles.tileConten}>
+                            <View elevation={2} style={Styles.bannerHolder}>
+                                <View style={Styles.bannerImageHolder}>
+                                    <Image style={{ width: '100%', height: '100%', borderRadius: wp('1%') }} source={{ uri: item.imgUrl }} resizeMode='cover' />
+                                </View>
+                                <View style={Styles.bannerDetailsHolder}>
+                                    <View style={Styles.bannerRowDteials}>
+                                        <View style={{ alignItems: 'flex-start', width: wp('6%'), }}>
+                                            <Icon color="#FFE800" name="tag" size={25} />
+                                        </View>
+                                        <View style={{ width: wp('50%'), }}>
+                                            <Text style={Styles.bannertextBold}>Pickup Only</Text>
+                                        </View>
+                                    </View>
+                                    <View style={Styles.bannerDteials}>
+                                        <View style={{ width: wp('54%'), }}>
+                                            <Text style={Styles.bannertextBold}>{item.totalPrice}</Text>
+                                        </View>
+                                    </View>
+                                    <View style={Styles.bannerDteials}>
+                                        <View style={{ width: wp('54%'), }}>
+                                            <Text style={Styles.bannertextLight}>{item.description}</Text>
+                                        </View>
+                                    </View>
+                                    <View style={[Styles.bannerDteials, { marginTop: hp('2%') }]}>
+                                        <View style={{ width: wp('54%'), }}>
+                                            <Text style={Styles.bannertextLightInfo}>{"Expire "+item.expiryDate} </Text>
+                                        </View>
+                                    </View>
+                                </View>
+                            </View>
+                        </View>
+                    </TouchableOpacity>
+                );
+            }}
+
+        />
     );
 }
 
-function deals_tab_screen() {
+function Deals_Tab_Screen() {
+
+    
+
+    const [dealsList, setDealsList] = useState([]);
+
+    useEffect(() => {
+        getBannerInfo();
+    });
+
+    function getBannerInfo() {
+        NetInfo.fetch().then(state => {
+            if (state.isConnected) {
+                // var response = Funtion_Get_Deals_Info_List();
+
+                Funtion_Get_Deals_Info_List().then((response) => {
+                    setDealsList(response.data);
+                }).catch((error) => {
+                    console.log("error on deal list screen " + error);
+                });
+
+                // if(response.status == '200'){
+                //     //sucessfully created
+                // }else if (response.status == '401'){
+                //     // token expire redirct to login page
+                // }else if (response.status == '500') {
+                //     // request body validation
+                // }
+            } else {
+                //show error alert for not connect to internet
+            }
+        });
+    }
+
+
+    
+
     return (
         <View style={Styles.main}>
             {/* <TitelsComponet /> */}
@@ -69,12 +184,12 @@ function deals_tab_screen() {
             </View>
 
             <View style={{ marginTop: hp('3%') }}>
-                <BannerComponet />
+                <BannerComponet dealList={dealsList} />
             </View>
 
-            <View style={{ marginTop: hp('1%') }}>
+            {/* <View style={{ marginTop: hp('1%') }}>
                 <BannerComponet />
-            </View>
+            </View> */}
 
 
         </View>
@@ -134,7 +249,7 @@ const Styles = StyleSheet.create({
         justifyContent: 'center',
         borderRadius: wp('2%'),
         backgroundColor: '#FFF',
-        flexDirection:'row'
+        flexDirection: 'row'
     },
     tileDescriptionHolder: {
         width: wp('90%'),
@@ -148,8 +263,8 @@ const Styles = StyleSheet.create({
         height: hp('5%'),
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#FFF',
-        borderRadius: wp('3%'),
+        backgroundColor: '#EB1F25',
+        borderRadius: wp('5%'),
         position: 'absolute',
         left: 50,
         bottom: 50,
@@ -159,7 +274,7 @@ const Styles = StyleSheet.create({
     Btn_ui: {
         fontFamily: 'NexaTextDemo-Light',
         fontSize: 14,
-        color: '#000',
+        color: '#FFF',
         letterSpacing: 0.25,
     },
     details_ui: {
@@ -184,8 +299,8 @@ const Styles = StyleSheet.create({
         width: wp('60%'),
         height: hp('3%'),
         flexDirection: 'row',
+        alignItems: 'flex-start',
         justifyContent: 'center',
-        alignContent: 'flex-start'
     },
     bannerDteials: {
         width: wp('60%'),
@@ -213,4 +328,4 @@ const Styles = StyleSheet.create({
     }
 });
 
-export default deals_tab_screen;
+export default Deals_Tab_Screen;

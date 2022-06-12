@@ -1,13 +1,14 @@
 import React, { PropTypes, Component } from 'react';
-import { View, Image, StyleSheet, Text } from 'react-native';
+import { View, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/AntDesign';
 
-
+import { Actions } from 'react-native-router-flux';
 
 const ProfileTitel = () => {
     return (
-        <View style={Styles.TitelConatiner}>
+        
+            <View style={Styles.TitelConatiner}>
             <View style={Styles.TitelHolder}>
                 <View style={Styles.TitelTextHolder}>
                     <Text style={Styles.TitelBoldTexts}>Your Profile</Text>
@@ -22,12 +23,14 @@ const ProfileTitel = () => {
                 </View>
             </View>
         </View>
+        
     );
 }
 
 
 const PersonalSettingTile = () => {
     return(
+        <TouchableOpacity onPress={()=>{Actions.Personal(); }}>
         <View style={Styles.TileConatiner}>
             <View style={Styles.TileHolder}>
                 <View style={Styles.TileIconHolder}>
@@ -41,11 +44,13 @@ const PersonalSettingTile = () => {
                 </View>
             </View>
         </View>
+        </TouchableOpacity>
     );
 }
 
 const PrivanceyTile = () => {
     return(
+        <TouchableOpacity onPress={()=>{Actions.privancy(); }}>
         <View style={Styles.TileConatiner}>
             <View style={Styles.TileHolder}>
                 <View style={Styles.TileIconHolder}>
@@ -59,11 +64,13 @@ const PrivanceyTile = () => {
                 </View>
             </View>
         </View>
+        </TouchableOpacity>
     );
 }
 
 const PaymentTile = () => {
     return(
+        <TouchableOpacity onPress={()=>{Actions.privancy(); }}>
         <View style={Styles.TileConatiner}>
             <View style={Styles.TileHolder}>
                 <View style={Styles.TileIconHolder}>
@@ -77,11 +84,13 @@ const PaymentTile = () => {
                 </View>
             </View>
         </View>
+        </TouchableOpacity>
     );
 }
 
 const CommunicationTile = () => {
     return(
+        <TouchableOpacity onPress={()=>{Actions.writeUs(); }}>
         <View style={Styles.TileConatiner}>
             <View style={Styles.TileHolder}>
                 <View style={Styles.TileIconHolder}>
@@ -95,6 +104,7 @@ const CommunicationTile = () => {
                 </View>
             </View>
         </View>
+        </TouchableOpacity>
     );
 }
 
@@ -182,7 +192,7 @@ const Styles = StyleSheet.create({
     TitelSubUnderTexts:{
         fontFamily: 'NexaTextDemo-Light',
         fontSize: 14,
-        color: 'blue',
+        color: '#EB1F25',
         letterSpacing: 0.04,
         textDecorationLine: 'underline',
     },
@@ -240,7 +250,7 @@ const Styles = StyleSheet.create({
     DeleteTexts:{
         fontFamily: 'NexaTextDemo-Light',
         fontSize: 13,
-        color: 'red',
+        color: '#EB1F25',
         letterSpacing: 0.04,
         marginLeft:wp('2%'),
         textDecorationLine: 'underline',

@@ -14,14 +14,12 @@ const authenticationscreen = () => {
     return (
         <NavigationContainer style={Styles.main}>
             <Tab.Navigator>
-                <Tab.Screen name="Log in" component={AuthScreen} />
+                <Tab.Screen name="Log in"  component={AuthScreen} />
                 <Tab.Screen name="Register" component={SignUp} />
             </Tab.Navigator>
         </NavigationContainer>
     );
 }
-
-
 
 const Styles = StyleSheet.create({
     main: {

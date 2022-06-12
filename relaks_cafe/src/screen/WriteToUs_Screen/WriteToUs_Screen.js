@@ -3,12 +3,14 @@ import { View, Image, StyleSheet, Text, TouchableOpacity,TextInput } from 'react
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/AntDesign';
 
+import app_logo from '../../assert/images/splash_app_logo.png';
+
 const TitelContainer = () => {
     return(
         <View style={Styles.tittelContainer}>
             <View style={Styles.tittelHolder}>
                 <View style={Styles.titelImageHolder}>
-
+                    <Image source={{uri: 'tabbar_icon'}} style={Styles.app_logs } />
                 </View>
                 <View style={Styles.titelTextsHolder}>
                     <View style={Styles.titelTextsHolder}>
@@ -82,6 +84,14 @@ const Styles = StyleSheet.create({
         height: hp('18%'),
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    app_logs : {
+        width:wp('18%'),
+        height:hp('9%'),
+        borderRadius:hp('5%'),
+        alignContent:'center',
+        alignItems:'center',
+        resizeMode: "contain",
     },
     titelTextsHolder : {
         width: wp('70%'),

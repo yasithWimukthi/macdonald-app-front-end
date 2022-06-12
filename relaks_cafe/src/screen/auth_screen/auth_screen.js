@@ -1,8 +1,13 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes, Component, useState } from 'react';
 import { View, Image, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icons from 'react-native-vector-icons/Feather';
 import Icon from 'react-native-vector-icons/AntDesign';
+import { Actions } from 'react-native-router-flux';
+
+//import {Funtion_Auth,Funtion_FaceBook_Register} from '../../assert/networks/api_calls';
+import NetInfo from "@react-native-community/netinfo";
+import { Funtion_Auth } from '../../assert/networks/api_calls';
 
 
 
@@ -21,18 +26,27 @@ const RulesTexts = () => {
     );
 }
 
-const FormView = () => {
+
+
+const FormView = ({ username, passwords, updateUserName, updatePassowrd }) => {
+
+    const [userName, setUserName] = useState(username);
+    const [password, setPassword] = useState(passwords);
+
     return (
         <View style={Styles.inputContainer}>
             <View style={Styles.input_holder}>
                 <View style={Styles.inputContainer_Row}>
-                    <TextInput placeholder='Email' placeholderTextColor="#000" style={Styles.defulatTextInput} />
+                    <TextInput placeholder='Email' value={userName} onChangeText={(values) => { setUserName(values); updateUserName(values) }} placeholderTextColor="#000" style={Styles.defulatTextInput} />
                 </View>
                 <View style={Styles.inputContainer_Row_icon}>
                     <View style={Styles.subinputContainer}>
                         <TextInput
                             style={Styles.defulatTextInput}
+                            secureTextEntry={true}
                             placeholder='Password'
+                            value={password}
+                            onChangeText={(values) => { setPassword(values); updatePassowrd(values) }}
                             placeholderTextColor="#000"
                         />
                         <Icons style={Styles.icon} color="#000" name="eye-off" size={20} />
@@ -48,10 +62,10 @@ const FormView = () => {
 }
 
 
-const BtnFaceBookView = () => {
+const BtnFaceBookView = ({ facebook_onpress }) => {
     return (
         <View style={Styles.btnContainer}>
-            <TouchableOpacity onPress={() => { alert("ypu press me") }}>
+            <TouchableOpacity onPress={facebook_onpress}>
                 <View style={Styles.btnBorder}>
                     <View style={Styles.btn_icon_holder}>
                         <Icon color="#4267B2" name="facebook-square" size={30} />
@@ -88,11 +102,11 @@ const BtnGoogleView = () => {
     )
 }
 
-const BtnLoginView = () => {
+const BtnLoginView = ({ funtions }) => {
     return (
         <View style={Styles.btnContainer}>
-            <TouchableOpacity onPress={() => { alert("ypu press login") }}>
-                <View style={ [Styles.btnBorder,{backgroundColor:'yellow',borderWidth:0}]}>
+            <TouchableOpacity onPress={funtions}>
+                <View style={[Styles.btnBorder, { backgroundColor: 'yellow', borderWidth: 0 }]}>
                     <View style={Styles.btn_icon_holder}>
                         {/* <Icon color="#4285F4" name="google" size={30} /> */}
                     </View>
@@ -108,26 +122,116 @@ const BtnLoginView = () => {
     )
 }
 
-const authscreen = () => {
+const AuthScreen = () => {
+
+    const [uName, setUName] = useState("");
+    const [uPass, setUPass] = useState("");
+
+    function login() {
+
+        var user = {
+            "email": uName,
+            "password": uPass
+        };
+
+        NetInfo.fetch().then(state => {
+            if (state.isConnected) {
+                //var response = Funtion_Auth(user);
+                Funtion_Auth(user).then((response) => {
+                    //alert("response " + JSON.stringify(response));
+                    console.log("response " + JSON.stringify(response));
+                     Actions.authenticated();
+                    
+                    if (response.status == '201') {
+                        //sucessfully created
+                        Actions.authenticated();
+                    } else if (response.status == '409') {
+                        // alredy on user
+                        alert("Alredy used this email, try again");
+                    } else if (response.status == '400') {
+                        // request body validation
+                        alert("Form Validation error");
+                    }else if (response.status == '401'){
+                        alert("Invalid Email Or Password");
+                    }
+                    
+                }).catch((error) => {
+                    console.log("error " + JSON.stringify(error));
+                });
+
+
+                // if(response.status == '201'){
+                //     //sucessfully created
+                // }else if (response.status == '409'){
+                //     // alredy on user
+                // }else if (response.status == '400') {
+                //     // request body validation
+                // }
+
+                // Actions.authenticated();
+
+            } else {
+                alert("net not conntectd");
+                //show error alert for not connect to internet
+            }
+        });
+    }
+
+    function validationForm() {
+        if (uName != "") {
+            if (uPass != "") {
+                login();
+            } else {
+                //show alert for password error
+                alert("please fill password");
+            }
+        } else {
+            //show alert for username error
+            alert("please fill user name");
+        }
+    }
+
+    function facebookLogin() {
+        NetInfo.fetch().then(state => {
+
+            if (state.isConnected) {
+                // var response = Funtion_FaceBook_Register();
+
+                // if(response.status == '201'){
+                //     //sucessfully created
+                // }else if (response.status == '409'){
+                //     // alredy on user
+                // }else if (response.status == '400') {
+                //     // request body validation
+                // }
+
+                //  Actions.authenticated();
+
+            } else {
+                //show error alert for not connect to internet
+            }
+        });
+    }
+
     return (
         <View style={Styles.main}>
-            <View style={[Styles.screenTitel,{marginTop:hp('1%'),marginBottom:hp('1.5%')}]}>
+            <View style={[Styles.screenTitel, { marginTop: hp('1%'), marginBottom: hp('1.5%') }]}>
                 <RulesTexts />
             </View>
-            
-            <View style={[Styles.screenTitel,{marginTop:hp('1%'),marginBottom:hp('1.5%')}]}>
-                <FormView />
+
+            <View style={[Styles.screenTitel, { marginTop: hp('1%'), marginBottom: hp('1.5%') }]}>
+                <FormView username={uName} passwords={uPass} updateUserName={setUName} updatePassowrd={setUPass} />
             </View>
-            
+
             <View style={Styles.screenTitel}>
-                <BtnFaceBookView/>
+                <BtnFaceBookView facebook_onpress={() => { facebookLogin(); }} />
             </View>
-           
-            <BtnGoogleView/>
-            <View style={[Styles.screenTitel,{position: 'absolute',bottom:0}]}>
-                <BtnLoginView/>
+
+            <BtnGoogleView />
+            <View style={[Styles.screenTitel, { position: 'absolute', bottom: 0 }]}>
+                <BtnLoginView funtions={() => { validationForm(); }} />
             </View>
-            
+
         </View>
     );
 }
@@ -169,7 +273,7 @@ const Styles = StyleSheet.create({
     hiyperlink_text: {
         fontFamily: 'NexaTextDemo-Light',
         fontSize: 14,
-        color: 'blue',
+        color: '#EB1F25',
         textDecorationLine: 'underline'
     },
     textContainer: {
@@ -188,7 +292,7 @@ const Styles = StyleSheet.create({
         width: wp('100%'),
         height: hp('25%'),
         justifyContent: 'center',
-        alignItems:'center',
+        alignItems: 'center',
         flexDirection: 'column',
     },
     input_holder: {
@@ -205,16 +309,16 @@ const Styles = StyleSheet.create({
         height: hp('4%'),
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop : hp('3%'),
-        marginBottom:hp('2%'),
+        marginTop: hp('3%'),
+        marginBottom: hp('2%'),
     },
     inputContainer_Row_icon: {
         width: wp('90%'),
         height: hp('4%'),
-        alignItems:'center',
+        alignItems: 'center',
         justifyContent: 'center',
-        marginTop : hp('3%'),
-        marginBottom:hp('2%'),
+        marginTop: hp('3%'),
+        marginBottom: hp('2%'),
 
     },
     defulatTextInput: {
@@ -252,35 +356,35 @@ const Styles = StyleSheet.create({
         borderRadius: 5,
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent:'center'
+        justifyContent: 'center'
     },
-    btn_icon_holder : {
+    btn_icon_holder: {
         width: "20%",
         height: hp('5%'),
-        alignItems:'center'
-,        justifyContent:'center'
+        alignItems: 'center'
+        , justifyContent: 'center'
     },
-    btn_text_holder : {
+    btn_text_holder: {
         width: "60%",
         height: hp('5%'),
-        justifyContent:'center'
+        justifyContent: 'center'
     },
-    btn_text_holder_login : {
+    btn_text_holder_login: {
         width: "60%",
         height: hp('5%'),
-        justifyContent:'center',
-        alignItems:'center'
+        justifyContent: 'center',
+        alignItems: 'center'
     },
-    brtn_text_content : {
+    brtn_text_content: {
         fontFamily: 'NexaTextDemo-Bold',
         fontSize: 16,
         color: '#000'
     },
-    screenTitel : {
-        marginTop : hp('3%'),
-        marginBottom : hp('3%'),
+    screenTitel: {
+        marginTop: hp('3%'),
+        marginBottom: hp('3%'),
     }
 });
 
 
-export default authscreen;
+export default AuthScreen;

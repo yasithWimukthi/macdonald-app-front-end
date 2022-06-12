@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { View, Image, StyleSheet, Text} from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
+import { Actions } from 'react-native-router-flux';
 
 //import fils
 import app_logo from '../../assert/images/splash_app_logo.png';
@@ -14,6 +15,20 @@ class splashscreeen extends Component {
     constructor(props) {
         super(props);
     }
+
+    componentDidMount(){
+
+        // Start counting when the page is loaded
+        this.timeoutHandle = setTimeout(()=>{
+             // Add your logic for the transition
+            Actions.auth();
+            // Actions.Tabel();
+        }, 3000);
+   }
+   
+   componentWillUnmount(){
+    clearTimeout(this.timeoutHandle); 
+}
 
     render(){
         return(

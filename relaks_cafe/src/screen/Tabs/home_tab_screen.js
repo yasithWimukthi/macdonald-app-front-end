@@ -1,24 +1,38 @@
-import React, { PropTypes, Component } from 'react';
-import { View, Image, StyleSheet, Text, TouchableOpacity, ScrollView } from 'react-native';
+import React, { PropTypes, Component, useEffect, useState } from 'react';
+import { View, Image, StyleSheet, Text, TouchableOpacity, ScrollView, FlatList, Platform, } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/AntDesign';
+import ZigzagView from "react-native-zigzag-view"
+import { Actions } from 'react-native-router-flux';
 
+import { Funtion_Get_Home_Menu_List, Funtion_Get_Home_Tranding_List, Funtion_Get_Home_Deals_List } from '../../assert/networks/api_calls';
+import NetInfo from "@react-native-community/netinfo";
+import Geolocation from '@react-native-community/geolocation';
+
+import { useSelector, useDispatch } from 'react-redux';
+import { setCartItems } from '../../redux/actions';
 
 const BannerTile = () => {
     return (
-        <View style={Styles.BtileConten}>
-            <View style={Styles.BtileHolder}>
-                <Image resizeMode='cover' style={{ width: '100%', height: '100%', }} source={{ uri: 'https://st4.depositphotos.com/14582236/22073/v/950/depositphotos_220731050-stock-illustration-cold-brewed-coffee-banner-ads.jpg' }} />
-                <View style={Styles.BtitelUIBtn}>
-                    <Text style={Styles.Btn_ui}>Add to Bag</Text>
+        <ZigzagView
+            backgroundColor="#E9E9E9"
+            surfaceColor="#FFF"
+            bottom={true}
+            top={false}
+        >
+            <View style={Styles.BtileConten}>
+                <View style={Styles.BtileHolder}>
+                    <Image resizeMode='cover' style={{ width: '100%', height: '100%', }} source={{ uri: 'https://st4.depositphotos.com/14582236/22073/v/950/depositphotos_220731050-stock-illustration-cold-brewed-coffee-banner-ads.jpg' }} />
+                    {/* <View style={Styles.BtitelUIBtn}>
+                        <Text style={Styles.Btn_ui}>Add to Bag</Text>
+                    </View> */}
                 </View>
             </View>
-        </View>
+        </ZigzagView>
     );
 }
 
-
-const MenuTile = () => {
+const MenuTile = ({ menuList }) => {
     return (
         <View style={Styles.MenuContainer}>
             <View style={Styles.MenuHolder}>
@@ -28,41 +42,60 @@ const MenuTile = () => {
                     </View>
                     <View style={[Styles.MenuSingleTitelHolder, { alignItems: 'flex-end', }]}>
                         <View style={{ flexDirection: 'row' }}>
-                            <Text style={Styles.menu_titel_scond}>Full menu</Text>
-                            <Icon color="#4267B2" name="arrowright" size={20} />
+                            <TouchableOpacity onPress={() => { Actions.FullMenu(); }}>
+                                <Text style={Styles.menu_titel_scond}>Full menu</Text>
+                            </TouchableOpacity>
+                            <Icon color="#EB1F25" name="arrowright" size={20} />
                         </View>
                     </View>
                 </View>
 
                 <View style={Styles.muneItemCoitainer}>
                     <View style={{ flexDirection: 'row' }}>
-                    <ScrollView horizontal>
-                        <View style={Styles.menuItemSingleTileConatiner}>
-                            <View style={Styles.menuItemSingleTileHolder}>
-                                <Image resizeMode='cover' style={{ width: '100%', height: '100%', borderRadius: wp('2%') }} source={{ uri: 'https://www.mashed.com/img/gallery/what-you-dont-know-about-mcdonalds-hotcakes/intro-1553105326.jpg' }} />
-                            </View>
-                            <View style={Styles.menuItemSingleTextHolder}>
-                                <Text style={Styles.menu_item_name}>Pancakes</Text>
-                            </View>
-                        </View>
+                        <ScrollView horizontal>
 
-                        <View style={Styles.menuItemSingleTileConatiner}>
-                            <View style={Styles.menuItemSingleTileHolder}>
-                                <Image resizeMode='cover' style={{ width: '100%', height: '100%', borderRadius: wp('2%') }} source={{ uri: 'https://www.mashed.com/img/gallery/what-you-dont-know-about-mcdonalds-hotcakes/intro-1553105326.jpg' }} />
-                            </View>
-                            <View style={Styles.menuItemSingleTextHolder}>
-                                <Text style={Styles.menu_item_name}>Pancakes</Text>
-                            </View>
-                        </View>
+                            <FlatList
+                                horizontal
+                                data={menuList}
+                                // keyExtractor={item => item.id}
+                                keyExtractor={(item, index) => index}
+                                renderItem={({ item }) => {
+                                    return (
+                                        <TouchableOpacity onPress={() => { Actions.MenuList({ cat_id: item.id }); }}>
+                                            <View style={Styles.menuItemSingleTileConatiner}>
+                                                <View style={Styles.menuItemSingleTileHolder}>
+                                                    {/* <Image resizeMode='cover' style={{ width: '100%', height: '100%', borderRadius: wp('2%') }} source={{ uri: 'https://www.mashed.com/img/gallery/what-you-dont-know-about-mcdonalds-hotcakes/intro-1553105326.jpg' }} /> */}
+                                                    <Image resizeMode='cover' style={{ width: '100%', height: '100%', borderRadius: wp('2%') }} source={{ uri: item.imgUrl }} />
+                                                </View>
+                                                <View style={Styles.menuItemSingleTextHolder}>
+                                                    <Text style={Styles.menu_item_name}>{item.name}</Text>
+                                                </View>
+                                            </View>
+                                        </TouchableOpacity>
+                                    );
+                                }}
 
-                        <View style={Styles.menuItemSingleTileConatiner}>
-                            <View style={Styles.menuItemSingleTileHolder}>
-                                <Image resizeMode='cover' style={{ width: '100%', height: '100%', borderRadius: wp('2%') }} source={{ uri: 'https://www.mashed.com/img/gallery/what-you-dont-know-about-mcdonalds-hotcakes/intro-1553105326.jpg' }} />
+                            />
+
+
+
+                            {/* <View style={Styles.menuItemSingleTileConatiner}>
+                                <View style={Styles.menuItemSingleTileHolder}>
+                                    <Image resizeMode='cover' style={{ width: '100%', height: '100%', borderRadius: wp('2%') }} source={{ uri: 'https://www.mashed.com/img/gallery/what-you-dont-know-about-mcdonalds-hotcakes/intro-1553105326.jpg' }} />
+                                </View>
+                                <View style={Styles.menuItemSingleTextHolder}>
+                                    <Text style={Styles.menu_item_name}>Pancakes</Text>
+                                </View>
                             </View>
-                            <View style={Styles.menuItemSingleTextHolder}>
-                                <Text style={Styles.menu_item_name}>Pancakes</Text>
-                            </View>
-                        </View>
+
+                            <View style={Styles.menuItemSingleTileConatiner}>
+                                <View style={Styles.menuItemSingleTileHolder}>
+                                    <Image resizeMode='cover' style={{ width: '100%', height: '100%', borderRadius: wp('2%') }} source={{ uri: 'https://www.mashed.com/img/gallery/what-you-dont-know-about-mcdonalds-hotcakes/intro-1553105326.jpg' }} />
+                                </View>
+                                <View style={Styles.menuItemSingleTextHolder}>
+                                    <Text style={Styles.menu_item_name}>Pancakes</Text>
+                                </View>
+                            </View> */}
                         </ScrollView>
                     </View>
                 </View>
@@ -72,7 +105,59 @@ const MenuTile = () => {
     );
 }
 
-const DealsTile = () => {
+const DealsTile = ({ dealList }) => {
+
+    const { items } = useSelector(state => state.userReducer);
+    const dispatch = useDispatch();
+
+    function addDealToCart(deal) {
+        var portionLit = items.foodItems;
+
+        var seleted_po = {
+            "id": deal.id,
+            "quantity": 1,
+            "portionId": "1", //selectdPortion.id
+            "note": " ",
+            "itemName": deal.description,
+            "image": deal.imgUrl,
+            "cal": "1000",
+            "potionName": " ",
+            "potionPrice": (parseInt(deal.totalPrice) - (parseInt(deal.totalPrice) * parseInt(deal.discount) / 100))
+        };
+
+        if (portionLit.length == 0) {
+            portionLit.push(seleted_po);
+        } else {
+            portionLit.forEach(element => {
+                if (element.id == seleted_po.id) {
+                    element.quantity = element.quantity + seleted_po.quantity;
+                    element.note = element.note != "" ? element.note + seleted_po.note : note
+                } else {
+                    portionLit.push(seleted_po);
+                }
+            });
+        }
+
+        console.log("portion array " + JSON.stringify(portionLit));
+
+
+        var orderObj = {
+            // "type": items.type != "" ? items.type : "order", //"order"
+            "isDelivery": (items.isDelivery) ? true : false,
+            "refId": "",
+            "noOfItems": items.noOfItems + 1, //qty
+            "totalPrice": items.totalPrice,
+            "promotionId": 0,
+            "location": {
+                "latitude": items.location.latitude,
+                "longitude": items.location.longitude
+            },
+            "foodItems": portionLit,
+        };
+
+        dispatch(setCartItems(orderObj));
+    }
+
     return (
         <View style={Styles.MenuContainer}>
             <View style={Styles.MenuHolder}>
@@ -91,7 +176,31 @@ const DealsTile = () => {
                 <View style={Styles.muneItemCoitainer}>
                     <View style={{ flexDirection: 'row' }}>
                         <ScrollView horizontal>
-                            <View style={Styles.menuItemSingleTileConatiner}>
+
+                            <FlatList
+                                horizontal
+                                data={dealList}
+                                keyExtractor={(item, index) => index}
+                                renderItem={({ item }) => {
+                                    return (
+                                        <TouchableOpacity onPress={() => { addDealToCart(item); }}>
+                                            <View style={Styles.menuItemSingleTileConatiner}>
+                                                <View style={Styles.menuItemSingleTileHolder}>
+                                                    <Image resizeMode='cover' style={{ width: '100%', height: '100%', borderRadius: wp('2%') }} source={{ uri: item.imgUrl }} />
+                                                </View>
+                                                <View style={Styles.menuItemSingleTextHolder}>
+                                                    {/* <Text style={Styles.menu_item_name}>{item.description}</Text> */}
+                                                </View>
+                                            </View>
+                                        </TouchableOpacity>
+                                    );
+                                }}
+
+                            />
+
+
+
+                            {/* <View style={Styles.menuItemSingleTileConatiner}>
                                 <View style={Styles.menuItemSingleTileHolder}>
                                     <Image resizeMode='cover' style={{ width: '100%', height: '100%', borderRadius: wp('2%') }} source={{ uri: 'https://www.mashed.com/img/gallery/what-you-dont-know-about-mcdonalds-hotcakes/intro-1553105326.jpg' }} />
                                 </View>
@@ -107,16 +216,7 @@ const DealsTile = () => {
                                 <View style={Styles.menuItemSingleTextHolder}>
                                     <Text style={Styles.menu_item_name}>Pancakes</Text>
                                 </View>
-                            </View>
-
-                            <View style={Styles.menuItemSingleTileConatiner}>
-                                <View style={Styles.menuItemSingleTileHolder}>
-                                    <Image resizeMode='cover' style={{ width: '100%', height: '100%', borderRadius: wp('2%') }} source={{ uri: 'https://www.mashed.com/img/gallery/what-you-dont-know-about-mcdonalds-hotcakes/intro-1553105326.jpg' }} />
-                                </View>
-                                <View style={Styles.menuItemSingleTextHolder}>
-                                    <Text style={Styles.menu_item_name}>Pancakes</Text>
-                                </View>
-                            </View>
+                            </View> */}
                         </ScrollView>
                     </View>
                 </View>
@@ -125,12 +225,11 @@ const DealsTile = () => {
     );
 }
 
-
 const RewardTile = () => {
     return (
         <View style={Styles.tileConten}>
             <View style={[Styles.RewrdtileDescriptionHolder, { marginBottom: hp('1%') }]}>
-                <Text style={Styles.menu_titel}>Your RcCafe Rewards</Text>
+                <Text style={Styles.menu_titel}>Relaks Radio Café Rewards</Text>
             </View>
             <View elevation={2} style={Styles.tileHolder}>
                 <Image resizeMode='cover' style={{ width: '100%', height: '100%', borderRadius: wp('5%') }} source={{ uri: 'https://st4.depositphotos.com/14582236/22073/v/950/depositphotos_220731050-stock-illustration-cold-brewed-coffee-banner-ads.jpg' }} />
@@ -147,7 +246,7 @@ const RewardTile = () => {
 }
 
 
-const TrandingTile = () => {
+const TrandingTile = ({ trandingList }) => {
     return (
         <View style={Styles.TrandingtileConten}>
 
@@ -163,7 +262,34 @@ const TrandingTile = () => {
                 </View>
             </View>
 
-            <View elevation={2} style={Styles.tileHolder}>
+            <ScrollView>
+                <FlatList
+                    data={trandingList}
+                    keyExtractor={(item, index) => index}
+                    renderItem={({ item }) => {
+                        return (
+                            <TouchableOpacity onPress={() => { Actions.Tranding({ foodId: item.foodItemId }); }}>
+                                <View elevation={2} style={Styles.tileHolder}>
+                                    <Image resizeMode='cover' style={{ width: '100%', height: '100%', borderRadius: wp('5%') }} source={{ uri: 'https://st4.depositphotos.com/14582236/22073/v/950/depositphotos_220731050-stock-illustration-cold-brewed-coffee-banner-ads.jpg' }} />
+
+                                    <View style={Styles.titelUIText}>
+                                        <Text style={Styles.Btn_ui_Bold}>{""}</Text>
+                                    </View>
+
+                                    <View style={[Styles.titelUIBtn, { color: '#FFE800', }]}>
+                                        <Text style={Styles.Btn_ui}>Order Now</Text>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                        );
+                    }}
+
+                />
+            </ScrollView>
+
+
+
+            {/* <View elevation={2} style={Styles.tileHolder}>
                 <Image resizeMode='cover' style={{ width: '100%', height: '100%', borderRadius: wp('5%') }} source={{ uri: 'https://st4.depositphotos.com/14582236/22073/v/950/depositphotos_220731050-stock-illustration-cold-brewed-coffee-banner-ads.jpg' }} />
 
                 <View style={Styles.titelUIText}>
@@ -173,19 +299,7 @@ const TrandingTile = () => {
                 <View style={[Styles.titelUIBtn, { color: '#FFE800', }]}>
                     <Text style={Styles.Btn_ui}>Order Now</Text>
                 </View>
-            </View>
-
-            <View elevation={2} style={Styles.tileHolder}>
-                <Image resizeMode='cover' style={{ width: '100%', height: '100%', borderRadius: wp('5%') }} source={{ uri: 'https://st4.depositphotos.com/14582236/22073/v/950/depositphotos_220731050-stock-illustration-cold-brewed-coffee-banner-ads.jpg' }} />
-
-                <View style={Styles.titelUIText}>
-                    <Text style={Styles.Btn_ui_Bold}>Festival Snack</Text>
-                </View>
-
-                <View style={[Styles.titelUIBtn, { color: '#FFE800', }]}>
-                    <Text style={Styles.Btn_ui}>Order Now</Text>
-                </View>
-            </View>
+            </View> */}
 
             <View style={Styles.tileDescriptionHolder}>
                 <Text style={Styles.details_ui}>* Offer valid only for full-price Relacas Cafe drinks.</Text>
@@ -213,17 +327,204 @@ const TrandingTile = () => {
 }
 
 
-function home_tab_screen() {
+function Home_Tab_Screen() {
+
+
+    const [menuList, setMenuList] = useState([]);
+    const [dealsList, setDealsList] = useState([]);
+    const [trandingList, setTrandingList] = useState([]);
+    const [
+        currentLongitude,
+        setCurrentLongitude
+    ] = useState('...');
+    const [
+        currentLatitude,
+        setCurrentLatitude
+    ] = useState('...');
+    const [
+        locationStatus,
+        setLocationStatus
+    ] = useState('');
+
+    useEffect(() => {
+
+        getMenuInfo();
+        getDealsInfo();
+        getTrandingInfo();
+
+        // const requestLocationPermission = async () => {
+        //     if (Platform.OS === 'ios') {
+        //         getOneTimeLocation();
+        //     } else {
+        //         try {
+        //             const granted = await PermissionsAndroid.request(
+        //                 PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+        //                 {
+        //                     title: 'Location Access Required',
+        //                     message: 'This App needs to Access your location',
+        //                 },
+        //             );
+        //             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        //                 //To Check, If Permission is granted
+        //                 getOneTimeLocation();
+        //             } else {
+        //                 setLocationStatus('Permission Denied');
+        //             }
+        //         } catch (err) {
+        //             console.warn(err);
+        //         }
+        //     }
+        // };
+        // requestLocationPermission();
+        // return () => {
+        //     Geolocation.clearWatch(watchID);
+        // };
+
+
+    }, []);
+
+
+    const getOneTimeLocation = () => {
+
+        const { items } = useSelector(state => state.userReducer);
+        const dispatch = useDispatch();
+
+        // setLocationStatus('Getting Location ...');
+        Geolocation.getCurrentPosition(
+            //Will give you the current location
+            (position) => {
+
+                //getting the Longitude from the location json
+                const currentLongitude =
+                    JSON.stringify(position.coords.longitude);
+
+                //getting the Latitude from the location json
+                const currentLatitude =
+                    JSON.stringify(position.coords.latitude);
+
+                //Setting Longitude state
+                setCurrentLongitude(currentLongitude);
+
+                //Setting Longitude state
+                setCurrentLatitude(currentLatitude);
+
+                var orderObj = {
+                    // "type": items.type != "" ? items.type : "order", //"order"
+                    "isDelivery": (items.isDelivery) ? true : false,
+                    "refId": "",
+                    "noOfItems": items.noOfItems, //qty
+                    "totalPrice": items.totalPrice,
+                    "promotionId": 0,
+                    "location": {
+                        "latitude": currentLatitude,
+                        "longitude": currentLongitude
+                    },
+                    "foodItems": items.foodItems,
+                };
+
+                // dispatch(setCartItems(orderObj));
+                console.log("finla array " + JSON.stringify(items));
+
+            },
+            (error) => {
+                setLocationStatus(error.message);
+            },
+            {
+                enableHighAccuracy: false,
+                timeout: 30000,
+                maximumAge: 1000
+            },
+        );
+    };
+
+    function getMenuInfo() {
+        NetInfo.fetch().then(state => {
+            if (state.isConnected) {
+                // var response = Funtion_Get_Home_Menu_List();
+                Funtion_Get_Home_Menu_List().then((response) => {
+                    // alert("menu list " + JSON.stringify(response));
+                    //console.log("menu list " + JSON.stringify(response));
+                    setMenuList(response.data);
+                }).catch((error) => {
+                    console.log("error " + JSON.stringify(error));
+                });
+
+                // if(response.status == '200'){
+                //     //sucessfully created
+                // }else if (response.status == '401'){
+                //     // token expire redirct to login page
+                // }else if (response.status == '500') {
+                //     // request body validation
+                // }
+
+            } else {
+                //show error alert for not connect to internet
+            }
+        });
+    }
+
+    function getDealsInfo() {
+        NetInfo.fetch().then(state => {
+            if (state.isConnected) {
+                // var response = Funtion_Get_Home_Deals_List();
+
+                Funtion_Get_Home_Deals_List().then((response) => {
+                    //alert("deals list " + JSON.stringify(response));
+                    // console.log("deals list " + JSON.stringify(response));
+                    setDealsList(response.data);
+                }).catch((error) => {
+                    console.log("error " + JSON.stringify(error));
+                });
+
+                // if(response.status == '200'){
+                //     //sucessfully created
+                // }else if (response.status == '401'){
+                //     // token expire redirct to login page
+                // }else if (response.status == '500') {
+                //     // request body validation
+                // }
+
+            } else {
+                //show error alert for not connect to internet
+            }
+        });
+    }
+
+    function getTrandingInfo() {
+        NetInfo.fetch().then(state => {
+            if (state.isConnected) {
+                // var response = Funtion_Get_Home_Tranding_List();
+                Funtion_Get_Home_Tranding_List().then((response) => {
+                    //alert("tranding list " + JSON.stringify(response));
+                    //console.log("tranding list " + JSON.stringify(response));
+                    setTrandingList(response.data);
+                }).catch((error) => {
+                    console.log("error " + JSON.stringify(error));
+                });
+
+                // if(response.status == '200'){
+                //     //sucessfully created
+                // }else if (response.status == '401'){
+                //     // token expire redirct to login page
+                // }else if (response.status == '500') {
+                //     // request body validation
+                // }
+
+            } else {
+                //show error alert for not connect to internet
+            }
+        });
+    }
+
     return (
 
         <View style={Styles.main}>
             <ScrollView>
                 <BannerTile />
-                <MenuTile />
-                <DealsTile />
-                <RewardTile />
-
-                <TrandingTile />
+                <MenuTile menuList={menuList} />
+                <DealsTile dealList={dealsList} />
+                {/* <RewardTile /> */}
+                <TrandingTile trandingList={trandingList} />
 
             </ScrollView>
         </View>
@@ -282,8 +583,8 @@ const Styles = StyleSheet.create({
         height: hp('5%'),
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#FFF',
-        borderRadius: wp('3%'),
+        backgroundColor: '#EB1F25',
+        borderRadius: wp('5%'),
         position: 'absolute',
         left: 50,
         bottom: 50,
@@ -292,7 +593,7 @@ const Styles = StyleSheet.create({
     },
     Btn_ui_Bold: {
         fontFamily: 'NexaTextDemo-Bold',
-        fontSize: 18,
+        fontSize: 26,
         color: '#FFF',
         letterSpacing: 0.25,
     },
@@ -328,7 +629,7 @@ const Styles = StyleSheet.create({
     menu_titel_scond: {
         fontFamily: 'NexaTextDemo-Light',
         fontSize: 14,
-        color: '#4267B2',
+        color: '#EB1F25',
         letterSpacing: 0.25,
     },
     muneItemCoitainer: {
@@ -350,7 +651,7 @@ const Styles = StyleSheet.create({
         justifyContent: 'center',
         borderRadius: wp('2%'),
         borderWidth: 1,
-        borderColor: 'red'
+        borderColor: '#EB1F25'
 
     },
     menuItemSingleTextHolder: {
@@ -361,7 +662,7 @@ const Styles = StyleSheet.create({
     },
     menu_item_name: {
         fontFamily: 'NexaTextDemo-Light',
-        fontSize: 14,
+        fontSize: 12,
         color: '#000',
         letterSpacing: 0.25,
     },
@@ -403,8 +704,8 @@ const Styles = StyleSheet.create({
         height: hp('5%'),
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#FFF',
-        borderRadius: wp('3%'),
+        backgroundColor: '#EB1F25',
+        borderRadius: wp('5%'),
         position: 'absolute',
         left: 50,
         bottom: 50,
@@ -416,7 +717,7 @@ const Styles = StyleSheet.create({
         height: hp('5%'),
         justifyContent: 'center',
         //backgroundColor: '#FFF',
-        borderRadius: wp('3%'),
+        borderRadius: wp('5%'),
         position: 'absolute',
         left: 50,
         bottom: 130,
@@ -426,7 +727,7 @@ const Styles = StyleSheet.create({
     Btn_ui: {
         fontFamily: 'NexaTextDemo-Light',
         fontSize: 14,
-        color: '#000',
+        color: '#FFF',
         letterSpacing: 0.25,
     },
     details_ui: {
@@ -438,4 +739,4 @@ const Styles = StyleSheet.create({
 
 });
 
-export default home_tab_screen;
+export default Home_Tab_Screen;
