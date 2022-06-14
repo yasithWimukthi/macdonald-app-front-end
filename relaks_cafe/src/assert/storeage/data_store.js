@@ -17,7 +17,7 @@ const GetToken = async () => {
         if (value !== null) {
             // value previously stored
             return value;
-        }else {
+        } else {
             return null;
         }
     } catch (error) {
@@ -29,7 +29,8 @@ const GetToken = async () => {
 
 const StoreUserInfo = async (userInfo) => {
     try {
-        
+        const jsonValue = JSON.stringify(userInfo)
+        await AsyncStorage.setItem('UserInfo', jsonValue);
     } catch (error) {
         console.log("error happen save userinfo " + error);
     }
@@ -37,7 +38,13 @@ const StoreUserInfo = async (userInfo) => {
 
 const GetUserInfo = () => {
     try {
-        
+        const value = AsyncStorage.getItem('UserInfo');
+        if (value !== null) {
+            // value previously stored
+            return JSON.parse(value);
+        } else {
+            return null;
+        }
     } catch (error) {
         console.log("error happen get userinfo " + error);
     }
@@ -47,7 +54,8 @@ const GetUserInfo = () => {
 
 const StoreOderInfo = (orderInfo) => {
     try {
-        
+        const jsonValue = JSON.stringify(orderInfo)
+        AsyncStorage.setItem('OrderInfo', jsonValue);
     } catch (error) {
         console.log("error happen save orderinfo " + error);
     }
@@ -55,11 +63,23 @@ const StoreOderInfo = (orderInfo) => {
 
 const GetOrderInfo = () => {
     try {
-        
+        const value = AsyncStorage.getItem('OrderInfo');
+        if (value !== null) {
+            // value previously stored
+            return JSON.parse(value);
+        } else {
+            return null;
+        }
+
     } catch (error) {
         console.log("error happen get orderinfo " + error);
     }
 }
 
 
-export default {StoreToke,GetToken,StoreUserInfo,GetUserInfo,StoreOderInfo,GetOrderInfo};
+export { StoreToke };
+export { GetToken };
+export { StoreUserInfo };
+export { GetUserInfo };
+export { StoreOderInfo };
+export { GetOrderInfo };

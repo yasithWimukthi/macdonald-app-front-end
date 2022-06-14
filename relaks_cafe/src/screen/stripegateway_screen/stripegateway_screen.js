@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes, Component, useState } from 'react';
 import {
     View,
     Text,
@@ -17,6 +17,8 @@ import { setCartItems } from '../../redux/actions';
 
 import { Funtion_Place_Foods_Order } from '../../assert/networks/api_calls';
 import { Actions } from 'react-native-router-flux';
+
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 const CURRENCY = 'USD';
 var CARD_TOKEN = null;
@@ -71,21 +73,29 @@ const StripeGateway = () => {
     const dispatch = useDispatch();
 
     const [CardInput, setCardInput] = React.useState({})
+    const [show, setShow] = useState(false);
+    const [modelTitel, setModelTitel] = useState("");
+    const [modelMessage, setModelMessage] = useState("");
 
     const onSubmit = async () => {
 
         if (CardInput.valid == false || typeof CardInput.valid == "undefined") {
-            alert('Invalid Credit Card');
+            //alert('Invalid Credit Card');
+            setModelTitel("Error");
+            setModelMessage("Invalid Credit Card. Try again");
+            setShow(true);
             return false;
         }
-
         let creditCardToken;
         try {
             // Create a credit card token
             creditCardToken = await getCreditCardToken(CardInput);
             // console.log("creditCardToken", creditCardToken)
             if (creditCardToken.error) {
-                alert("creditCardToken error");
+                //alert("creditCardToken error");
+                setModelTitel("Error");
+                setModelMessage("Somthing went wrong. Try again");
+                setShow(true);
                 return;
             }
         } catch (e) {
@@ -96,12 +106,12 @@ const StripeGateway = () => {
         const { error } = await subscribeUser(creditCardToken);
         // Handle any errors from your server
         if (error) {
-            alert(error)
+           // alert(error)
         } else {
 
             let pament_data = await charges();
             console.log('pament_data', pament_data);
-            alert("response " + JSON.stringify(pament_data.id));
+            //alert("response " + JSON.stringify(pament_data.id));
 
             var orderObj = {
                 "isDelivery": items.isDelivery,
@@ -126,7 +136,7 @@ const StripeGateway = () => {
 
             list.forEach(element => {
 
-                if(element.dealType == "item"){
+                if (element.dealType == "item") {
                     var obj = {
                         "foodItemId": element.foodItemId,
                         "portionId": element.portionId,
@@ -134,10 +144,10 @@ const StripeGateway = () => {
                         "note": element.note
                     }
                     dummyData.push(obj);
-                }else{
+                } else {
 
                     var tmpList = element.dealItem;
-                    tmpList.forEach((dels)=>{
+                    tmpList.forEach((dels) => {
                         var obj = {
                             "foodItemId": dels.foodItem.id,
                             "portionId": dels.portion.id,
@@ -146,7 +156,7 @@ const StripeGateway = () => {
                         }
                         dummyData.push(obj);
                     });
-                }  
+                }
             });
 
             orderObj.foodItems = dummyData;
@@ -154,39 +164,52 @@ const StripeGateway = () => {
             console.log("final order obj " + JSON.stringify(orderObj));
 
             if (pament_data.status == 'succeeded') {
-                alert("Payment Successfully");
+                //alert("Payment Successfully");
                 Funtion_Place_Foods_Order(orderObj).then((response) => {
-                   // alert("order place Successfully " + JSON.stringify(response));
-                    var dts = {
-                        "isDelivery": false,
-                        "refId": "",
-                        "noOfItems": 0,
-                        "totalPrice": 0.00,
-                        "promotionId": 0,
-                        "location": {
-                            "latitude": "34.052235",
-                            "longitude": "-118.243683"
-                        },
-                        "foodItems": []
+                    // alert("order place Successfully " + JSON.stringify(response));
+                    if (response.code == '201') {
+                        var dts = {
+                            "isDelivery": false,
+                            "refId": "",
+                            "noOfItems": 0,
+                            "totalPrice": 0.00,
+                            "promotionId": 0,
+                            "location": {
+                                "latitude": "34.052235",
+                                "longitude": "-118.243683"
+                            },
+                            "foodItems": []
+                        }
+
+                        dispatch(setCartItems(dts));
+
+                        //Actions.authenticated();
+                        Actions.OrderSt();
+                    } else if (response.code == '401') {
+                        setModelTitel("Error");
+                        setModelMessage("Authentication Fail, Plase login again");
+                        setShow(true);
+                        //redirct to login page
+                        //show eorr
+                    } else if (response.code == '500') {
+                        //server error
+                        setModelTitel("Error");
+                        setModelMessage("Something went wrong, try again later");
+                        setShow(true);
                     }
-
-                    dispatch(setCartItems(dts));
-
-                    Actions.authenticated();
                     //clear redux store
                 }).catch((error) => {
                     console.log("error happen place oder " + error);
                 });
             }
             else {
-                alert('Payment failed');
+                //alert('Payment failed');
+                setModelTitel("Error");
+                setModelMessage("Payment Failed, try again later");
+                setShow(true);
             }
         }
     };
-
-
-
-
 
     const charges = async () => {
         const card = {
@@ -245,6 +268,27 @@ const StripeGateway = () => {
                     Pay Now
                 </Text>
             </TouchableOpacity>
+
+            <AwesomeAlert
+                show={show}
+                showProgress={false}
+                title={modelTitel}
+                message={modelMessage}
+                closeOnTouchOutside={true}
+                closeOnHardwareBackPress={false}
+                showCancelButton={true}
+                showConfirmButton={true}
+                cancelText="cancel"
+                confirmText="Ok"
+                confirmButtonColor="red" //#DD6B55
+                onCancelPressed={() => {
+                    setShow(false);
+                }}
+                onConfirmPressed={() => {
+                    setShow(false);
+                }}
+            />
+
         </View>
     );
 };
@@ -263,7 +307,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
     },
     button: {
-        backgroundColor: 'yellow',
+        backgroundColor: '#EB1F25',
         width: 150,
         height: 45,
         alignSelf: 'center',

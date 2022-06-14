@@ -5,7 +5,9 @@ import Icon from 'react-native-vector-icons/AntDesign';
 
 import { Actions } from 'react-native-router-flux';
 
-const ProfileTitel = () => {
+import { useSelector, useDispatch } from 'react-redux';
+
+const ProfileTitel = ({username}) => {
     return (
         
             <View style={Styles.TitelConatiner}>
@@ -15,7 +17,7 @@ const ProfileTitel = () => {
                 </View>
                 <View style={Styles.TitelNameHolder}>
                     <View style={Styles.TitelNameConatiner}>
-                        <Text style={Styles.TitelSubTexts}>Dinesh Madushanka</Text>
+                        <Text style={Styles.TitelSubTexts}>{username}</Text>
                     </View>
                     <View style={Styles.TitelSignConatiner}>
                         <Text style={Styles.TitelSubUnderTexts}>Sign out</Text>
@@ -123,9 +125,12 @@ const DeleteAccountTile = () => {
 }
 
 const profile_screen = () => {
+
+    const { user } = useSelector(state => state.userReducer);
+
     return (
         <View style={Styles.main}>
-             <ProfileTitel/>  
+             <ProfileTitel username={user.firstName +" "+user.lastName}/>  
              <PersonalSettingTile/> 
              <PrivanceyTile/>
              <PaymentTile/>

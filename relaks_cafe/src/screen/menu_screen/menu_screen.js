@@ -7,6 +7,11 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import { Actions } from 'react-native-router-flux';
 import { Funtion_Get_Home_Menu_List } from '../../assert/networks/api_calls';
 
+import AwesomeAlert from 'react-native-awesome-alerts';
+
+import { useSelector, useDispatch } from 'react-redux';
+import { setCartItems } from '../../redux/actions';
+
 const MenuTitel = () => {
     return (
         <View style={Styles.menuTitel}>
@@ -56,15 +61,47 @@ const MenuListTile = ({menuList}) => {
 
 const Menu_Screen = () => {
 
+    const { items } = useSelector(state => state.userReducer);
+    const dispatch = useDispatch();
+
     const [catogeryList, setCategoryList] = useState([]);
+
+    const [show, setShow] = useState(false);
+    const [modelTitel, setModelTitel] = useState("");
+    const [modelMessage, setModelMessage] = useState("");
     
+    const [visbile, setVisible] = useState((items.foodItems.length > 0) ? true : false);
+
+    const [totals, setTolats] = useState(items.totalPrice);
+
+    // useEffect(() => {
+        
+    // });
+
     useEffect(() => {
+        setVisible((items.foodItems.length > 0) ? true : false);
+        setTolats(items.totalPrice);
         getCatogeryInfo();
     }, []);
 
     function getCatogeryInfo() {
         Funtion_Get_Home_Menu_List().then((response) => {
-            setCategoryList(response.data);
+
+            if(response.code == '200'){
+                setCategoryList(response.responce.data);
+            }else if (response.code == '406'){
+                setModelTitel("Error");
+                setModelMessage("Catogery Limit Invalid!");
+                setShow(true);
+                //show eorr
+            }else if (response.code == '500'){
+                //server error
+                setModelTitel("Error");
+                setModelMessage("Something went wrong, try again later");
+                setShow(true);
+            }
+
+           // setCategoryList(response.data);
         }).catch((error) => {
             console.log("error happen when loading data to catogery list " + error);
         });
@@ -77,6 +114,48 @@ const Menu_Screen = () => {
             <ScrollView style={{ flex: 1 }}>
                 <MenuListTile menuList={catogeryList}/>
             </ScrollView>
+
+            {
+                (visbile) ? <View style={Styles.cartTile}>
+                    <View style={Styles.cartTile_holder}>
+                        <View style={Styles.cartTile_info_holder}>
+                            <View style={Styles.cartTile_tesxts_holder}>
+                                <Text style={Styles.itemText}>{items.foodItems.length + " items"}</Text>
+                            </View>
+                            <View style={Styles.cartTile_tesxts_holder}>
+                                <Text style={Styles.totalText}>{"€ :" + totals}</Text>
+                            </View>
+                        </View>
+                        <TouchableOpacity onPress={() => { Actions.Cart(); }}>
+                            <View style={Styles.cartTile_btn_holder}>
+                                <View style={Styles.btn_holder}>
+                                    <Text style={[Styles.itemText,{color: '#000',}]}>View Cart</Text>
+                                </View>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                </View> : null
+            }
+
+            <AwesomeAlert
+                show={show}
+                showProgress={false}
+                title={modelTitel}
+                message={modelMessage}
+                closeOnTouchOutside={true}
+                closeOnHardwareBackPress={false}
+                showCancelButton={false}
+                showConfirmButton={true}
+                cancelText="cancel"
+                confirmText="Ok"
+                confirmButtonColor="red" //#DD6B55
+                onCancelPressed={() => {
+                    setShow(false);
+                }}
+                onConfirmPressed={() => {
+                    setShow(false);
+                }}
+            />
         </View>
     );
 }
@@ -151,6 +230,60 @@ const Styles = StyleSheet.create({
         fontSize: 15,
         color: '#000',
         letterSpacing: 0.04,
+    },
+    cartTile: {
+        width: wp('100%'),
+        height: hp('10%'),
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'absolute',
+        bottom: 0,
+        // backgroundColor:'#f5f5f5'
+    },
+    cartTile_holder: {
+        width: wp('90%'),
+        height: hp('8%'),
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#a5a6a5',
+        borderRadius: 5,
+        flexDirection: 'row'
+    },
+    cartTile_info_holder: {
+        width: wp('60%'),
+        height: hp('8%'),
+        justifyContent: 'center',
+    },
+    cartTile_tesxts_holder: {
+        width: wp('50%'),
+        height: hp('3%'),
+        justifyContent: 'center',
+        marginLeft: 10,
+    },
+    cartTile_btn_holder: {
+        width: wp('30%'),
+        height: hp('8%'),
+        justifyContent: 'center',
+    },
+    itemText: {
+        fontFamily: 'NexaTextDemo-Light',
+        fontSize: 14,
+        color: '#fff',
+        letterSpacing: 0.04,
+    },
+    totalText: {
+        fontFamily: 'NexaTextDemo-Bold',
+        fontSize: 14,
+        color: '#fff',
+        letterSpacing: 0.04,
+    },
+    btn_holder: {
+        width: wp('28%'),
+        height: hp('7%'),
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 5,
+        backgroundColor: 'red'
     },
 
 });

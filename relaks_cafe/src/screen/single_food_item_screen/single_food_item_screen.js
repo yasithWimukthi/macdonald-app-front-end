@@ -7,6 +7,10 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import { useSelector, useDispatch } from 'react-redux';
 import { setCartItems } from '../../redux/actions';
 
+import AwesomeAlert from 'react-native-awesome-alerts';
+
+import { Actions } from 'react-native-router-flux';
+
 const FoodName = ({ foodName }) => {
     return (
         <View style={Styles.foodName_Container}>
@@ -44,7 +48,7 @@ const PortionTitel = ({ protionList, updateSeletedPortion }) => {
                         renderItem={({ item }) => {
                             return (
                                 <TouchableOpacity onPress={() => { setSelectItem(item.id); updateSeletedPortion(item); }}>
-                                    <View style={[Styles.single_portion_View, { backgroundColor: selectItem == item.id ? 'yellow' : '#f5f5f5' }]}>
+                                    <View style={[Styles.single_portion_View, { backgroundColor: selectItem == item.id ? '#ADD8E6' : '#f5f5f5' }]}>
                                         <View style={Styles.single_portion_info_holder}>
                                             <Text>{"€ " + item.price}</Text>
                                         </View>
@@ -115,7 +119,7 @@ const BtnAddToCartView = ({ funtions, protionCount }) => {
     return (
         <View style={Styles.btnContainer}>
             <TouchableOpacity disabled={protionCount != 0 ? false : true} onPress={funtions}>
-                <View style={[Styles.btnBorder, { backgroundColor: protionCount != 0 ? 'yellow' : '#f5f5f5', borderWidth: 0 }]}>
+                <View style={[Styles.btnBorder, { backgroundColor: protionCount != 0 ? '#EB1F25' : '#f5f5f5', borderWidth: 0 }]}>
                     <View style={Styles.btn_icon_holder}>
                         {/* <Icon color="#4285F4" name="google" size={30} /> */}
                     </View>
@@ -145,6 +149,19 @@ const Single_FoodInfo_Screen = ({ ...props }) => {
     const [note, setNote] = useState("");
     const [selectdPortion, setSeletedPortion] = useState(null);
 
+    const [show, setShow] = useState(false);
+    const [modelTitel, setModelTitel] = useState("");
+    const [modelMessage, setModelMessage] = useState("");
+
+    const [visbile, setVisible] = useState((items.foodItems.length > 0) ? true : false);
+
+    const [totals, setTolats] = useState(items.totalPrice);
+
+    useEffect(() => {
+        setVisible((items.foodItems.length > 0) ? true : false);
+        setTolats(items.totalPrice);
+    });
+
     function AddToCart() {
         var portionLit = items.foodItems;
         var seleted_po = {
@@ -152,34 +169,34 @@ const Single_FoodInfo_Screen = ({ ...props }) => {
             "quantity": qty,
             "portionId": selectdPortion.id,
             "note": (note != "") ? note : " ",
-            "itemName" : item.name,
-            "image" : item.imgUrl,
-            "cal" : selectdPortion.calories,
-            "potionName" : selectdPortion.name,
-            "potionPrice" : selectdPortion.price,
-            "dealID" : "0",
-            "dealType" : "item",
-            "dealItem" : [],
+            "itemName": item.name,
+            "image": item.imgUrl,
+            "cal": selectdPortion.calories,
+            "potionName": selectdPortion.name,
+            "potionPrice": selectdPortion.price,
+            "dealID": "0",
+            "dealType": "item",
+            "dealItem": [],
         };
 
-        if(portionLit.length == 0) {
+        if (portionLit.length == 0) {
             portionLit.push(seleted_po);
-        }else{
+        } else {
             var updte_st = true;
             portionLit.forEach(element => {
-                if(element.id == seleted_po.id & element.dealType == "item"){
+                if (element.id == seleted_po.id & element.dealType == "item") {
                     element.quantity = element.quantity + seleted_po.quantity;
                     element.note = element.note != "" ? element.note + seleted_po.note : note;
                     updte_st = false;
 
-                }else{
-                    
+                } else {
+
                 }
             });
-            if(updte_st){
+            if (updte_st) {
                 portionLit.push(seleted_po);
             }
-            
+
         }
 
         var orderObj = {
@@ -193,27 +210,78 @@ const Single_FoodInfo_Screen = ({ ...props }) => {
                 "latitude": items.location.latitude,
                 "longitude": items.location.longitude
             },
-            "foodItems": portionLit, 
+            "foodItems": portionLit,
         };
-
         dispatch(setCartItems(orderObj));
-       // alert("set values "+JSON.stringify(items));
+
+        setModelTitel("Item Added");
+        setModelMessage("Item added to your cart!");
+        setShow(true);
+        // alert("set values "+JSON.stringify(items));
     }
 
     return (
         <View style={Styles.main}>
-            <FoodName foodName={foodName} />
+            <ScrollView>
+                <FoodName foodName={foodName} />
 
-            {/* <PortionTitel potionPrice={"100.00"} calaoriesCount={"537"} /> */}
-            <PortionTitel protionList={protionlist} updateSeletedPortion={setSeletedPortion} />
+                {/* <PortionTitel potionPrice={"100.00"} calaoriesCount={"537"} /> */}
+                <PortionTitel protionList={protionlist} updateSeletedPortion={setSeletedPortion} />
 
-            <ItemImageView imageUrl={itemImage} />
+                <ItemImageView imageUrl={itemImage} />
 
-            <QtyInfoView qty={qty} updateQty={setQty} updateNote={setNote} />
+                <QtyInfoView qty={qty} updateQty={setQty} updateNote={setNote} />
 
-            <View style={Styles.screenTitel}>
-                <BtnAddToCartView funtions={() => { AddToCart(); }} protionCount={protionlist.length} />
-            </View>
+                <View style={Styles.screenTitel}>
+                    <BtnAddToCartView funtions={() => { AddToCart(); }} protionCount={protionlist.length} />
+                </View>
+
+                <View style={{ height : hp('5%') }}>
+
+                </View>
+            </ScrollView>
+
+            {
+                (visbile) ? <View style={Styles.cartTile}>
+                    <View style={Styles.cartTile_holder}>
+                        <View style={Styles.cartTile_info_holder}>
+                            <View style={Styles.cartTile_tesxts_holder}>
+                                <Text style={Styles.itemText}>{items.foodItems.length + " items"}</Text>
+                            </View>
+                            <View style={Styles.cartTile_tesxts_holder}>
+                                <Text style={Styles.totalText}>{"€ :" + totals}</Text>
+                            </View>
+                        </View>
+                        <TouchableOpacity onPress={() => { Actions.Cart(); }}>
+                            <View style={Styles.cartTile_btn_holder}>
+                                <View style={Styles.btn_holder}>
+                                    <Text style={[Styles.itemText,{color: '#000',}]}>View Cart</Text>
+                                </View>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                </View> : null
+            }
+
+            <AwesomeAlert
+                show={show}
+                showProgress={false}
+                title={modelTitel}
+                message={modelMessage}
+                closeOnTouchOutside={true}
+                closeOnHardwareBackPress={false}
+                showCancelButton={false}
+                showConfirmButton={true}
+                cancelText="cancel"
+                confirmText="Ok"
+                confirmButtonColor="red" //#DD6B55
+                onCancelPressed={() => {
+                    setShow(false);
+                }}
+                onConfirmPressed={() => {
+                    setShow(false);
+                }}
+            />
 
         </View>
     );
@@ -385,9 +453,63 @@ const Styles = StyleSheet.create({
     screenTitel: {
         marginTop: hp('3%'),
         marginBottom: hp('3%'),
+        //position: 'absolute',
+        //bottom: 0
+    },
+    cartTile: {
+        width: wp('100%'),
+        height: hp('10%'),
+        alignItems: 'center',
+        justifyContent: 'center',
         position: 'absolute',
-        bottom: 0
-    }
+        bottom: 0,
+        // backgroundColor:'#f5f5f5'
+    },
+    cartTile_holder: {
+        width: wp('90%'),
+        height: hp('8%'),
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#a5a6a5',
+        borderRadius: 5,
+        flexDirection: 'row'
+    },
+    cartTile_info_holder: {
+        width: wp('60%'),
+        height: hp('8%'),
+        justifyContent: 'center',
+    },
+    cartTile_tesxts_holder: {
+        width: wp('50%'),
+        height: hp('3%'),
+        justifyContent: 'center',
+        marginLeft: 10,
+    },
+    cartTile_btn_holder: {
+        width: wp('30%'),
+        height: hp('8%'),
+        justifyContent: 'center',
+    },
+    itemText: {
+        fontFamily: 'NexaTextDemo-Light',
+        fontSize: 14,
+        color: '#fff',
+        letterSpacing: 0.04,
+    },
+    totalText: {
+        fontFamily: 'NexaTextDemo-Bold',
+        fontSize: 14,
+        color: '#fff',
+        letterSpacing: 0.04,
+    },
+    btn_holder: {
+        width: wp('28%'),
+        height: hp('7%'),
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 5,
+        backgroundColor: 'red'
+    },
 
 
 });

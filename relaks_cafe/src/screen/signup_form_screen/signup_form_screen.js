@@ -8,6 +8,7 @@ import { Checkbox } from 'native-base';
 
 import { Funtion_Register } from '../../assert/networks/api_calls';
 import NetInfo from "@react-native-community/netinfo";
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 const TitelView = () => {
     return (
@@ -21,7 +22,7 @@ const TitelView = () => {
 }
 
 
-const FirstFormContent = ({ fname, lname, mail, pass, repass, postal_code, updateFname, updateLname, updateEmail, updatePass, updateRePass, updatePostalCode }) => {
+const FirstFormContent = ({ fname, lname, mail, pass, repass, postal_code, mobile, updateMobile, updateFname, updateLname, updateEmail, updatePass, updateRePass, updatePostalCode }) => {
 
     const [uFName, setUFName] = useState(fname);
     const [uLName, setULName] = useState(lname);
@@ -29,6 +30,10 @@ const FirstFormContent = ({ fname, lname, mail, pass, repass, postal_code, updat
     const [uPassword, setUPassword] = useState(pass);
     const [uRePassword, setURePassword] = useState(repass);
     const [uPostal, setUPostal] = useState(postal_code);
+    const [uContact, setUContact] = useState(mobile);
+
+    const [viewPass, setViewPass] = useState(true);
+    const [viewRePass, setReViewPass] = useState(true);
 
     return (
         <View style={Styles.frist_form_container}>
@@ -40,23 +45,31 @@ const FirstFormContent = ({ fname, lname, mail, pass, repass, postal_code, updat
                     <TextInput placeholder='*Last Name' onChangeText={(values) => { setULName(values); updateLname(values); }} value={uLName} placeholderTextColor="#000" style={Styles.defulatTextInput} />
                 </View>
                 <View style={Styles.inputContainer_Row}>
-                    <TextInput placeholder='*Email' onChangeText={(values) => { setUEmail(values); updateEmail(values); }} value={uEmail} placeholderTextColor="#000" style={Styles.defulatTextInput} />
+                    <TextInput placeholder='*Email' keyboardType='email-address' onChangeText={(values) => { setUEmail(values); updateEmail(values); }} value={uEmail} placeholderTextColor="#000" style={Styles.defulatTextInput} />
+                </View>
+                <View style={Styles.inputContainer_Row}>
+                    <TextInput placeholder='*Mobile Number' keyboardType='numeric' maxLength={13} onChangeText={(values) => { setUContact(values); updateMobile(values); }} value={uContact} placeholderTextColor="#000" style={Styles.defulatTextInput} />
                 </View>
                 <View style={Styles.inputContainer_Row_icon}>
                     <View style={Styles.subinputContainer}>
                         <TextInput
                             style={Styles.defulatTextInput}
                             placeholder='*Password'
+                            secureTextEntry={viewPass}
                             placeholderTextColor="#000"
                             onChangeText={(values) => { setUPassword(values); updatePass(values); }}
                             value={uPassword}
                         />
-                        <Icons style={Styles.icon} color="#000" name="eye-off" size={20} />
+                        <View style={Styles.icon}>
+                            <TouchableOpacity onPress={() => { setViewPass(!viewPass) }}>
+                                <Icons color="#000" name={(viewPass) ? "eye-off" : "eye"} size={20} />
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
                 <View style={Styles.textRow_for_content}>
-                    <View style={[Styles.instutionTitelContainer, { height: hp('5%') }]}>
-                        <Text style={Styles.insturtionTitel}>Plase ensure you use a unique password and change it {"\n"}frequently</Text>
+                    <View style={[Styles.instutionTitelContainer, { height: hp('6%') }]}>
+                        <Text style={Styles.insturtionTitel}>Plase ensure you use a unique password and change it frequently</Text>
                     </View>
                     <View style={Styles.instutionTitelContainer}>
                         <Text style={Styles.insturtionDetails}>password must be 8 to 16 characters</Text>
@@ -76,16 +89,22 @@ const FirstFormContent = ({ fname, lname, mail, pass, repass, postal_code, updat
                     <View style={Styles.subinputContainer}>
                         <TextInput
                             style={Styles.defulatTextInput}
+                            secureTextEntry={viewRePass}
                             placeholder='*Confirm Password'
                             placeholderTextColor="#000"
                             onChangeText={(values) => { setURePassword(values); updateRePass(values); }}
                             value={uRePassword}
                         />
-                        <Icons style={Styles.icon} color="#000" name="eye-off" size={20} />
+
+                        <View style={Styles.icon}>
+                            <TouchableOpacity onPress={() => { setReViewPass(!viewRePass) }}>
+                                <Icons color="#000" name={(viewRePass) ? "eye-off" : "eye"} size={20} />
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
 
-                <View style={[Styles.inputContainer_Row, { height: hp('5%') }]}>
+                <View style={[Styles.inputContainer_Row, { height: hp('6%') }]}>
                     <TextInput placeholder='*Postalcode (incl. space)' onChangeText={(values) => { setUPostal(values); updatePostalCode(values); }} value={uPostal} placeholderTextColor="#000" style={Styles.defulatTextInput} />
                     <Text style={[Styles.insturtionDetails, { fontSize: 12, letterSpacing: 0.10, marginTop: 10 }]}>Providing your postalcode helps us find the nearest Relaks cafe to you </Text>
                 </View>
@@ -170,7 +189,7 @@ const BtnLoginView = ({ onpress_funtion }) => {
     return (
         <View style={Styles.btnContainer}>
             <TouchableOpacity onPress={onpress_funtion}>
-                <View style={[Styles.btnBorder, { backgroundColor: 'yellow', borderWidth: 0 }]}>
+                <View style={[Styles.btnBorder, { backgroundColor: '#EB1F25', borderWidth: 0 }]}>
                     <View style={Styles.btn_icon_holder}>
                         {/* <Icon color="#4285F4" name="google" size={30} /> */}
                     </View>
@@ -186,6 +205,8 @@ const BtnLoginView = ({ onpress_funtion }) => {
     )
 }
 
+
+
 const signup_form_screen = () => {
 
     const [user_Fname, setUserFname] = useState("");
@@ -197,6 +218,16 @@ const signup_form_screen = () => {
     const [user_Contact, setUserContact] = useState("");
     const [driving, setDriving] = useState(true);
     const [age, setAge] = useState(true);
+
+
+    const [show, setShow] = useState(false);
+    const [showRE, setShowRE] = useState(false);
+    const [modelTitel, setModelTitel] = useState("");
+    const [modelMessage, setModelMessage] = useState("");
+
+
+
+
 
     function registerUser() {
 
@@ -210,32 +241,48 @@ const signup_form_screen = () => {
             "postal": user_PostalCode
         }
 
+        console.log("user create " + JSON.stringify(user));
+
         NetInfo.fetch().then(state => {
 
             if (state.isConnected) {
-                // var response = Funtion_Register(user);
-
                 Funtion_Register(user).then((response) => {
-                   // alert("response " + JSON.stringify(response));
+                    // alert("response " + JSON.stringify(response));
                     console.log("response " + JSON.stringify(response));
-                    Actions.auth();
-                    if (response.status == '201') {
+                    //Actions.auth();
+                    if (response.code == '201') {
                         //sucessfully created
+                        setModelTitel("Successfully");
+                        setModelMessage("user registered sucess!");
+                        setShow(true);
                         Actions.auth();
-                    } else if (response.status == '409') {
+                    } else if (response.code == '409') {
                         // alredy on user
-                        alert("Alredy used this email, try again");
-                    } else if (response.status == '400') {
-                        alert("Form Validation error");
+                        setModelTitel("Error");
+                        setModelMessage("Alredy used this email or mobile number, try again");
+                        setShow(true);
+                        ///alert("Alredy used this email, try again");
+                    } else if (response.code == '400') {
+                        // alert("Form Validation error");
+                        setModelTitel("Error");
+                        setModelMessage("Form Validation error");
+                        setShow(true);
                         // request body validation
+                    } else if (response.code == '500') {
+                        setModelTitel("Error");
+                        setModelMessage("Something went wrong, try again later");
+                        setShow(true);
                     }
                 }).catch((error) => {
                     console.log("error " + JSON.stringify(error));
                 });
 
-                
+
             } else {
                 //show error alert for not connect to internet
+                setModelTitel("Error");
+                setModelMessage("Please check your device connection");
+                setShow(true);
             }
         });
     }
@@ -248,40 +295,71 @@ const signup_form_screen = () => {
                         if (user_RePassword != null || user_RePassword != "") {
                             if (user_Password == user_RePassword) {
                                 if (user_PostalCode != null || user_PostalCode != "") {
-                                    registerUser();
-                                    // if (driving & age) {
-                                    //     registerUser();
-                                    // } else {
-                                    //     //show alert for error user agree condtion
-                                    //     alert("Agree the user condtion");
-                                    // }
+                                    if (user_Contact != null || user_Contact != "") {
+                                        const regex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+                                        var validate = !(!user_Contact || regex.test(user_Contact) === false);
+                                        if (validate) {
+                                            registerUser();
+                                        } else {
+                                            // not valida uk number
+                                            setModelTitel("Error");
+                                            setModelMessage("Please enter valid uk mobile number");
+                                            setShowRE(true);
+                                        }
+
+                                    } else {
+                                        setModelTitel("Error");
+                                        setModelMessage("Please enter mobile number");
+                                        setShowRE(true);
+                                    }
                                 } else {
                                     //show alert for error user postal code
-                                    alert("fill user postal code");
+                                   // alert("fill user postal code");
+                                    setModelTitel("Error");
+                                    setModelMessage("Please enter postal code");
+                                    setShowRE(true);
                                 }
                             } else {
                                 //show alert for error password not match
-                                alert("password not match");
+                                //alert("password not match");
+                                setModelTitel("Error");
+                                setModelMessage("password not match, plase try again");
+                                setShowRE(true);
                             }
                         } else {
                             //show alert for error user repass
-                            alert("fill user re enter password");
+                           // alert("fill user re enter password");
+                            setModelTitel("Error");
+                            setModelMessage("Please re-enter password");
+                            setShowRE(true);
                         }
                     } else {
                         //show alert for error user password
-                        alert("fill user passsword");
+                        //alert("fill user passsword");
+                        setModelTitel("Error");
+                        setModelMessage("Please enter password ");
+                        setShowRE(true);
                     }
                 } else {
                     //show alert for error user email
-                    alert("fill user email");
+                    //alert("fill user email");
+                    setModelTitel("Error");
+                    setModelMessage("Please enter email address");
+                    setShowRE(true);
                 }
             } else {
                 //show alert for error user lname
-                alert("fill user last name");
+                //alert("fill user last name");
+                setModelTitel("Error");
+                setModelMessage("Please enter last name");
+                setShowRE(true);
             }
         } else {
             //show alert for error user fname
-            alert("fill user frist name");
+            //alert("fill user frist name");
+            setModelTitel("Error");
+            setModelMessage("Please enter frist name");
+            setShowRE(true);
         }
     }
 
@@ -289,13 +367,52 @@ const signup_form_screen = () => {
         <View style={Styles.main}>
             <ScrollView>
                 <TitelView />
-                <FirstFormContent fname={user_Fname} updateFname={setUserFname} lname={user_Lname} updateLname={setUserLname} mail={user_Email} updateEmail={setUserEmail} pass={user_Password} updatePass={setUserPassword} repass={user_RePassword} updateRePass={setUserRePassword} postal_code={user_PostalCode} updatePostalCode={setUserPostalCode} />
+                <FirstFormContent fname={user_Fname} updateFname={setUserFname} lname={user_Lname} updateLname={setUserLname} mail={user_Email} updateEmail={setUserEmail} pass={user_Password} updatePass={setUserPassword} repass={user_RePassword} updateRePass={setUserRePassword} postal_code={user_PostalCode} updatePostalCode={setUserPostalCode} mobile={user_Contact} updateMobile={setUserContact} />
                 <PerferContent />
 
                 <TermsAndCondition driving_condtion={driving} updateDrivingCondtion={setDriving} age_condition={age} updateAgeCondtion={setAge} />
 
-                <BtnLoginView onpress_funtion={()=>{validateForm();}} />
+                <BtnLoginView onpress_funtion={() => { validateForm(); }} />
+
             </ScrollView>
+            <AwesomeAlert
+                show={show}
+                showProgress={false}
+                title={modelTitel}
+                message={modelMessage}
+                closeOnTouchOutside={true}
+                closeOnHardwareBackPress={false}
+                showCancelButton={true}
+                showConfirmButton={true}
+                cancelText="cancel"
+                confirmText="Ok"
+                confirmButtonColor="red" //#DD6B55
+                onCancelPressed={() => {
+                    setShow(false);
+                }}
+                onConfirmPressed={() => {
+                    setShow(false);
+                }}
+            />
+            <AwesomeAlert
+                show={showRE}
+                showProgress={false}
+                title={modelTitel}
+                message={modelMessage}
+                closeOnTouchOutside={true}
+                closeOnHardwareBackPress={false}
+                showCancelButton={false}
+                showConfirmButton={true}
+                cancelText="cancel"
+                confirmText="Ok"
+                confirmButtonColor="red" //#DD6B55
+                onCancelPressed={() => {
+                    setShowRE(false);
+                }}
+                onConfirmPressed={() => {
+                    setShowRE(false);
+                }}
+            />
         </View>
     );
 }
@@ -331,13 +448,13 @@ const Styles = StyleSheet.create({
     },
     frist_form_container: {
         width: wp('100%'),
-        height: hp('80%'),
+        height: hp('90%'),
         alignItems: 'center',
         justifyContent: 'center',
     },
     input_holder: {
         width: wp('90%'),
-        height: hp('20%'),
+        height: hp('88%'),
         alignItems: 'center',
         justifyContent: 'center',
     },

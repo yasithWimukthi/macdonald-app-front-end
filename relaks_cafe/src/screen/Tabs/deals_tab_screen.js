@@ -10,6 +10,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setCartItems } from '../../redux/actions';
 
 import { Actions } from 'react-native-router-flux';
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 
 const TitelsComponet = () => {
@@ -149,6 +150,9 @@ function Deals_Tab_Screen() {
 
 
     const [dealsList, setDealsList] = useState([]);
+    const [show, setShow] = useState(false);
+    const [modelTitel, setModelTitel] = useState("");
+    const [modelMessage, setModelMessage] = useState("");
 
     useEffect(() => {
         getBannerInfo();
@@ -160,20 +164,29 @@ function Deals_Tab_Screen() {
                 // var response = Funtion_Get_Deals_Info_List();
 
                 Funtion_Get_Deals_Info_List().then((response) => {
-                    setDealsList(response.data);
+                    if (response.code == '200') {
+                        setDealsList(response.responce.data);
+                    } else if (response.code == '406') {
+                        setModelTitel("Error");
+                        setModelMessage("Catogery Limit Invalid!");
+                        setShow(true);
+                        //show eorr
+                    } else if (response.code == '500') {
+                        //server error
+                        setModelTitel("Error");
+                        setModelMessage("Something went wrong, try again later");
+                        setShow(true);
+                    }
+                    //setDealsList(response.data);
                 }).catch((error) => {
                     console.log("error on deal list screen " + error);
                 });
 
-                // if(response.status == '200'){
-                //     //sucessfully created
-                // }else if (response.status == '401'){
-                //     // token expire redirct to login page
-                // }else if (response.status == '500') {
-                //     // request body validation
-                // }
             } else {
                 //show error alert for not connect to internet
+                setModelTitel("Error");
+                setModelMessage("Please check your device connection");
+                setShow(true);
             }
         });
     }
@@ -192,6 +205,25 @@ function Deals_Tab_Screen() {
                     <BannerComponet dealList={dealsList} />
                 </View>
             </ScrollView>
+            <AwesomeAlert
+                show={show}
+                showProgress={false}
+                title={modelTitel}
+                message={modelMessage}
+                closeOnTouchOutside={true}
+                closeOnHardwareBackPress={false}
+                showCancelButton={true}
+                showConfirmButton={true}
+                cancelText="cancel"
+                confirmText="Ok"
+                confirmButtonColor="red" //#DD6B55
+                onCancelPressed={() => {
+                    setShow(false);
+                }}
+                onConfirmPressed={() => {
+                    setShow(false);
+                }}
+            />
         </View>
 
     );

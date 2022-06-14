@@ -6,7 +6,8 @@ const initialState = {
         "firstName": "",
         "lastName": "",
         "loginType": "",
-        "email": ""
+        "email": "",
+        "token" : ""
     },
     items: {
         "isDelivery": false,

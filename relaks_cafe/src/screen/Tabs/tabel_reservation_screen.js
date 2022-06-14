@@ -11,7 +11,9 @@ import DatePicker from 'react-native-date-picker';
 
 import { Funtion_Reservation_tabel, Funtion_Check_Avalible_tabel } from '../../assert/networks/api_calls';
 
-const CheckTabelList = ({updateTabelList, updateCheckin, updateCheckout}) => {
+import AwesomeAlert from 'react-native-awesome-alerts';
+
+const CheckTabelList = ({ updateTabelList, updateCheckin, updateCheckout, updateModelVisible, updateModelTitel, updateModelMessage }) => {
 
     var tempdate = new Date();
     var timeZoneFromDB = +5.30;
@@ -31,20 +33,46 @@ const CheckTabelList = ({updateTabelList, updateCheckin, updateCheckout}) => {
         }
 
         Funtion_Check_Avalible_tabel(tims).then((response) => {
-           // alert("resever "+JSON.stringify(response.code));
-            if(response.code == "200"){
+
+            if (response.code == '200') {
+                // setModelTitel("SuccessFully");
+                // setModelMessage("Table reservation successfully");
+                // setShow(true);
                 var dt = response.responce;
-                updateTabelList(dt.data.availableTableIds);
-            }else{
-                alert("tables getting error " + JSON.stringify(response));
+                if(dt.data.availableTableIds.length == '0'){
+                    updateModelTitel("Sorry");
+                    updateModelMessage("All of table are fully booked, try another time slot");
+                    updateModelVisible(true);
+                }else{
+                    updateTabelList(dt.data.availableTableIds);
+                }
+                
+            } else if (response.code == '401') {
+                updateModelTitel("Error");
+                updateModelMessage("Authentication Fail, Plase login again");
+                updateModelVisible(true);
+                //redirct to login page
+                //show eorr
+            } else if (response.code == '500') {
+                //server error
+                updateModelTitel("Error");
+                updateModelMessage("Something went wrong, try again later");
+                updateModelVisible(true);
             }
-            
-            
+
+            // if (response.code == "200") {
+            //     var dt = response.responce;
+            //     updateTabelList(dt.data.availableTableIds);
+            // } else {
+            //     alert("tables getting error " + JSON.stringify(response));
+            // }
+
+
         }).catch((error) => {
             console.log("error happen on avlaibe data fetching " + error);
         });
     }
-  
+
 
     return (
         <View style={Styles.TabelChecking_Container}>
@@ -138,7 +166,7 @@ const TableListView = ({ tabelList, updateSelected, updateNote }) => {
                             renderItem={({ item }) => {
                                 //console.log("datas "+JSON.stringify(item));
                                 return (
-                                    <TouchableOpacity onPress={() => {  updateSelected(item); }}>
+                                    <TouchableOpacity onPress={() => { updateSelected(item); }}>
                                         <View elevation={2} style={Styles.singleTable}>
                                             <View style={Styles.singleTextHolder}>
                                                 <Text style={Styles.table_info}>{"No : " + item.tableNo}</Text>
@@ -159,7 +187,7 @@ const TableListView = ({ tabelList, updateSelected, updateNote }) => {
 
                     <View style={Styles.note_Container}>
                         <View style={Styles.note_holder}>
-                            <TextInput style={Styles.note_text} onChangeText={(text)=>{updateNote(text);}} placeholder='Please added any spceial note..' />
+                            <TextInput style={Styles.note_text} onChangeText={(text) => { updateNote(text); }} placeholder='Please added any spceial note..' />
                         </View>
                     </View>
 
@@ -179,57 +207,59 @@ const Tabel_Reservation_Screen = () => {
     var offsetTime = new Date(tempdate.getTime() + tzDifference * 60 * 1000);
 
     const [tabelsList, setTableList] = useState([]);
-    const [selectTabel,setSelectTabel] = useState(null);
-    const [checkIN,setCheckIN] = useState(offsetTime);
-    const [checkOUT,setCheckOUT] = useState(offsetTime);
-    const [note,setNote] = useState("");
+    const [selectTabel, setSelectTabel] = useState(null);
+    const [checkIN, setCheckIN] = useState(offsetTime);
+    const [checkOUT, setCheckOUT] = useState(offsetTime);
+    const [note, setNote] = useState("");
 
-    const tables = [
-        {
-            "id": 1,
-            "tableNo": 1,
-            "seatingCapacity": 4,
-            "isIndoor": 1
-        },
-        {
-            "id": 2,
-            "tableNo": 2,
-            "seatingCapacity": 4,
-            "isIndoor": 0
-        }
-    ];
+    const [show, setShow] = useState(false);
+    const [modelTitel, setModelTitel] = useState("");
+    const [modelMessage, setModelMessage] = useState("");
 
-    function reserveTable () {
+    function reserveTable() {
         var dts = {
             "tableId": selectTabel.tableNo,
-            "note" : note,
+            "note": note,
             "checkIn": checkIN,
             "checkOut": checkOUT
         }
-        Funtion_Reservation_tabel(dts).then((response)=>{
+        Funtion_Reservation_tabel(dts).then((response) => {
             //alert("resever "+JSON.stringify(responce.status));
-            if(response.code == "200"){
-                alert("successfully reserve table");
-            }else{
-                alert("error happen reserve table");
+            if (response.code == '200') {
+                setModelTitel("SuccessFully");
+                setModelMessage("Table reservation successfully");
+                setShow(true);
+                //redirct to home
+                Actions.authenticated();
+            } else if (response.code == '401') {
+                setModelTitel("Error");
+                setModelMessage("Authentication Fail, Plase login again");
+                setShow(true);
+                //redirct to login page
+                //show eorr
+            } else if (response.code == '500') {
+                //server error
+                setModelTitel("Error");
+                setModelMessage("Something went wrong, try again later");
+                setShow(true);
             }
-        }).catch((error)=>{
+        }).catch((error) => {
             console.log("error happen on reseve tables" + error);
         });
     }
 
     return (
         <View style={Styles.main}>
-            <CheckTabelList updateTabelList={setTableList} updateCheckin={setCheckIN} updateCheckout={setCheckOUT} />
+            <CheckTabelList updateTabelList={setTableList} updateCheckin={setCheckIN} updateCheckout={setCheckOUT} updateModelVisible={setShow} updateModelTitel={setModelTitel} updateModelMessage={setModelMessage}/>
 
-            <TableListView tabelList={tabelsList} updateSelected={setSelectTabel} updateNote ={setNote} />
+            <TableListView tabelList={tabelsList} updateSelected={setSelectTabel} updateNote={setNote} />
 
             <View style={Styles.screenTitel}>
                 <View style={Styles.btnContainer}>
-                    <TouchableOpacity disabled={(tabelsList.length) != 0 ? false : true} onPress={() => {reserveTable();}}>
-                        <View style={[Styles.btnBorder, { backgroundColor: (tabelsList.length) != 0 ? 'yellow' : "#f5f5f5", borderWidth: 0 }]}>
+                    <TouchableOpacity disabled={(tabelsList.length) != 0 ? false : true} onPress={() => { reserveTable(); }}>
+                        <View style={[Styles.btnBorder, { backgroundColor: (tabelsList.length) != 0 ? '#EB1F25' : "#f5f5f5", borderWidth: 0 }]}>
                             <View style={Styles.btn_icon_holder}>
-                                {/* <Icon color="#4285F4" name="google" size={30} /> */}
+                                {/* <Icon color="#4285F4" name="google" size={30} /> */} 
                             </View>
                             <View style={Styles.btn_text_holder_login}>
                                 <Text style={Styles.brtn_text_content}>Reserve a table</Text>
@@ -241,6 +271,25 @@ const Tabel_Reservation_Screen = () => {
                     </TouchableOpacity>
                 </View>
             </View>
+            <AwesomeAlert
+                show={show}
+                showProgress={false}
+                title={modelTitel}
+                message={modelMessage}
+                closeOnTouchOutside={true}
+                closeOnHardwareBackPress={false}
+                showCancelButton={true}
+                showConfirmButton={true}
+                cancelText="cancel"
+                confirmText="Ok"
+                confirmButtonColor="red" //#DD6B55
+                onCancelPressed={() => {
+                    setShow(false);
+                }}
+                onConfirmPressed={() => {
+                    setShow(false);
+                }}
+            />
         </View>
     )
 }
@@ -329,7 +378,7 @@ const Styles = StyleSheet.create({
         borderRadius: 3,
         borderWidth: 2,
         borderColor: '#f5f5f5',
-        backgroundColor: 'yellow'
+        backgroundColor: '#EB1F25'
         // backgroundColor:'pink'
     },
     BtnLabel: {
@@ -347,7 +396,7 @@ const Styles = StyleSheet.create({
     },
     List_holder: {
         width: wp('90%'),
-       // height: hp('68%'),
+        // height: hp('68%'),
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#fff'
@@ -451,12 +500,12 @@ const Styles = StyleSheet.create({
         borderColor: '#f5f5f5',
         // backgroundColor:'pink'
     },
-    note_holder : {
+    note_holder: {
         width: wp('82%'),
         height: hp('5%'),
         justifyContent: 'center',
     },
-    note_text : {
+    note_text: {
         fontFamily: 'NexaTextDemo-Light',
         fontSize: 14,
         color: '#000'

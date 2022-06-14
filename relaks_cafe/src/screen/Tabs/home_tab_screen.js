@@ -11,6 +11,7 @@ import Geolocation from '@react-native-community/geolocation';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { setCartItems } from '../../redux/actions';
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 const BannerTile = () => {
     return (
@@ -257,6 +258,10 @@ function Home_Tab_Screen() {
 
     }, []);
 
+    const [show, setShow] = useState(false);
+    const [modelTitel, setModelTitel] = useState("");
+    const [modelMessage, setModelMessage] = useState("");
+
     function getMenuInfo() {
         NetInfo.fetch().then(state => {
             if (state.isConnected) {
@@ -264,7 +269,20 @@ function Home_Tab_Screen() {
                 Funtion_Get_Home_Menu_List().then((response) => {
                     // alert("menu list " + JSON.stringify(response));
                     //console.log("menu list " + JSON.stringify(response));
-                    setMenuList(response.data);
+                    if(response.code == '200'){
+                        setMenuList(response.responce.data);
+                    }else if (response.code == '406'){
+                        setModelTitel("Error");
+                        setModelMessage("Catogery Limit Invalid!");
+                        setShow(true);
+                        //show eorr
+                    }else if (response.code == '500'){
+                        //server error
+                        setModelTitel("Error");
+                        setModelMessage("Something went wrong, try again later");
+                        setShow(true);
+                    }
+                    //setMenuList(response.responce.data);
                 }).catch((error) => {
                     console.log("error " + JSON.stringify(error));
                 });
@@ -291,7 +309,20 @@ function Home_Tab_Screen() {
                 Funtion_Get_Home_Deals_List().then((response) => {
                     //alert("deals list " + JSON.stringify(response));
                     // console.log("deals list " + JSON.stringify(response));
-                    setDealsList(response.data);
+                    if(response.code == '200'){
+                        setDealsList(response.responce.data);
+                    }else if (response.code == '406'){
+                        setModelTitel("Error");
+                        setModelMessage("Catogery Limit Invalid!");
+                        setShow(true);
+                        //show eorr
+                    }else if (response.code == '500'){
+                        //server error
+                        setModelTitel("Error");
+                        setModelMessage("Something went wrong, try again later");
+                        setShow(true);
+                    }
+                    //setDealsList(response.data);
                 }).catch((error) => {
                     console.log("error " + JSON.stringify(error));
                 });
@@ -317,7 +348,20 @@ function Home_Tab_Screen() {
                 Funtion_Get_Home_Tranding_List().then((response) => {
                     //alert("tranding list " + JSON.stringify(response));
                     //console.log("tranding list " + JSON.stringify(response));
-                    setTrandingList(response.data);
+                    if(response.code == '200'){
+                        setTrandingList(response.responce.data);
+                    }else if (response.code == '406'){
+                        setModelTitel("Error");
+                        setModelMessage("Catogery Limit Invalid!");
+                        setShow(true);
+                        //show eorr
+                    }else if (response.code == '500'){
+                        //server error
+                        setModelTitel("Error");
+                        setModelMessage("Something went wrong, try again later");
+                        setShow(true);
+                    }
+                    //setTrandingList(response.data);
                 }).catch((error) => {
                     console.log("error " + JSON.stringify(error));
                 });
@@ -347,6 +391,25 @@ function Home_Tab_Screen() {
                 <TrandingTile trandingList={trandingList} />
 
             </ScrollView>
+            <AwesomeAlert
+                show={show}
+                showProgress={false}
+                title={modelTitel}
+                message={modelMessage}
+                closeOnTouchOutside={true}
+                closeOnHardwareBackPress={false}
+                showCancelButton={true}
+                showConfirmButton={true}
+                cancelText="cancel"
+                confirmText="Ok"
+                confirmButtonColor="red" //#DD6B55
+                onCancelPressed={() => {
+                    setShow(false);
+                }}
+                onConfirmPressed={() => {
+                    setShow(false);
+                }}
+            />
         </View>
 
     );

@@ -12,6 +12,7 @@ import { Funtion_Order_Menu_List } from '../../assert/networks/api_calls';
 import NetInfo from "@react-native-community/netinfo";
 
 import { useSelector, useDispatch } from 'react-redux';
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 const OderHeader = () => {
 
@@ -150,6 +151,9 @@ const ExpolourMenu = ({ menuList }) => {
 function Order_Tab_Screen() {
 
     const [menuList, setMenuList] = useState([]);
+    const [show, setShow] = useState(false);
+    const [modelTitel, setModelTitel] = useState("");
+    const [modelMessage, setModelMessage] = useState("");
 
     useEffect(() => {
         getMenuInfos();
@@ -159,7 +163,20 @@ function Order_Tab_Screen() {
         NetInfo.fetch().then(state => {
             if (state.isConnected) {
                 Funtion_Order_Menu_List().then((response) => {
-                    setMenuList(response.data);
+                    if(response.code == '200'){
+                        setMenuList(response.responce.data);
+                    }else if (response.code == '406'){
+                        setModelTitel("Error");
+                        setModelMessage("Catogery Limit Invalid!");
+                        setShow(true);
+                        //show eorr
+                    }else if (response.code == '500'){
+                        //server error
+                        setModelTitel("Error");
+                        setModelMessage("Something went wrong, try again later");
+                        setShow(true);
+                    }
+                    //setMenuList(response.data);
                 }).catch((error) => {
                     console.log("error on get data in menu screen " + error);
                 });
@@ -174,6 +191,9 @@ function Order_Tab_Screen() {
 
             } else {
                 //show error alert for not connect to internet
+                setModelTitel("Error");
+                setModelMessage("Please check your device connection");
+                setShow(true);
             }
         });
     }
@@ -190,6 +210,25 @@ function Order_Tab_Screen() {
                 <ExpolourMenu foodName={"Halwa sandwich "} />
                 <ExpolourMenu foodName={"Pancake"} /> */}
             </ScrollView>
+            <AwesomeAlert
+                show={show}
+                showProgress={false}
+                title={modelTitel}
+                message={modelMessage}
+                closeOnTouchOutside={true}
+                closeOnHardwareBackPress={false}
+                showCancelButton={true}
+                showConfirmButton={true}
+                cancelText="cancel"
+                confirmText="Ok"
+                confirmButtonColor="red" //#DD6B55
+                onCancelPressed={() => {
+                    setShow(false);
+                }}
+                onConfirmPressed={() => {
+                    setShow(false);
+                }}
+            />
         </View>
     );
 }

@@ -7,6 +7,9 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import { useSelector, useDispatch } from 'react-redux';
 import { setCartItems } from '../../redux/actions';
 
+import AwesomeAlert from 'react-native-awesome-alerts';
+import { Actions } from 'react-native-router-flux';
+
 const DealName = ({ dealName }) => {
     return (
         <View style={Styles.foodName_Container}>
@@ -18,7 +21,7 @@ const DealName = ({ dealName }) => {
         </View>
     );
 }
-const DealImage = ({imageUrl}) => {
+const DealImage = ({ imageUrl }) => {
     return (
         <View style={Styles.Image_Container}>
             <View style={Styles.Image_Holder}>
@@ -29,17 +32,17 @@ const DealImage = ({imageUrl}) => {
 }
 
 
-const PortionTiles = ({menuList}) => {
+const PortionTiles = ({ menuList }) => {
 
-    return(
+    return (
         <FlatList
             data={menuList}
             keyExtractor={(item, index) => index}
             renderItem={({ item }) => {
                 return (
-                    <TouchableOpacity onPress={() => { 
+                    <TouchableOpacity onPress={() => {
                         //Actions.MenuList({ cat_id: item.id });
-                     }}>
+                    }}>
                         <View style={Styles.ExpolurMenuContent}>
                             <View style={Styles.ExpolurMenuHolder}>
                                 <View style={Styles.ExpolurMenuImageHolder}>
@@ -49,7 +52,7 @@ const PortionTiles = ({menuList}) => {
                                     <Text style={Styles.MenuTextBold}>{item.foodItem.name}</Text>
                                 </View>
                                 <View style={Styles.ExpolurMenuIconHolder}>
-                                    <Icon color="#000" name="right" size={25} />
+                                    {/* <Icon color="#000" name="right" size={25} /> */}
                                 </View>
                             </View>
                         </View>
@@ -62,11 +65,11 @@ const PortionTiles = ({menuList}) => {
 }
 
 
-const AddToCartBtn = ({funtions,protionCount}) => {
+const AddToCartBtn = ({ funtions, protionCount }) => {
     return (
         <View style={Styles.btnContainer}>
             <TouchableOpacity disabled={protionCount != 0 ? false : true} onPress={funtions}>
-                <View style={[Styles.btnBorder, { backgroundColor: protionCount != 0 ? 'yellow' : '#f5f5f5', borderWidth: 0 }]}>
+                <View style={[Styles.btnBorder, { backgroundColor: protionCount != 0 ? '#EB1F25' : '#f5f5f5', borderWidth: 0 }]}>
                     <View style={Styles.btn_icon_holder}>
                         {/* <Icon color="#4285F4" name="google" size={30} /> */}
                     </View>
@@ -82,15 +85,28 @@ const AddToCartBtn = ({funtions,protionCount}) => {
     )
 }
 
-const Single_Deals_Info_Screen = ({...props}) => {
+const Single_Deals_Info_Screen = ({ ...props }) => {
 
     const { items } = useSelector(state => state.userReducer);
 
     const dispatch = useDispatch();
 
-    const [dealInfo,setDealInfo] = useState(props.dealObj);
+    const [dealInfo, setDealInfo] = useState(props.dealObj);
 
-    function addToCartDealsInfo (deals) {
+    const [show, setShow] = useState(false);
+    const [modelTitel, setModelTitel] = useState("");
+    const [modelMessage, setModelMessage] = useState("");
+
+    const [visbile, setVisible] = useState((items.foodItems.length > 0) ? true : false);
+
+    const [totals, setTolats] = useState(items.totalPrice);
+
+    useEffect(() => {
+        setVisible((items.foodItems.length > 0) ? true : false);
+        setTolats(items.totalPrice);
+    });
+
+    function addToCartDealsInfo(deals) {
 
         var obj = {
             "id": deals.id,
@@ -102,31 +118,31 @@ const Single_Deals_Info_Screen = ({...props}) => {
             "cal": " ",
             "potionName": " ",
             "potionPrice": parseInt(deals.totalPrice),
-            "dealID" : deals.id,
-            "dealType" : "deal",
-            "dealItem" : deals.promotionItems,
+            "dealID": deals.id,
+            "dealType": "deal",
+            "dealItem": deals.promotionItems,
         }
 
         var list = items.foodItems;
 
 
-        if(list.length == 0) {
+        if (list.length == 0) {
             list.push(obj);
-        }else{
+        } else {
             var updte_st = true;
             list.forEach(element => {
-                if(element.id == obj.id & element.dealType == "deal"){
+                if (element.id == obj.id & element.dealType == "deal") {
                     element.quantity = element.quantity + 1;
                     element.note = element.note != "" ? element.note + obj.note : " ";
                     updte_st = false;
-                }else{
-                    
+                } else {
+
                 }
             });
-            if(updte_st){
+            if (updte_st) {
                 list.push(obj);
             }
-            
+
         }
         var orderObj = {
             "isDelivery": items.isDelivery,
@@ -142,14 +158,60 @@ const Single_Deals_Info_Screen = ({...props}) => {
         };
         dispatch(setCartItems(orderObj));
 
+        setModelTitel("Deal Added");
+        setModelMessage("Deal added to your cart!");
+        setShow(true);
     }
 
-    return(
+    return (
         <View style={Styles.main}>
             <DealName dealName={dealInfo.description} />
             <DealImage imageUrl={dealInfo.imgUrl} />
             <PortionTiles menuList={dealInfo.promotionItems} />
-            <AddToCartBtn protionCount={dealInfo.promotionItems.length}  funtions={()=>{addToCartDealsInfo(dealInfo);}} />
+            <AddToCartBtn protionCount={dealInfo.promotionItems.length} funtions={() => { addToCartDealsInfo(dealInfo); }} />
+
+            {
+                (visbile) ? <View style={Styles.cartTile}>
+                    <View style={Styles.cartTile_holder}>
+                        <View style={Styles.cartTile_info_holder}>
+                            <View style={Styles.cartTile_tesxts_holder}>
+                                <Text style={Styles.itemText}>{items.foodItems.length + " items"}</Text>
+                            </View>
+                            <View style={Styles.cartTile_tesxts_holder}>
+                                <Text style={Styles.totalText}>{"€ :" + totals}</Text>
+                            </View>
+                        </View>
+                        <TouchableOpacity onPress={() => { Actions.Cart(); }}>
+                            <View style={Styles.cartTile_btn_holder}>
+                                <View style={Styles.btn_holder}>
+                                    <Text style={[Styles.itemText,{color: '#000',}]}>View Cart</Text>
+                                </View>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                </View> : null
+            }
+
+            <AwesomeAlert
+                show={show}
+                showProgress={false}
+                title={modelTitel}
+                message={modelMessage}
+                closeOnTouchOutside={true}
+                closeOnHardwareBackPress={false}
+                showCancelButton={false}
+                showConfirmButton={true}
+                cancelText="cancel"
+                confirmText="Ok"
+                confirmButtonColor="red" //#DD6B55
+                onCancelPressed={() => {
+                    setShow(false);
+                }}
+                onConfirmPressed={() => {
+                    setShow(false);
+                }}
+            />
+
         </View>
     )
 }
@@ -323,7 +385,7 @@ const Styles = StyleSheet.create({
         position: 'absolute',
         bottom: 0
     },
-    ExpolurMenuContent: { 
+    ExpolurMenuContent: {
         width: wp('100%'),
         height: hp('12%'),
         justifyContent: 'center',
@@ -332,25 +394,25 @@ const Styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: "#FFFFFF",
     },
-    ExpolurMenuHolder: { 
+    ExpolurMenuHolder: {
         width: wp('90%'),
         height: hp('10%'),
         justifyContent: 'center',
         flexDirection: 'row'
     },
-    ExpolurMenuImageHolder: { 
+    ExpolurMenuImageHolder: {
         width: wp('20%'),
         height: hp('8%'),
         justifyContent: 'center',
         alignItems: 'center'
     },
-    ExpolurMenuTextHolder: { 
+    ExpolurMenuTextHolder: {
         width: wp('60%'),
         height: hp('8%'),
         justifyContent: 'center',
         marginLeft: wp('2%')
     },
-    ExpolurMenuIconHolder: { 
+    ExpolurMenuIconHolder: {
         width: wp('10%'),
         height: hp('8%'),
         justifyContent: 'center',
@@ -362,7 +424,61 @@ const Styles = StyleSheet.create({
         color: '#000',
         letterSpacing: 0.25,
     },
-    
+    cartTile: {
+        width: wp('100%'),
+        height: hp('10%'),
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'absolute',
+        bottom: hp('8%'),
+        // backgroundColor:'#f5f5f5'
+    },
+    cartTile_holder: {
+        width: wp('90%'),
+        height: hp('8%'),
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#a5a6a5',
+        borderRadius: 5,
+        flexDirection: 'row'
+    },
+    cartTile_info_holder: {
+        width: wp('60%'),
+        height: hp('8%'),
+        justifyContent: 'center',
+    },
+    cartTile_tesxts_holder: {
+        width: wp('50%'),
+        height: hp('3%'),
+        justifyContent: 'center',
+        marginLeft:10,
+    },
+    cartTile_btn_holder: {
+        width: wp('30%'),
+        height: hp('8%'),
+        justifyContent: 'center',
+    },
+    itemText: {
+        fontFamily: 'NexaTextDemo-Light',
+        fontSize: 14,
+        color: '#fff',
+        letterSpacing: 0.04,
+    },
+    totalText: {
+        fontFamily: 'NexaTextDemo-Bold',
+        fontSize: 14,
+        color: '#fff',
+        letterSpacing: 0.04,
+    },
+    btn_holder: {
+        width: wp('28%'),
+        height: hp('7%'),
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 5,
+        backgroundColor: 'red'
+    },
+
 });
 
 export default Single_Deals_Info_Screen;

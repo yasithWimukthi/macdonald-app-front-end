@@ -574,7 +574,7 @@ const Styles = StyleSheet.create({
         borderColor: 'yellow',
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: 'yellow',
+        backgroundColor: '#EB1F25',
         justifyContent: 'center'
     },
     btn_icon_holder: {

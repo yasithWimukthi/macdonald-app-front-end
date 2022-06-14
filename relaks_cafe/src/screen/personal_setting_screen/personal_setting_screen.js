@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { View, Image, StyleSheet, Text} from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/AntDesign';
-
+import { useSelector, useDispatch } from 'react-redux';
 
 const TitelView = () => {
     return(
@@ -16,31 +16,31 @@ const TitelView = () => {
     );
 }
 
-const RegisterTypeView = () => {
+const RegisterTypeView = ({type}) => {
     return(
         <View style={Styles.titelContainer}>
             <View style={Styles.titelHolder}>
                 <View style = {Styles.titelConte}>
                     <Icon color="#4267B2" name="facebook-square" size={30} />
-                    <Text style={Styles.defulat_text_Info}>Register with Facebook</Text>
+                    <Text style={Styles.defulat_text_Info}>{"Register with "+type}</Text>
                 </View>
             </View>
         </View>
     );
 }
-const NameView = () => {
+const NameView = ({userName}) => {
     return(
         <View style={Styles.titelContainer}>
             <View style={Styles.titelHolder}>
                 <View style = {Styles.titelConte}>
                     <Text style={Styles.defulat_text_label}>Name</Text>
-                    <Text style={Styles.defulat_text_Info}>Dinesh Madushanka</Text>
+                    <Text style={Styles.defulat_text_Info}>{userName}</Text>
                 </View>
             </View>
         </View>
     );
 }
-const EmailView = () => {
+const EmailView = ({emails}) => {
     return(
         <View style={Styles.titelContainer}>
             <View style={Styles.titelHolder}>
@@ -56,12 +56,15 @@ const EmailView = () => {
 
 
 const personal_setting_screen = () => {
+
+    const { user } = useSelector(state => state.userReducer);
+
     return(
         <View style={Styles.main}>
             <TitelView />
-            <RegisterTypeView/>
-            <NameView/>
-            <EmailView/>
+            <RegisterTypeView type={user.loginType}/>
+            <NameView userName={user.firstName+" "+user.lastName}/>
+            <EmailView emails={user.email}/>
         </View>
     );
 }

@@ -6,6 +6,11 @@ import ZigzagView from "react-native-zigzag-view"
 import { Actions } from 'react-native-router-flux';
 import { Funtion_Get_Foods_List } from '../../assert/networks/api_calls';
 
+import AwesomeAlert from 'react-native-awesome-alerts';
+
+import { useSelector, useDispatch } from 'react-redux';
+import { setCartItems } from '../../redux/actions';
+
 const FeaturesMenuItem = ({ imageUrl, MenuName, singleInfo, mealInfo }) => {
     return (
         <ZigzagView
@@ -87,20 +92,56 @@ const SingleMenuItem = ({ foodList }) => {
 }
 
 const MenuList_Screen = ({ ...props }) => { //
+
+    const { items } = useSelector(state => state.userReducer);
+    const dispatch = useDispatch();
+
     const [foodList, setFoodList] = useState([]);
+
+    const [show, setShow] = useState(false);
+    const [modelTitel, setModelTitel] = useState("");
+    const [modelMessage, setModelMessage] = useState("");
+
+    const [visbile, setVisible] = useState((items.foodItems.length > 0) ? true : false);
+
+    const [totals, setTolats] = useState(items.totalPrice);
+
 
     useEffect(() => {
         getFoodList(props.cat_id);
+        setVisible((items.foodItems.length > 0) ? true : false);
+        setTolats(items.totalPrice);
         // getFoodList("1");
     }, []);
 
     function getFoodList(ids) {
         Funtion_Get_Foods_List(ids).then((response) => {
-            // setFoodList(response.data);
-            // var list = [];
-            // list.push(response.data);
-            // setFoodList(list);
-            setFoodList(response.data);
+            if (response.code == '200') {
+                // setModelTitel("SuccessFully");
+                // setModelMessage("Table reservation successfully");
+                // setShow(true);
+                //redirct to home
+                //Actions.authenticated();
+                setFoodList(response.responce.data);
+            }else if (response.code == '404') {
+                setModelTitel("Error");
+                setModelMessage("Category not found. Try again");
+                setShow(true);
+                //redirct to login page
+                //show eorr
+            } else if (response.code == '401') {
+                setModelTitel("Error");
+                setModelMessage("Authentication Fail, Plase login again");
+                setShow(true);
+                //redirct to login page
+                //show eorr
+            } else if (response.code == '500') {
+                //server error
+                setModelTitel("Error");
+                setModelMessage("Something went wrong, try again later");
+                setShow(true);
+            }
+            
         }).catch((error) => {
             console.log("error on get food list by cat id " + error);
         });
@@ -125,6 +166,46 @@ const MenuList_Screen = ({ ...props }) => { //
                 <SingleMenuItem MenuName={"Cheese and Egg Muffin"} singleInfo={"€ 2.89 2301 KJ/ 551 kcal "} mealInfo={"€ 3.99 2301 KJ/ 551 kcal"} imageUrl={"https://st4.depositphotos.com/14582236/22073/v/950/depositphotos_220731050-stock-illustration-cold-brewed-coffee-banner-ads.jpg"} /> */}
 
             </ScrollView>
+            {
+                (visbile) ? <View style={Styles.cartTile}>
+                    <View style={Styles.cartTile_holder}>
+                        <View style={Styles.cartTile_info_holder}>
+                            <View style={Styles.cartTile_tesxts_holder}>
+                                <Text style={Styles.itemText}>{items.foodItems.length + " items"}</Text>
+                            </View>
+                            <View style={Styles.cartTile_tesxts_holder}>
+                                <Text style={Styles.totalText}>{"€ :" + totals}</Text>
+                            </View>
+                        </View>
+                        <TouchableOpacity onPress={() => { Actions.Cart(); }}>
+                            <View style={Styles.cartTile_btn_holder}>
+                                <View style={Styles.btn_holder}>
+                                    <Text style={[Styles.itemText,{color: '#000',}]}>View Cart</Text>
+                                </View>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                </View> : null
+            }
+            <AwesomeAlert
+                show={show}
+                showProgress={false}
+                title={modelTitel}
+                message={modelMessage}
+                closeOnTouchOutside={true}
+                closeOnHardwareBackPress={false}
+                showCancelButton={true}
+                showConfirmButton={true}
+                cancelText="cancel"
+                confirmText="Ok"
+                confirmButtonColor="red" //#DD6B55
+                onCancelPressed={() => {
+                    setShow(false);
+                }}
+                onConfirmPressed={() => {
+                    setShow(false);
+                }}
+            />
         </View>
     );
 }
@@ -229,7 +310,60 @@ const Styles = StyleSheet.create({
         color: '#000',
         letterSpacing: 0.04,
     },
-
+    cartTile: {
+        width: wp('100%'),
+        height: hp('10%'),
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'absolute',
+        bottom: 0,
+        // backgroundColor:'#f5f5f5'
+    },
+    cartTile_holder: {
+        width: wp('90%'),
+        height: hp('8%'),
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#a5a6a5',
+        borderRadius: 5,
+        flexDirection: 'row'
+    },
+    cartTile_info_holder: {
+        width: wp('60%'),
+        height: hp('8%'),
+        justifyContent: 'center',
+    },
+    cartTile_tesxts_holder: {
+        width: wp('50%'),
+        height: hp('3%'),
+        justifyContent: 'center',
+        marginLeft: 10,
+    },
+    cartTile_btn_holder: {
+        width: wp('30%'),
+        height: hp('8%'),
+        justifyContent: 'center',
+    },
+    itemText: {
+        fontFamily: 'NexaTextDemo-Light',
+        fontSize: 14,
+        color: '#fff',
+        letterSpacing: 0.04,
+    },
+    totalText: {
+        fontFamily: 'NexaTextDemo-Bold',
+        fontSize: 14,
+        color: '#fff',
+        letterSpacing: 0.04,
+    },
+    btn_holder: {
+        width: wp('28%'),
+        height: hp('7%'),
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 5,
+        backgroundColor: 'red'
+    },
 
 });
 

@@ -1,5 +1,5 @@
 import React, { PropTypes, Component, useState } from 'react';
-import { View, Image, StyleSheet, Text, TextInput, TouchableOpacity } from 'react-native';
+import { View, Image, StyleSheet, Text, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icons from 'react-native-vector-icons/Feather';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -8,7 +8,14 @@ import { Actions } from 'react-native-router-flux';
 //import {Funtion_Auth,Funtion_FaceBook_Register} from '../../assert/networks/api_calls';
 import NetInfo from "@react-native-community/netinfo";
 import { Funtion_Auth } from '../../assert/networks/api_calls';
+import SweetAlert from 'react-native-sweet-alert';
+import AwesomeAlert from 'react-native-awesome-alerts';
+import Spinner from 'react-native-spinkit';
 
+import { useSelector, useDispatch } from 'react-redux';
+import { setUserInfo } from '../../redux/actions';
+
+import { StoreUserInfo } from '../../assert/storeage/data_store';
 
 
 const RulesTexts = () => {
@@ -33,28 +40,37 @@ const FormView = ({ username, passwords, updateUserName, updatePassowrd }) => {
     const [userName, setUserName] = useState(username);
     const [password, setPassword] = useState(passwords);
 
+    const [viewPass, setViewPass] = useState(true);
+
     return (
         <View style={Styles.inputContainer}>
             <View style={Styles.input_holder}>
                 <View style={Styles.inputContainer_Row}>
-                    <TextInput placeholder='Email' value={userName} onChangeText={(values) => { setUserName(values); updateUserName(values) }} placeholderTextColor="#000" style={Styles.defulatTextInput} />
+                    <TextInput placeholder='Email' keyboardType='email-address' value={userName} onChangeText={(values) => { setUserName(values); updateUserName(values) }} placeholderTextColor="#000" style={Styles.defulatTextInput} />
                 </View>
                 <View style={Styles.inputContainer_Row_icon}>
                     <View style={Styles.subinputContainer}>
                         <TextInput
                             style={Styles.defulatTextInput}
-                            secureTextEntry={true}
+                            secureTextEntry={viewPass}
                             placeholder='Password'
                             value={password}
                             onChangeText={(values) => { setPassword(values); updatePassowrd(values) }}
                             placeholderTextColor="#000"
                         />
-                        <Icons style={Styles.icon} color="#000" name="eye-off" size={20} />
+                        <View style={Styles.icon}>
+                            <TouchableOpacity onPress={() => { setViewPass(!viewPass) }}>
+                                <Icons color="#000" name={(viewPass) ? "eye-off" : "eye"} size={20} />
+                            </TouchableOpacity>
+                        </View>
+                        {/* <Icons style={Styles.icon} color="#000" name="eye-off" size={20} /> */}
                     </View>
                 </View>
-                <View style={Styles.textRow_for}>
-                    <Text style={Styles.hiyperlink_text}>Forget Password</Text>
-                </View>
+                <TouchableOpacity onPress={() => { Actions.forgetPass(); }}>
+                    <View style={Styles.textRow_for}>
+                        <Text style={Styles.hiyperlink_text}>Forget Password</Text>
+                    </View>
+                </TouchableOpacity>
             </View>
 
         </View>
@@ -106,7 +122,7 @@ const BtnLoginView = ({ funtions }) => {
     return (
         <View style={Styles.btnContainer}>
             <TouchableOpacity onPress={funtions}>
-                <View style={[Styles.btnBorder, { backgroundColor: 'yellow', borderWidth: 0 }]}>
+                <View style={[Styles.btnBorder, { backgroundColor: '#EB1F25', borderWidth: 0 }]}>
                     <View style={Styles.btn_icon_holder}>
                         {/* <Icon color="#4285F4" name="google" size={30} /> */}
                     </View>
@@ -124,8 +140,21 @@ const BtnLoginView = ({ funtions }) => {
 
 const AuthScreen = () => {
 
+    const { user } = useSelector(state => state.userReducer);
+    const dispatch = useDispatch();
+
     const [uName, setUName] = useState("");
     const [uPass, setUPass] = useState("");
+    const [show, setShow] = useState(false);
+    const [showOk, setShowOk] = useState(false);
+    const [modelTitel, setModelTitel] = useState("");
+    const [modelMessage, setModelMessage] = useState("");
+
+    //spiner contex
+    const [spinerType, setSpinerType] = useState("ThreeBounce");
+    const [spinerColour, setSpinerColour] = useState('red');
+    const [spinerSize, setSpinerSize] = useState(100);
+    const [spinerVisible, setSpinerVisible] = useState(false);
 
     function login() {
 
@@ -139,36 +168,58 @@ const AuthScreen = () => {
                 //var response = Funtion_Auth(user);
                 Funtion_Auth(user).then((response) => {
                     //alert("response " + JSON.stringify(response));
+                    //
+                    setSpinerVisible(true);
+                    //setShow(true);
                     console.log("response " + JSON.stringify(response));
-                     Actions.authenticated();
-                    
-                    if (response.status == '201') {
+                    //Actions.authenticated();
+
+                    if (response.code == '200') {
                         //sucessfully created
-                        Actions.authenticated();
-                    } else if (response.status == '409') {
+                        var dts = response.responce;
+                        var us = {
+                            "firstName": dts.data.firstName,
+                            "lastName": dts.data.lastName,
+                            "loginType": dts.data.loginType,
+                            "email": uName,
+                            "token": dts.token
+                        }
+
+                        dispatch(setUserInfo(us));
+
+                        StoreUserInfo(us);
+
+                        setModelTitel("Successfully");
+                        setModelMessage("user auth sucess!");
+                        setShowOk(true);
+                        setSpinerVisible(false);
+
+                        setTimeout(() => { Actions.authenticated(); }, 1000);
+                        //need to set bear token to state and save in local
+
+
+                    } else if (response.code == '400') {
                         // alredy on user
-                        alert("Alredy used this email, try again");
-                    } else if (response.status == '400') {
-                        // request body validation
-                        alert("Form Validation error");
-                    }else if (response.status == '401'){
-                        alert("Invalid Email Or Password");
+                        setModelTitel("Error");
+                        setModelMessage("Form Validation error!");
+                        setShow(true);
+                        setSpinerVisible(false);
+                        //alert("Alredy used this email, try again");
+                    } else if (response.code == '401') {
+                        setModelTitel("Error");
+                        setModelMessage("Invalid Email Or Password!");
+                        setShow(true);
+                        setSpinerVisible(false);
+                        //alert("Invalid Email Or Password");
+                    } else if (response.code == '500') {
+                        setModelTitel("Error");
+                        setModelMessage("Something went wrong, try again later");
+                        setShow(true);
                     }
-                    
+
                 }).catch((error) => {
                     console.log("error " + JSON.stringify(error));
                 });
-
-
-                // if(response.status == '201'){
-                //     //sucessfully created
-                // }else if (response.status == '409'){
-                //     // alredy on user
-                // }else if (response.status == '400') {
-                //     // request body validation
-                // }
-
-                // Actions.authenticated();
 
             } else {
                 alert("net not conntectd");
@@ -197,16 +248,6 @@ const AuthScreen = () => {
             if (state.isConnected) {
                 // var response = Funtion_FaceBook_Register();
 
-                // if(response.status == '201'){
-                //     //sucessfully created
-                // }else if (response.status == '409'){
-                //     // alredy on user
-                // }else if (response.status == '400') {
-                //     // request body validation
-                // }
-
-                //  Actions.authenticated();
-
             } else {
                 //show error alert for not connect to internet
             }
@@ -232,23 +273,77 @@ const AuthScreen = () => {
                 <BtnLoginView funtions={() => { validationForm(); }} />
             </View>
 
+            <AwesomeAlert
+                show={show}
+                showProgress={false}
+                title={modelTitel}
+                message={modelMessage}
+                closeOnTouchOutside={true}
+                closeOnHardwareBackPress={false}
+                showCancelButton={false}
+                showConfirmButton={true}
+                cancelText="cancel"
+                confirmText="Ok"
+                confirmButtonColor="red" //#DD6B55
+                onCancelPressed={() => {
+                    setShow(false);
+                }}
+                onConfirmPressed={() => {
+                    setShow(false);
+                }}
+            />
+            <AwesomeAlert
+                show={showOk}
+                showProgress={false}
+                title={modelTitel}
+                message={modelMessage}
+                closeOnTouchOutside={true}
+                closeOnHardwareBackPress={false}
+                showCancelButton={false}
+                showConfirmButton={false}
+                cancelText="cancel"
+                confirmText="Ok"
+                confirmButtonColor="red" //#DD6B55
+                onCancelPressed={() => {
+                    setShowOk(false);
+                }}
+                onConfirmPressed={() => {
+                    setShowOk(false);
+                }}
+            />
+
+            {(spinerVisible) ?
+                <View
+                    style={{
+                        flex: 1,
+                        position: "absolute",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        opacity: 0.8,
+                        width: wp("100%"),
+                        height: hp("100%"),
+                        backgroundColor: "#000000"
+                    }}
+                >
+
+                    <View style={Styles.activityindicator_view}>
+                        <ActivityIndicator animating size="large" color="#F5FCFF" />
+                        <Text
+                            style={{
+                                color: "#000000"
+                            }}
+                        >
+                            loading
+                        </Text>
+                    </View>
+                </View>
+                : null}
+
         </View>
     );
 }
 
-// class authscreen extends Component {
 
-//     constructor(props) {
-//         super(props);
-//     }
-
-//     render() {
-
-//         return (
-
-//         );
-//     }
-// }
 
 const Styles = StyleSheet.create({
     main: {
@@ -383,6 +478,26 @@ const Styles = StyleSheet.create({
     screenTitel: {
         marginTop: hp('3%'),
         marginBottom: hp('3%'),
+    },
+    spinerStyle: {
+        flex: 1,
+        width: wp('100%'),
+        height: hp('100%'),
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#AF000000', //#0000ffff #d35400
+        position: 'absolute',
+        top: 0,
+
+    },
+    activityindicator_view: {
+        position: "absolute",
+        alignItems: "center",
+        justifyContent: "center",
+        width: 100,
+        height: 100,
+        opacity: 1,
+        borderRadius: 20
     }
 });
 

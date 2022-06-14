@@ -1,6 +1,11 @@
 import axios from 'axios';
 
+import { useSelector, useDispatch } from 'react-redux';
+import { setCartItems } from '../../redux/actions';
+
 let BASE_URL = "https://cafe-app-352118.el.r.appspot.com/";
+
+
 
 const Funtion_Register = async (user) => {
 
@@ -9,19 +14,10 @@ const Funtion_Register = async (user) => {
         "lastName": user.l_name,
         "email": user.email,
         "password": user.password,
-        "mobile": user.contact
+        "mobile": user.contact,
     });
 
     var url = BASE_URL + "api/v1/auth/customer/register";
-    // var config = {
-    //     method: 'post',
-    //     url: url,
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //     },
-    //     data: data
-    // };
-
     try {
         let responce = await fetch(url, {
             method: 'POST',
@@ -31,8 +27,15 @@ const Funtion_Register = async (user) => {
             },
             body: data
         });
+        // let responce_Values = await responce.json();
+        // return responce_Values;
+        let code = responce.status;
         let responce_Values = await responce.json();
-        return responce_Values;
+        var data = {
+            "code" : code,
+            "responce" : responce_Values
+        }
+        return data;
 
     } catch (error) {
         console.log("error on funtion_register : " + error);
@@ -98,8 +101,15 @@ const Funtion_Auth = async (user) => {
             },
             body: data
         });
+        // let responce_Values = await responce.json();
+        // return responce_Values;
+        let code = responce.status;
         let responce_Values = await responce.json();
-        return responce_Values;
+        var data = {
+            "code" : code,
+            "responce" : responce_Values
+        }
+        return data;
 
 
     } catch (error) {
@@ -118,8 +128,15 @@ const Funtion_Get_Home_Menu_List = async () => {
                 'Content-Type': 'application/json',
             },
         });
+        // let responce_Values = await responce.json();
+        // return responce_Values;
+        let code = responce.status;
         let responce_Values = await responce.json();
-        return responce_Values;
+        var data = {
+            "code" : code,
+            "responce" : responce_Values
+        }
+        return data;
     
     } catch (error) {
         console.log("error on funtion_get_home_menu_list : " + error);
@@ -136,8 +153,15 @@ const Funtion_Get_Home_Tranding_List = async () => {
                 'Content-Type': 'application/json',
             },
         });
+        // let responce_Values = await responce.json();
+        // return responce_Values;
+        let code = responce.status;
         let responce_Values = await responce.json();
-        return responce_Values;
+        var data = {
+            "code" : code,
+            "responce" : responce_Values
+        }
+        return data;
 
     } catch (error) {
         console.log("error on funtion_get_home_tranding_list : " + error);
@@ -154,8 +178,15 @@ const Funtion_Get_Home_Deals_List = async () => {
                 'Content-Type': 'application/json',
             },
         });
+        // let responce_Values = await responce.json();
+        // return responce_Values;
+        let code = responce.status;
         let responce_Values = await responce.json();
-        return responce_Values;
+        var data = {
+            "code" : code,
+            "responce" : responce_Values
+        }
+        return data;
 
     } catch (error) {
         console.log("error on funtion_get_home_deals_list : " + error);
@@ -173,8 +204,15 @@ const Funtion_Order_Menu_List = async () => {
                 'Content-Type': 'application/json',
             },
         });
+        // let responce_Values = await responce.json();
+        // return responce_Values;
+        let code = responce.status;
         let responce_Values = await responce.json();
-        return responce_Values;
+        var data = {
+            "code" : code,
+            "responce" : responce_Values
+        }
+        return data;
 
     } catch (error) {
         console.log("error on funtion_get_oder_menu_list : " + error);
@@ -191,8 +229,15 @@ const Funtion_Get_Deals_Info_List = async () => {
                 'Content-Type': 'application/json',
             },
         });
+        // let responce_Values = await responce.json();
+        // return responce_Values;
+        let code = responce.status;
         let responce_Values = await responce.json();
-        return responce_Values;
+        var data = {
+            "code" : code,
+            "responce" : responce_Values
+        }
+        return data;
 
     } catch (error) {
         console.log("error on funtion_get_deals_list : " + error);
@@ -210,8 +255,15 @@ const Funtion_Get_Foods_List = async (id) => {
                 'Content-Type': 'application/json',
             },
         });
+        // let responce_Values = await responce.json();
+        // return responce_Values;
+        let code = responce.status;
         let responce_Values = await responce.json();
-        return responce_Values;
+        var data = {
+            "code" : code,
+            "responce" : responce_Values
+        }
+        return data;
 
 
     } catch (error) {
@@ -245,8 +297,15 @@ const Funtion_Place_Foods_Order = async (order) => {
             },
             body: raw
         });
+        // let responce_Values = await responce.json();
+        // return responce_Values;
+        let code = responce.status;
         let responce_Values = await responce.json();
-        return responce_Values;
+        var data = {
+            "code" : code,
+            "responce" : responce_Values
+        }
+        return data;
 
 
     } catch (error) {
@@ -265,8 +324,15 @@ const Funtion_Single_Foods_Info = async (id) => {
                 'Content-Type': 'application/json',
             },
         });
+        // let responce_Values = await responce.json();
+        // return responce_Values;
+        let code = responce.status;
         let responce_Values = await responce.json();
-        return responce_Values;
+        var data = {
+            "code" : code,
+            "responce" : responce_Values
+        }
+        return data;
 
 
     } catch (error) {
@@ -347,7 +413,58 @@ const Funtion_Reservation_tabel = async (table) => {
     }
 }
 
+const Funtion_Request_ForgetPasword = async (email) => {
 
+    try {
+        var url = BASE_URL + "api/v1/auth/password-reset?email="+email;
+        let responce = await fetch(url, {
+            method: 'GET',
+            headers: {
+                //"Authorization": "Bearer "+token,
+                'Content-Type': 'application/json',
+            },
+        });
+        let code = responce.status;
+        let responce_Values = await responce.json();
+        var data = {
+            "code" : code,
+            "responce" : responce_Values
+        }
+        return data;
+    } catch (error) {
+        console.log("error on funtion_get_deals_list : " + error);
+    }
+}
+
+const Funtion_Reset_Pasword = async (passObj,token) => {
+    try {
+        var url = BASE_URL + "/api/v1/auth/password-reset";
+
+        var raw = JSON.stringify({
+                "token": passObj.token,
+                "email": passObj.email,
+                "password": passObj.password
+        });
+
+        let responce = await fetch(url, {
+            method: 'POST',
+            headers: {
+                "Authorization": "Bearer "+token,
+                'Content-Type': 'application/json',
+            },
+            body : raw,
+        });
+        let code = responce.status;
+        let responce_Values = await responce.json();
+        var data = {
+            "code" : code,
+            "responce" : responce_Values
+        }
+        return data;
+    } catch (error) {
+        console.log("error on funtion_get_deals_list : " + error);
+    }
+}
 
 export {Funtion_FaceBook_Register};
 export {Funtion_Google_Register};  
@@ -363,4 +480,6 @@ export {Funtion_Place_Foods_Order};
 export {Funtion_Single_Foods_Info};
 export {Funtion_Check_Avalible_tabel};
 export {Funtion_Reservation_tabel};
+export {Funtion_Request_ForgetPasword};
+export {Funtion_Reset_Pasword};
 
