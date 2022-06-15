@@ -129,7 +129,7 @@ const NoteHolder = () => {
         <View style={Styles.note_Container}>
             <View style={Styles.noteHolder}>
                 <View style={Styles.noteInputs}>
-                    <TextInput placeholder="Special Note" />
+                    <TextInput style={Styles.defulatTextInput}  placeholder="Special Note" />
                 </View>
             </View>
         </View>
@@ -343,6 +343,10 @@ const Styles = StyleSheet.create({
     table_text_content: {
         fontFamily: 'NexaTextDemo-Bold',
         fontSize: 14,
+        color: '#000'
+    },
+    defulatTextInput:{
+        fontFamily: 'NexaTextDemo-Light',
         color: '#000'
     },
 

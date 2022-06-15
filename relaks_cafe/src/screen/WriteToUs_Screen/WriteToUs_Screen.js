@@ -142,7 +142,7 @@ const Styles = StyleSheet.create({
         borderBottomColor: '#000',
         borderBottomWidth: 1,
         fontFamily: 'NexaTextDemo-Light',
-        fontSize: 15,
+        color: '#000'
     },
     formTitelHolder : {
         width: wp('80%'),

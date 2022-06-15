@@ -1,4 +1,4 @@
-import React, { PropTypes, Component, useState } from 'react';
+import React, { PropTypes, Component, useState, useEffect } from 'react';
 import { View, Image, StyleSheet, Text, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icons from 'react-native-vector-icons/Feather';
@@ -17,6 +17,13 @@ import { setUserInfo } from '../../redux/actions';
 
 import { StoreUserInfo } from '../../assert/storeage/data_store';
 
+const SOKCET_SERVER_ADDRESS = "https://cafe-app-352118.el.r.appspot.com";
+import GET_TOKEN from '../../assert/networks/dataAccess';
+
+import PushNotification,{Importance} from 'react-native-push-notification';
+import { io, Socket } from 'socket.io-client';
+
+import RefundPayement from '../../componet/refundPayemnt';
 
 const RulesTexts = () => {
     return (
@@ -32,8 +39,6 @@ const RulesTexts = () => {
         </View>
     );
 }
-
-
 
 const FormView = ({ username, passwords, updateUserName, updatePassowrd }) => {
 
@@ -156,6 +161,9 @@ const AuthScreen = () => {
     const [spinerSize, setSpinerSize] = useState(100);
     const [spinerVisible, setSpinerVisible] = useState(false);
 
+    const [tokens ,setTokens] = useState(""); //GET_TOKEN
+
+
     function login() {
 
         var user = {
@@ -184,6 +192,8 @@ const AuthScreen = () => {
                             "email": uName,
                             "token": dts.token
                         }
+
+                        setTokens(dts.token);
 
                         dispatch(setUserInfo(us));
 
@@ -253,6 +263,111 @@ const AuthScreen = () => {
             }
         });
     }
+
+
+    useEffect(() => {
+        const SOCKETS = io(SOKCET_SERVER_ADDRESS, {
+            auth: {
+                //token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRpbmVzaG1hZHVzaGFua2Fnc3MyMDE1QGdtYWlsLmNvbSIsImlhdCI6MTY1NTIwMDk3MSwiZXhwIjoxNjU1ODA1NzcxfQ.UaCqLjffAg9PNBuWRFk8T9HtSkQcEOtvjXntRzb_LcM'
+                token: tokens,
+            }
+        });
+
+        SOCKETS.on('connect', (response) => {
+            console.log("connect " + SOCKETS.id);
+        });
+        SOCKETS.on('order-status', (response) => {
+            console.log('message :' + JSON.stringify(response));
+            //{"data":"Your order has been accepted"}
+            //{"data":"Your order has been cancelled","refId":"12332322332333"}
+            var rep = JSON.stringify(response);
+            console.log("pass " + response.data);
+
+            if (response.data == "Your order has been accepted") {
+                // sucess
+                showAppPushNotification("Oder Accepted", response.data, "accept", "0", "order");
+            } else {
+                //cancel
+                showAppPushNotification("Oder Cancelled", response.data, "cancel", response.refId, "order");
+                RefundPayement(response.refId).then((response) => {
+
+                    console.log("resposne refund " + JSON.stringify(response))
+
+                    if (response.status == "succeeded") {
+                        console.log("refund sucess");
+                    } else {
+                        console.log("refund failed");
+                    }
+                }).catch((error) => {
+                    console.log("error happen when create fefund " + error);
+                });
+            }
+        });
+        SOCKETS.on('table-reserve', (response) => {
+            console.log("socket is on " + SOCKETS.id);
+            console.log('message: ' + response);
+
+            showAppPushNotification("Tabel Reservation Cancel", "your tabel reservation has been cancel", "accept", "0", "tabel");
+
+        });
+    }, [tokens]);
+
+
+    function showAppPushNotification(titel,message,status,ref,type) {
+
+        console.log("calling push notification "+titel+" "+message);
+    
+        PushNotification.localNotification({
+          /* Android Only Properties */
+          channelId: "1995", // (required) channelId, if the channel doesn't exist, notification will not trigger.
+          ticker: "Relaks Notification Ticker", // (optional)
+          showWhen: true, // (optional) default: true
+          autoCancel: true, // (optional) default: true
+          largeIcon: "ic_launcher", // (optional) default: "ic_launcher". Use "" for no large icon.
+          largeIconUrl: "https://www.example.tld/picture.jpg", // (optional) default: undefined
+          smallIcon: "ic_notification", // (optional) default: "ic_notification" with fallback for "ic_launcher". Use "" for default small icon.
+          bigText: "My big text that will be shown when notification is expanded.)", // (optional) default: "message" prop
+          subText: "Order Status", // (optional) default: none
+          bigPictureUrl: "https://www.example.tld/picture.jpg", // (optional) default: undefined
+          bigLargeIcon: "ic_launcher", // (optional) default: undefined
+          bigLargeIconUrl: "https://www.example.tld/bigicon.jpg", // (optional) default: undefined
+          color: "red", // (optional) default: system default
+          vibrate: false, // (optional) default: true
+          vibration: 0, // vibration length in milliseconds, ignored if vibrate=false, default: 1000
+          priority: "high", // (optional) set notification priority, default: high
+          visibility: "private", // (optional) set notification visibility, default: private
+          ignoreInForeground: false,// (optional) If this notification is duplicative of a Launcher shortcut, sets the id of the shortcut, in case the Launcher wants to hide the shortcut, default undefined
+          onlyAlertOnce: false, // (optional) alert will open only once with sound and notify, default: false
+    
+          when: null, // (optional) Add a timestamp (Unix timestamp value in milliseconds) pertaining to the notification (usually the time the event occurred). For apps targeting Build.VERSION_CODES.N and above, this time is not shown anymore by default and must be opted into by using `showWhen`, default: null.
+          usesChronometer: false, // (optional) Show the `when` field as a stopwatch. Instead of presenting `when` as a timestamp, the notification will show an automatically updating display of the minutes and seconds since when. Useful when showing an elapsed time (like an ongoing phone call), default: false.
+          timeoutAfter: null, // (optional) Specifies a duration in milliseconds after which this notification should be canceled, if it is not already canceled, default: null
+    
+          actions: ["Yes", "No"], // (Android only) See the doc for notification actions to know more
+          invokeApp: true, // (optional) This enable click on actions to bring back the application to foreground or stay in background, default: true
+    
+          /* iOS only properties */
+          category: "Relakas", // (optional) default: empty string
+          subtitle: "My Order", // (optional) smaller title below notification title
+    
+          /* iOS and Android properties */
+          id: 0, // (optional) Valid unique 32 bit integer specified as string. default: Autogenerated Unique ID
+          title: titel, // (optional)
+          message: message, // (required)
+          picture: "https://www.example.tld/picture.jpg", // (optional) Display an picture with the notification, alias of `bigPictureUrl` for Android. default: undefined
+          userInfo: {}, // (optional) default: {} (using null throws a JSON value '<null>' error)
+          playSound: true, // (optional) default: true
+          soundName: "default", // (optional) Sound to play when the notification is shown. Value of 'default' plays the default sound. It can be set to a custom sound such as 'android.resource://com.xyz/raw/my_sound'. It will look for the 'my_sound' audio file in 'res/raw' directory and play it. default: 'default' (default sound is played)
+          number: 10, // (optional) Valid 32 bit integer specified as string. default: none (Cannot be zero)
+          repeatType: "day", // (optional) Repeating interval. Check 'Repeating Notifications' section for more info. 
+          repeatTime: 2,
+          data : {
+            "status" : status,
+            "ref" : ref,
+            "type" : type
+          }
+        });
+      }
 
     return (
         <View style={Styles.main}>
@@ -420,7 +535,9 @@ const Styles = StyleSheet.create({
         width: wp('90%'),
         height: 40,
         borderBottomColor: '#000',
-        borderBottomWidth: 1
+        borderBottomWidth: 1,
+        fontFamily: 'NexaTextDemo-Light',
+        color: '#000'
     },
     icon: {
         position: 'absolute',

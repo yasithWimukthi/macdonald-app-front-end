@@ -231,7 +231,9 @@ const Styles = StyleSheet.create({
         width: wp('90%'),
         height: 40,
         borderBottomColor: '#000',
-        borderBottomWidth: 1
+        borderBottomWidth: 1,
+        fontFamily: 'NexaTextDemo-Light',
+        color: '#000'
     },
     icon: {
         position: 'absolute',

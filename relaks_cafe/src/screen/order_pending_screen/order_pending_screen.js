@@ -1,10 +1,10 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes, Component, useState } from 'react';
 import { View, Image, StyleSheet, Text, TouchableOpacity, TextInput } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/AntDesign';
 import ProcessImage from '../../assert/images/process_image.jpg'
 
-const OderDatilsTile = () => {
+const OderDatilsTile = ({orderState}) => {
     return(
         <View style={Styles.titelContainer}>
             <View style={Styles.titelHolder}>
@@ -12,7 +12,7 @@ const OderDatilsTile = () => {
                     <Image style={Styles.imageStyle} source={ProcessImage} />
                 </View>
                 <View style={Styles.textHolder}>
-                    <Text style={Styles.textStyles}>Your Order On Still Processing...</Text>
+                    <Text style={Styles.textStyles}>{"Your Order is "+orderState+"..."}</Text>
                 </View>
                 
             </View>
@@ -21,10 +21,17 @@ const OderDatilsTile = () => {
 }
 
 
-const Order_Pendding_Screen = () => {
+const Order_Pendding_Screen = (...props) => {
+
+
+    // alert(JSON.stringify(props[0].orderStatus));
+    // console.log(JSON.stringify(props));
+
+    const [orderStatus,setOrderStatus] = useState(props[0].orderStatus);
+
     return(
         <View style={Styles.main}>
-            <OderDatilsTile />
+            <OderDatilsTile orderState={orderStatus} />
         </View>
     );
 }

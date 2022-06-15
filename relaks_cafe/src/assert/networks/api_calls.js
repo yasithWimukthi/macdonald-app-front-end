@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-import { useSelector, useDispatch } from 'react-redux';
-import { setCartItems } from '../../redux/actions';
+import GET_TOKEN from '../../assert/networks/dataAccess';
 
 let BASE_URL = "https://cafe-app-352118.el.r.appspot.com/";
 
+const TokenVal = GET_TOKEN;
 
 
 const Funtion_Register = async (user) => {
@@ -124,7 +124,8 @@ const Funtion_Get_Home_Menu_List = async () => {
         let responce = await fetch(url, {
             method: 'GET',
             headers: {
-                "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRpbmVzaG1hZHVzaGFzYW5rYWdzczIwMTVAZ21haWwuY29tIiwiaWF0IjoxNjU0ODUyNjI3LCJleHAiOjE2NTU0NTc0Mjd9.yoo09mURK_WrWgucjjSf8pseTzR5CxTA-uGEMgpgDps",
+                // "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRpbmVzaG1hZHVzaGFzYW5rYWdzczIwMTVAZ21haWwuY29tIiwiaWF0IjoxNjU0ODUyNjI3LCJleHAiOjE2NTU0NTc0Mjd9.yoo09mURK_WrWgucjjSf8pseTzR5CxTA-uGEMgpgDps",
+                Authorization: `Bearer ${TokenVal}`,
                 'Content-Type': 'application/json',
             },
         });
@@ -149,7 +150,7 @@ const Funtion_Get_Home_Tranding_List = async () => {
         let responce = await fetch(url, {
             method: 'GET',
             headers: {
-                "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRpbmVzaG1hZHVzaGFzYW5rYWdzczIwMTVAZ21haWwuY29tIiwiaWF0IjoxNjU0ODUyNjI3LCJleHAiOjE2NTU0NTc0Mjd9.yoo09mURK_WrWgucjjSf8pseTzR5CxTA-uGEMgpgDps",
+                Authorization: `Bearer ${TokenVal}`,
                 'Content-Type': 'application/json',
             },
         });
@@ -174,7 +175,7 @@ const Funtion_Get_Home_Deals_List = async () => {
         let responce = await fetch(url, {
             method: 'GET',
             headers: {
-                "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRpbmVzaG1hZHVzaGFzYW5rYWdzczIwMTVAZ21haWwuY29tIiwiaWF0IjoxNjU0ODUyNjI3LCJleHAiOjE2NTU0NTc0Mjd9.yoo09mURK_WrWgucjjSf8pseTzR5CxTA-uGEMgpgDps",
+                Authorization: `Bearer ${TokenVal}`,
                 'Content-Type': 'application/json',
             },
         });
@@ -200,7 +201,7 @@ const Funtion_Order_Menu_List = async () => {
         let responce = await fetch(url, {
             method: 'GET',
             headers: {
-                "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRpbmVzaG1hZHVzaGFzYW5rYWdzczIwMTVAZ21haWwuY29tIiwiaWF0IjoxNjU0ODUyNjI3LCJleHAiOjE2NTU0NTc0Mjd9.yoo09mURK_WrWgucjjSf8pseTzR5CxTA-uGEMgpgDps",
+                Authorization: `Bearer ${TokenVal}`,
                 'Content-Type': 'application/json',
             },
         });
@@ -225,7 +226,7 @@ const Funtion_Get_Deals_Info_List = async () => {
         let responce = await fetch(url, {
             method: 'GET',
             headers: {
-                "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRpbmVzaG1hZHVzaGFzYW5rYWdzczIwMTVAZ21haWwuY29tIiwiaWF0IjoxNjU0ODUyNjI3LCJleHAiOjE2NTU0NTc0Mjd9.yoo09mURK_WrWgucjjSf8pseTzR5CxTA-uGEMgpgDps",
+                Authorization: `Bearer ${TokenVal}`,
                 'Content-Type': 'application/json',
             },
         });
@@ -251,7 +252,7 @@ const Funtion_Get_Foods_List = async (id) => {
         let responce = await fetch(url, {
             method: 'GET',
             headers: {
-                "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRpbmVzaG1hZHVzaGFzYW5rYWdzczIwMTVAZ21haWwuY29tIiwiaWF0IjoxNjU0ODUyNjI3LCJleHAiOjE2NTU0NTc0Mjd9.yoo09mURK_WrWgucjjSf8pseTzR5CxTA-uGEMgpgDps",
+                Authorization: `Bearer ${TokenVal}`,
                 'Content-Type': 'application/json',
             },
         });
@@ -271,7 +272,8 @@ const Funtion_Get_Foods_List = async (id) => {
     }
 }
 
-const Funtion_Place_Foods_Order = async (order) => {
+const Funtion_Place_Foods_Order = async (order, tokens) => {
+    console.log("calling apis");
     try {
         var url = BASE_URL + "api/v1/orders";
 
@@ -288,11 +290,12 @@ const Funtion_Place_Foods_Order = async (order) => {
             "foodItems": order.foodItems,
           });
 
+        //console.log("token "+TokenVal);
        // console.log("url "+url);
         let responce = await fetch(url, {
             method: 'POST',
             headers: {
-                "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRpbmVzaG1hZHVzaGFzYW5rYWdzczIwMTVAZ21haWwuY29tIiwiaWF0IjoxNjU0ODUyNjI3LCJleHAiOjE2NTU0NTc0Mjd9.yoo09mURK_WrWgucjjSf8pseTzR5CxTA-uGEMgpgDps",
+                Authorization: `Bearer ${tokens}`,
                 'Content-Type': 'application/json',
             },
             body: raw
@@ -309,7 +312,7 @@ const Funtion_Place_Foods_Order = async (order) => {
 
 
     } catch (error) {
-        console.log("error on funtion_get_deals_list : " + error);
+        console.log("error on funtion_order_place : " + error);
     }
 }
 
@@ -320,7 +323,7 @@ const Funtion_Single_Foods_Info = async (id) => {
         let responce = await fetch(url, {
             method: 'GET',
             headers: {
-                "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRpbmVzaG1hZHVzaGFzYW5rYWdzczIwMTVAZ21haWwuY29tIiwiaWF0IjoxNjU0ODUyNjI3LCJleHAiOjE2NTU0NTc0Mjd9.yoo09mURK_WrWgucjjSf8pseTzR5CxTA-uGEMgpgDps",
+                Authorization: `Bearer ${TokenVal}`,
                 'Content-Type': 'application/json',
             },
         });
@@ -328,6 +331,8 @@ const Funtion_Single_Foods_Info = async (id) => {
         // return responce_Values;
         let code = responce.status;
         let responce_Values = await responce.json();
+
+        console.log("response "+JSON.stringify(responce_Values));
         var data = {
             "code" : code,
             "responce" : responce_Values
@@ -345,7 +350,7 @@ const Funtion_Check_Avalible_tabel = async (times) => {
 
     try {
         var url = BASE_URL + "api/v1/tables/available-tables";
-
+        console.log("token "+TokenVal);
         var raw = JSON.stringify({
             'checkIn': times.checkIn,
             'checkOut': times.checkOut
@@ -354,7 +359,7 @@ const Funtion_Check_Avalible_tabel = async (times) => {
         let responce = await fetch(url, {
             method: 'POST',
             headers: {
-                "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRpbmVzaG1hZHVzaGFua2Fnc3MyMDE1QGdtYWlsLmNvbSIsImlhdCI6MTY1NTAzMzk5NCwiZXhwIjoxNjU1NjM4Nzk0fQ.s7RCF400GObJiqV-vk2qynaIUkq0W9RbyxcONss0wNQ",
+                Authorization: `Bearer ${TokenVal}`,
                 'Content-Type': 'application/json',
             },
             body : raw,
@@ -393,7 +398,7 @@ const Funtion_Reservation_tabel = async (table) => {
         let responce = await fetch(url, {
             method: 'POST',
             headers: {
-                "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRpbmVzaG1hZHVzaGFua2Fnc3MyMDE1QGdtYWlsLmNvbSIsImlhdCI6MTY1NTAzMzk5NCwiZXhwIjoxNjU1NjM4Nzk0fQ.s7RCF400GObJiqV-vk2qynaIUkq0W9RbyxcONss0wNQ",
+                Authorization: `Bearer ${TokenVal}`,
                 'Content-Type': 'application/json',
             },
             body : data,

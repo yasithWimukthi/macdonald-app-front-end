@@ -20,6 +20,9 @@ import { Actions } from 'react-native-router-flux';
 
 import AwesomeAlert from 'react-native-awesome-alerts';
 
+import GET_TOKEN from '../../assert/networks/dataAccess';
+
+
 const CURRENCY = 'USD';
 var CARD_TOKEN = null;
 
@@ -70,6 +73,7 @@ function subscribeUser(creditCardToken) {
 const StripeGateway = () => {
 
     const { items } = useSelector(state => state.userReducer);
+    const { user } = useSelector(state => state.userReducer);
     const dispatch = useDispatch();
 
     const [CardInput, setCardInput] = React.useState({})
@@ -134,11 +138,13 @@ const StripeGateway = () => {
 
             var dummyData = [];
 
+            console.log("cart "+JSON.stringify(list));
+
             list.forEach(element => {
 
                 if (element.dealType == "item") {
                     var obj = {
-                        "foodItemId": element.foodItemId,
+                        "id": element.id,
                         "portionId": element.portionId,
                         "quantity": element.quantity,
                         "note": element.note
@@ -149,7 +155,7 @@ const StripeGateway = () => {
                     var tmpList = element.dealItem;
                     tmpList.forEach((dels) => {
                         var obj = {
-                            "foodItemId": dels.foodItem.id,
+                            "id": dels.foodItem.id,
                             "portionId": dels.portion.id,
                             "quantity": (parseInt(dels.quantity) * parseInt(element.quantity)),
                             "note": element.note
@@ -165,8 +171,11 @@ const StripeGateway = () => {
 
             if (pament_data.status == 'succeeded') {
                 //alert("Payment Successfully");
-                Funtion_Place_Foods_Order(orderObj).then((response) => {
-                    // alert("order place Successfully " + JSON.stringify(response));
+
+                console.log("tokens "+user.token);
+
+                Funtion_Place_Foods_Order(orderObj,user.token).then((response) => {
+                    //alert("order place Successfully " + JSON.stringify(response));
                     if (response.code == '201') {
                         var dts = {
                             "isDelivery": false,
@@ -184,7 +193,8 @@ const StripeGateway = () => {
                         dispatch(setCartItems(dts));
 
                         //Actions.authenticated();
-                        Actions.OrderSt();
+                       // Actions.OrderSt();
+                        Actions.OrderSt({ "orderStatus": "Pending" });
                     } else if (response.code == '401') {
                         setModelTitel("Error");
                         setModelMessage("Authentication Fail, Plase login again");
@@ -193,6 +203,10 @@ const StripeGateway = () => {
                         //show eorr
                     } else if (response.code == '500') {
                         //server error
+                        setModelTitel("Error");
+                        setModelMessage("Something went wrong, try again later");
+                        setShow(true);
+                    }else if(response.code == "502"){
                         setModelTitel("Error");
                         setModelMessage("Something went wrong, try again later");
                         setShow(true);

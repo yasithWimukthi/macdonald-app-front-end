@@ -12,13 +12,39 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSelector, useDispatch } from 'react-redux';
 import { setUserInfo, setCartItems } from '../../redux/actions';
 
+import { io, Socket } from 'socket.io-client';
+
 const SplashScreen = () => {
 
     const dispatch = useDispatch();
 
+    //const SOKCET_SERVER_ADDRESS = "https://cafe-app-352118.el.r.appspot.com";
+
     useEffect(() => {
         chakLocal();
-    }, []);
+
+    });
+    // useEffect(()=>{
+    //     const SOCKETS = io(SOKCET_SERVER_ADDRESS, {
+    //         auth: {
+    //             token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRpbmVzaG1hZHVzaGFua2Fnc3MyMDE1QGdtYWlsLmNvbSIsImlhdCI6MTY1NTE4Mjk3MiwiZXhwIjoxNjU1Nzg3NzcyfQ.KLLNojdDmtHmc4a3vUGfXJLUpV4ABEM4i6VP2NJDOGk'
+    //          }
+    //     });
+
+    //     console.log("linging");
+    //     SOCKETS.on('connect',(response)=>{
+    //         console.log("connect "+SOCKETS.id);
+    //     });
+    //     SOCKETS.on('order-status', (response) => {
+    //         console.log("linging");
+    //         console.log("socket is on " + SOCKETS.id);
+    //         console.log('message: ' + JSON.stringify(response));
+    //      });
+    //      SOCKETS.on('table-reserve', (response) => {
+    //        console.log("socket is on " + SOCKETS.id);
+    //        console.log('message: ' + response);
+    //     });
+    // });
 
     function chakLocal() {
         setTimeout(() => {

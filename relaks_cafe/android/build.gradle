@@ -18,6 +18,7 @@ buildscript {
         }
 
         googlePlayServicesVersion = "16.0.0"
+        firebaseMessagingVersion = "21.1.0"
         androidMapsUtilsVersion = "0.5+"
     }
     repositories {
