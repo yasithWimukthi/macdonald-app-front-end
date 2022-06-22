@@ -9,9 +9,11 @@ import NetInfo from "@react-native-community/netinfo";
 
 import DatePicker from 'react-native-date-picker';
 
-import { Funtion_Reservation_tabel, Funtion_Check_Avalible_tabel } from '../../assert/networks/api_calls';
+import { Funtion_Reservation_tabel, Funtion_Check_Avalible_tabel,  } from '../../assert/networks/api_calls';
 
 import AwesomeAlert from 'react-native-awesome-alerts';
+
+import { useSelector, useDispatch } from 'react-redux';
 
 const CheckTabelList = ({ updateTabelList, updateCheckin, updateCheckout, updateModelVisible, updateModelTitel, updateModelMessage }) => {
 
@@ -20,6 +22,8 @@ const CheckTabelList = ({ updateTabelList, updateCheckin, updateCheckout, update
     var tzDifference = timeZoneFromDB * 60 + tempdate.getTimezoneOffset();
     var offsetTime = new Date(tempdate.getTime() + tzDifference * 60 * 1000);
 
+    const { user } = useSelector(state => state.userReducer);
+
     const [checkindate, setCheckinDate] = useState(offsetTime);
     const [checkoutdate, setCheckoutDate] = useState(offsetTime);
     const [openCheckout, setOpenCheckout] = useState(false);
@@ -27,26 +31,42 @@ const CheckTabelList = ({ updateTabelList, updateCheckin, updateCheckout, update
 
     function checkAvalibleTable() {
 
+        console.log("calling");
+
         var tims = {
             "checkIn": checkindate.toISOString(),
             "checkOut": checkoutdate.toISOString()
         }
 
-        Funtion_Check_Avalible_tabel(tims).then((response) => {
-
+        Funtion_Check_Avalible_tabel(tims, user.token).then((response) => {
+            console.log("response " + JSON.stringify(response));
             if (response.code == '200') {
                 // setModelTitel("SuccessFully");
                 // setModelMessage("Table reservation successfully");
                 // setShow(true);
                 var dt = response.responce;
-                if(dt.data.availableTableIds.length == '0'){
+                if (dt.data.availableTableIds.length == '0') {
                     updateModelTitel("Sorry");
                     updateModelMessage("All of table are fully booked, try another time slot");
                     updateModelVisible(true);
-                }else{
-                    updateTabelList(dt.data.availableTableIds);
+                } else {
+
+                    var lists = [];
+                    dt.data.availableTableIds.forEach(tabels => {
+                        var teblObj = {
+                            "id": tabels.id,
+                            "tableName": tabels.tableName,
+                            "seatingCapacity": tabels.seatingCapacity,
+                            "isIndoor": tabels.isIndoor,
+                            "isSelected": false,
+                        }
+
+                        lists.push(teblObj);
+                    });
+
+                    updateTabelList(lists);
                 }
-                
+
             } else if (response.code == '401') {
                 updateModelTitel("Error");
                 updateModelMessage("Authentication Fail, Plase login again");
@@ -98,6 +118,7 @@ const CheckTabelList = ({ updateTabelList, updateCheckin, updateCheckout, update
                                         }}
                                         timeZoneOffsetInMinutes={330}
                                     />
+                                    <Text style={Styles.timeLabelCont}>{"From"}</Text>
                                     <Text style={Styles.timeLabel}>{checkindate.toUTCString()}</Text>
 
                                 </View>
@@ -124,7 +145,7 @@ const CheckTabelList = ({ updateTabelList, updateCheckin, updateCheckout, update
                                         }}
                                         timeZoneOffsetInMinutes={330}
                                     />
-
+                                    <Text style={Styles.timeLabelCont}>{"To"}</Text>
                                     <Text style={Styles.timeLabel}>{checkoutdate.toUTCString()}</Text>
                                 </View>
                                 <View style={Styles.Input_Icon_Container}>
@@ -150,6 +171,10 @@ const CheckTabelList = ({ updateTabelList, updateCheckin, updateCheckout, update
 const TableListView = ({ tabelList, updateSelected, updateNote }) => {
 
     //console.log("pass list "+JSON.stringify(tabelList));
+    var ids = 0;
+
+    const [seletcedTile, setSelectedTile] = useState(null);
+    const [ItemSelected, setSelectItem] = useState(false);
 
     return (
         <View style={Styles.List_Container}>
@@ -163,19 +188,30 @@ const TableListView = ({ tabelList, updateSelected, updateNote }) => {
                             data={tabelList}
                             keyExtractor={(item, index) => index}
                             numColumns={3}
+                            extraData={ItemSelected}
                             renderItem={({ item }) => {
                                 //console.log("datas "+JSON.stringify(item));
                                 return (
-                                    <TouchableOpacity onPress={() => { updateSelected(item); }}>
-                                        <View elevation={2} style={Styles.singleTable}>
+                                    <TouchableOpacity onPress={() => {
+                                        updateSelected(item);
+                                        tabelList.forEach(tabels => {
+
+                                            if (tabels.id == item.id) {
+                                                tabels.isSelected = true;
+                                            } else {
+                                                tabels.isSelected = false;
+                                            }
+                                        });
+                                    }}>
+                                        <View elevation={2} style={[Styles.singleTable, { backgroundColor: (item.isSelected) ? "red" : "#FFF" }]}>
                                             <View style={Styles.singleTextHolder}>
-                                                <Text style={Styles.table_info}>{"No : " + item.tableNo}</Text>
+                                                <Text style={[Styles.table_info, { color: (item.isSelected) ? "#FFF" : "#000" }]}>{"Name : " + item.tableName}</Text>
                                             </View>
                                             <View style={Styles.singleTextHolder}>
-                                                <Text style={Styles.table_info}>{"Seat : " + item.seatingCapacity}</Text>
+                                                <Text style={[Styles.table_info, { color: (item.isSelected) ? "#FFF" : "#000" }]}>{"Seat : " + item.seatingCapacity}</Text>
                                             </View>
                                             <View style={Styles.singleTextHolder}>
-                                                <Text style={Styles.table_info}>{(item.isIndoor == "0") ? "INDOOR" : "OUTDOOR"}</Text>
+                                                <Text style={[Styles.table_info, { color: (item.isSelected) ? "#FFF" : "#000" }]}>{(item.isIndoor == "0") ? "INDOOR" : "OUTDOOR"}</Text>
                                             </View>
                                         </View>
                                     </TouchableOpacity>
@@ -199,12 +235,16 @@ const TableListView = ({ tabelList, updateSelected, updateNote }) => {
     );
 }
 
+
+
 const Tabel_Reservation_Screen = () => {
 
     var tempdate = new Date();
     var timeZoneFromDB = +5.30;
     var tzDifference = timeZoneFromDB * 60 + tempdate.getTimezoneOffset();
     var offsetTime = new Date(tempdate.getTime() + tzDifference * 60 * 1000);
+
+    const { user } = useSelector(state => state.userReducer);
 
     const [tabelsList, setTableList] = useState([]);
     const [selectTabel, setSelectTabel] = useState(null);
@@ -215,16 +255,21 @@ const Tabel_Reservation_Screen = () => {
     const [show, setShow] = useState(false);
     const [modelTitel, setModelTitel] = useState("");
     const [modelMessage, setModelMessage] = useState("");
+    
 
     function reserveTable() {
         var dts = {
-            "tableId": selectTabel.tableNo,
+            "tableId": selectTabel.id, //tableNo //tableName
             "note": note,
             "checkIn": checkIN,
             "checkOut": checkOUT
         }
-        Funtion_Reservation_tabel(dts).then((response) => {
+
+        console.log("tokens " + user.token);
+
+        Funtion_Reservation_tabel(dts, user.token).then((response) => {
             //alert("resever "+JSON.stringify(responce.status));
+            console.log("resever " + JSON.stringify(response));
             if (response.code == '200') {
                 setModelTitel("SuccessFully");
                 setModelMessage("Table reservation successfully");
@@ -242,6 +287,10 @@ const Tabel_Reservation_Screen = () => {
                 setModelTitel("Error");
                 setModelMessage("Something went wrong, try again later");
                 setShow(true);
+            } else {
+                setModelTitel("Error");
+                setModelMessage("Something went wrong, try again later");
+                setShow(true);
             }
         }).catch((error) => {
             console.log("error happen on reseve tables" + error);
@@ -250,16 +299,19 @@ const Tabel_Reservation_Screen = () => {
 
     return (
         <View style={Styles.main}>
-            <CheckTabelList updateTabelList={setTableList} updateCheckin={setCheckIN} updateCheckout={setCheckOUT} updateModelVisible={setShow} updateModelTitel={setModelTitel} updateModelMessage={setModelMessage}/>
+            <CheckTabelList updateTabelList={setTableList} updateCheckin={setCheckIN} updateCheckout={setCheckOUT} updateModelVisible={setShow} updateModelTitel={setModelTitel} updateModelMessage={setModelMessage} />
 
-            <TableListView tabelList={tabelsList} updateSelected={setSelectTabel} updateNote={setNote} />
+            {/* <ScrollView> */}
+                <TableListView tabelList={tabelsList} updateSelected={setSelectTabel} updateNote={setNote} />
+                {/* <RecentBookTabelList bookList={recentTbelBookList} /> */}
+            {/* </ScrollView> */}
 
             <View style={Styles.screenTitel}>
                 <View style={Styles.btnContainer}>
                     <TouchableOpacity disabled={(tabelsList.length) != 0 ? false : true} onPress={() => { reserveTable(); }}>
                         <View style={[Styles.btnBorder, { backgroundColor: (tabelsList.length) != 0 ? '#EB1F25' : "#f5f5f5", borderWidth: 0 }]}>
                             <View style={Styles.btn_icon_holder}>
-                                {/* <Icon color="#4285F4" name="google" size={30} /> */} 
+                                {/* <Icon color="#4285F4" name="google" size={30} /> */}
                             </View>
                             <View style={Styles.btn_text_holder_login}>
                                 <Text style={Styles.brtn_text_content}>Reserve a table</Text>
@@ -365,6 +417,13 @@ const Styles = StyleSheet.create({
     timeLabel: {
         fontFamily: 'NexaTextDemo-Light',
         fontSize: 14,
+        color: '#000',
+        letterSpacing: 0.04,
+        marginLeft: 10,
+    },
+    timeLabelCont: {
+        fontFamily: 'NexaTextDemo-Light',
+        fontSize: 12,
         color: '#000',
         letterSpacing: 0.04,
         marginLeft: 10,
@@ -509,7 +568,62 @@ const Styles = StyleSheet.create({
         fontFamily: 'NexaTextDemo-Light',
         fontSize: 14,
         color: '#000'
-    }
+    },
+    orderListContainer: {
+        width: wp('100%'),
+        height: hp('75%'),
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 15,
+
+    },
+    orderListHoler: {
+        width: wp('95%'),
+        height: hp('75%'),
+        justifyContent: 'center',
+    },
+    orderListTileContainer: {
+        width: wp('95%'),
+        height: hp('12%'),
+        //alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: wp('4%'),
+        flexDirection: 'row',
+        marginTop: 2,
+        marginBottom: 1,
+    },
+    orderTileViews1: {
+        width: wp('60%'),
+        height: hp('10%'),
+        //alignItems: 'center',
+        justifyContent: 'center',
+
+    },
+    orderTileViews2: {
+        width: wp('35%'),
+        height: hp('10%'),
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    orderInfoView: {
+        width: wp('58%'),
+        //alignItems: 'center',
+        justifyContent: 'center',
+        marginLeft: 8,
+        marginTop: 2,
+    },
+    orderInfoText: {
+        fontFamily: 'NexaTextDemo-Light',
+        fontSize: 13,
+        color: '#000',
+        letterSpacing: 0.1,
+    },
+    orderInfoTextBold: {
+        fontFamily: 'NexaTextDemo-Bold',
+        fontSize: 16,
+        color: '#000',
+        letterSpacing: 0.1,
+    },
 
 
 });

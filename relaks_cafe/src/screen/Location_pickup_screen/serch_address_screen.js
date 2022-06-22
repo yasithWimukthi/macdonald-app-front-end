@@ -9,6 +9,8 @@ import { PlaceAPI } from '../../assert/key/key';
 import { useSelector, useDispatch } from 'react-redux';
 import { setAddressInfo, setCartItems } from '../../redux/actions';
 
+import AwesomeAlert from 'react-native-awesome-alerts';
+
 const AddressTile = () => {
     return (
         <View style={Styles.resultInputContainer}>
@@ -27,7 +29,7 @@ const AddressTile = () => {
     );
 }
 
-const SearchViewInputTile = ({ updateList, updateVisible }) => {
+const SearchViewInputTile = ({ updateList, updateVisible, showVisble, updateTitel, updateMessage }) => {
 
     const { items, address } = useSelector(state => state.userReducer);
     const dispatch = useDispatch();
@@ -91,8 +93,13 @@ const SearchViewInputTile = ({ updateList, updateVisible }) => {
             dispatch(setCartItems(orderObj));
             dispatch(setAddressInfo(addressObj));
 
-            alert("done, state update");
+           // alert("done, state update");
             //redirct to prevois screen
+            updateTitel("Address Selected");
+            updateMessage("Address is updated!");
+            showVisble(true);
+            setTimeout(() => { Actions.popTo("dashbord"); }, 1000);
+            
 
         }).catch((error) => {
             console.log("error happen when get address locartion " + error);
@@ -152,12 +159,33 @@ const Search_Address_Screen = () => {
     const [showResult, setShowResult] = useState(false);
     const [listResult, setListResult] = useState([]);
 
+    const [show, setShow] = useState(false);
+    const [modelTitel, setModelTitel] = useState("");
+    const [modelMessage, setModelMessage] = useState("");
+
     return (
         <View style={Styles.main}>
-            <SearchViewInputTile updateList={setListResult} updateVisible={setShowResult} />
+            <SearchViewInputTile updateList={setListResult} updateVisible={setShowResult} showVisble={setShow} updateMessage={setModelMessage} updateTitel={setModelTitel}  />
             {/* <AddressTile /> */}
 
-
+            <AwesomeAlert
+                show={show}
+                showProgress={false}
+                title={modelTitel}
+                message={modelMessage}
+                closeOnTouchOutside={true}
+                closeOnHardwareBackPress={false}
+                showCancelButton={false}
+                showConfirmButton={true}
+                cancelText="cancel"
+                confirmText="Ok"
+                confirmButtonColor="red" //#DD6B55
+                onCancelPressed={() => {
+                    setShow(false);
+                }}
+                onConfirmPressed={() => {
+                    setShow(false);
+                }} />
 
         </View>
     );

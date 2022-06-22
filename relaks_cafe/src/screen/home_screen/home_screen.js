@@ -158,22 +158,6 @@ const home_screen = () => {
                 })} />
             </Tab.Navigator>
 
-            {/* <FloatingAction
-                actions={()=>{Actions.Cart();}}
-                onPressItem={name => {
-                    console.log(`selected button: ${name}`);
-                }}
-            /> */}
-            {/* <FloatingAction
-                actions={actions2}
-                onPressItem={name => {
-                    console.log(`selected button: ${name}`);
-                    if (name == "Cart") {
-                        Actions.Cart();
-                    }
-                }}
-            /> */}
-
             {
                 (visbile) ? <View style={Styles.cartTile}>
                     <View style={Styles.cartTile_holder}>

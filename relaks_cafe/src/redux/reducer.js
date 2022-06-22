@@ -1,13 +1,15 @@
-import { SET_USER_TOKEN, SET_USER_INFO, SET_CART_ITEMS, SET_ADDRESS_INFO } from './actions';
+import { SET_USER_TOKEN, SET_USER_INFO, SET_CART_ITEMS, SET_ADDRESS_INFO, SET_FAV_ADDRESS_INFO } from './actions';
 
 const initialState = {
     token: "",
     user: {
+        "ids": "0",
         "firstName": "",
         "lastName": "",
         "loginType": "",
         "email": "",
-        "token" : ""
+        "token": "",
+        "mobile" : ""
     },
     items: {
         "isDelivery": false,
@@ -22,14 +24,27 @@ const initialState = {
         "foodItems": []
     },
     address: {
-        "mainAddress" : "Plase select Location",
-        "subAddress" : "tap on change location",
+        "mainAddress": "Plase select Location",
+        "subAddress": "tap on change location",
         "location": {
             "latitude": "34.052235",
             "longitude": "-118.243683"
         }
+    },
+    favaddress: {
+        "favAdd": []
     }
 }
+
+// {
+//     "favName": "defult",
+//     "mainAddress": "Plase select Location",
+//     "subAddress": "tap on change location",
+//     "location": {
+//         "latitude": "34.052235",
+//         "longitude": "-118.243683"
+//     }
+// }
 
 function userReducer(state = initialState, actions) {
     switch (actions.type) {
@@ -41,6 +56,8 @@ function userReducer(state = initialState, actions) {
             return { ...state, items: actions.payload }
         case SET_ADDRESS_INFO:
             return { ...state, address: actions.payload }
+        case SET_FAV_ADDRESS_INFO:
+            return { ...state, favaddress: actions.payload }
         default:
             return state;
     }

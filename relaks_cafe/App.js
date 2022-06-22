@@ -60,6 +60,7 @@ import Single_Deals_Info_Screen from './src/screen/single_deals_screen/single_de
 import Order_Pendding_Screen from './src/screen/order_pending_screen/order_pending_screen';
 import Reset_Password_Screen from './src/screen/reset_password_screen/reset_password_screen';
 import Request_Reset_Password_Screen from './src/screen/request_password_reset_screen/request_password_reset_screen';
+import Add_ToFav_Location_Screen from './src/screen/Location_pickup_screen/add_toFav_location_screen';
 
 import { Stack, Router, Scene } from 'react-native-router-flux';
 
@@ -308,8 +309,9 @@ const App: () => Node = () => {
               hideNavBar={true}
               initial
             />
-
           </Scene>
+
+
           <Scene
             key="MenuList"
             component={SingleMenuItemScreen}
@@ -322,6 +324,53 @@ const App: () => Node = () => {
           //leftButtonStyle = {{color : '#fff',tintColor : '#fff'}}
           //hideNavBar={true}
           />
+
+          <Scene
+            key="SingleFood"
+            component={Single_FoodInfo_Screen}
+            title=""
+            // backButtonTextStyle = {{color:'#FFFFFF'}}
+            barButtonIconStyle={{ tintColor: '#EB1F25' }}
+            // titleStyle = {{color : '#ffffff',fontFamily : 'Roboto-Regular',}}
+            // navigationBarStyle = {{backgroundColor : '#5B0492'}}
+            backButtonTintColor='#EB1F25'
+            leftButtonStyle={{ color: '#EB1F25', tintColor: '#EB1F25' }}
+          // hideNavBar={true}
+          />
+
+          <Scene
+            key="SingleDeal"
+            component={Single_Deals_Info_Screen}
+            title=""
+            // backButtonTextStyle = {{color:'#FFFFFF'}}
+            // barButtonIconStyle={{ tintColor: '#fff' }}
+            // titleStyle = {{color : '#ffffff',fontFamily : 'Roboto-Regular',}}
+            navigationBarStyle={{ backgroundColor: '#FFF' }}
+            // backButtonTintColor = '#fff'
+            // leftButtonStyle = {{color : '#fff',tintColor : '#fff'}}
+            //hideNavBar={true}
+            barButtonIconStyle={{ tintColor: '#EB1F25' }}
+            // titleStyle = {{color : '#ffffff',fontFamily : 'Roboto-Regular',}}
+            // navigationBarStyle = {{backgroundColor : '#5B0492'}}
+            backButtonTintColor='#EB1F25'
+            leftButtonStyle={{ color: '#EB1F25', tintColor: '#EB1F25' }}
+          />
+
+          <Scene
+            key="Tranding"
+            component={Single_Tranding_Screen}
+            title=""
+            // backButtonTextStyle = {{color:'#FFFFFF'}}
+            barButtonIconStyle={{ tintColor: '#EB1F25' }}
+            // titleStyle = {{color : '#ffffff',fontFamily : 'Roboto-Regular',}}
+            // navigationBarStyle = {{backgroundColor : '#5B0492'}}
+            backButtonTintColor='#EB1F25'
+            leftButtonStyle={{ color: '#EB1F25', tintColor: '#EB1F25' }}
+          // hideNavBar={true}
+          />
+
+          {/* </Scene> */}
+
           <Scene
             key="writeUs"
             component={WriteToUs_Screen}
@@ -446,144 +495,112 @@ const App: () => Node = () => {
             key="Register"
             component={SignupFormScreen}
             title=""
-          // backButtonTextStyle = {{color:'#FFFFFF'}}
-          // barButtonIconStyle={{ tintColor: '#fff' }}
-          // titleStyle = {{color : '#ffffff',fontFamily : 'Roboto-Regular',}}
-          // navigationBarStyle = {{backgroundColor : '#5B0492'}}
-          // backButtonTintColor = '#fff'
-          // leftButtonStyle = {{color : '#fff',tintColor : '#fff'}}
+            // backButtonTextStyle = {{color:'#FFFFFF'}}
+            barButtonIconStyle={{ tintColor: '#EB1F25' }}
+            // titleStyle = {{color : '#ffffff',fontFamily : 'Roboto-Regular',}}
+            // navigationBarStyle = {{backgroundColor : '#5B0492'}}
+            backButtonTintColor='#EB1F25'
+            leftButtonStyle={{ color: '#EB1F25', tintColor: '#EB1F25' }}
           // hideNavBar={true}
+
           />
           <Scene
             key="FullMenu"
             component={Menu_Screen}
             title=""
-          // backButtonTextStyle = {{color:'#FFFFFF'}}
-          // barButtonIconStyle={{ tintColor: '#fff' }}
-          // titleStyle = {{color : '#ffffff',fontFamily : 'Roboto-Regular',}}
-          // navigationBarStyle = {{backgroundColor : '#5B0492'}}
-          // backButtonTintColor = '#fff'
-          // leftButtonStyle = {{color : '#fff',tintColor : '#fff'}}
+            // backButtonTextStyle = {{color:'#FFFFFF'}}
+            barButtonIconStyle={{ tintColor: '#EB1F25' }}
+            // titleStyle = {{color : '#ffffff',fontFamily : 'Roboto-Regular',}}
+            // navigationBarStyle = {{backgroundColor : '#5B0492'}}
+            backButtonTintColor='#EB1F25'
+            leftButtonStyle={{ color: '#EB1F25', tintColor: '#EB1F25' }}
           // hideNavBar={true}
           />
           <Scene
             key="Tabel"
             component={Tabel_Reservation_Screen}
             title=""
-          // backButtonTextStyle = {{color:'#FFFFFF'}}
-          // barButtonIconStyle={{ tintColor: '#fff' }}
-          // titleStyle = {{color : '#ffffff',fontFamily : 'Roboto-Regular',}}
-          // navigationBarStyle = {{backgroundColor : '#5B0492'}}
-          // backButtonTintColor = '#fff'
-          // leftButtonStyle = {{color : '#fff',tintColor : '#fff'}}
+            // backButtonTextStyle = {{color:'#FFFFFF'}}
+            barButtonIconStyle={{ tintColor: '#EB1F25' }}
+            // titleStyle = {{color : '#ffffff',fontFamily : 'Roboto-Regular',}}
+            // navigationBarStyle = {{backgroundColor : '#5B0492'}}
+            backButtonTintColor='#EB1F25'
+            leftButtonStyle={{ color: '#EB1F25', tintColor: '#EB1F25' }}
           // hideNavBar={true}
           />
-          <Scene
-            key="SingleFood"
-            component={Single_FoodInfo_Screen}
-            title=""
-          // backButtonTextStyle = {{color:'#FFFFFF'}}
-          // barButtonIconStyle={{ tintColor: '#fff' }}
-          // titleStyle = {{color : '#ffffff',fontFamily : 'Roboto-Regular',}}
-          // navigationBarStyle = {{backgroundColor : '#5B0492'}}
-          // backButtonTintColor = '#fff'
-          // leftButtonStyle = {{color : '#fff',tintColor : '#fff'}}
-          // hideNavBar={true}
-          />
+
           <Scene
             key="Cart"
             component={Cart_Screen}
             title=""
-          // backButtonTextStyle = {{color:'#FFFFFF'}}
-          // barButtonIconStyle={{ tintColor: '#fff' }}
-          // titleStyle = {{color : '#ffffff',fontFamily : 'Roboto-Regular',}}
-          // navigationBarStyle = {{backgroundColor : '#5B0492'}}
-          // backButtonTintColor = '#fff'
-          // leftButtonStyle = {{color : '#fff',tintColor : '#fff'}}
+            // backButtonTextStyle = {{color:'#FFFFFF'}}
+            barButtonIconStyle={{ tintColor: '#EB1F25' }}
+            // titleStyle = {{color : '#ffffff',fontFamily : 'Roboto-Regular',}}
+            // navigationBarStyle = {{backgroundColor : '#5B0492'}}
+            backButtonTintColor='#EB1F25'
+            leftButtonStyle={{ color: '#EB1F25', tintColor: '#EB1F25' }}
           // hideNavBar={true}
           />
           <Scene
             key="Pay"
             component={StripeGateway}
             title=""
-          // backButtonTextStyle = {{color:'#FFFFFF'}}
-          // barButtonIconStyle={{ tintColor: '#fff' }}
-          // titleStyle = {{color : '#ffffff',fontFamily : 'Roboto-Regular',}}
-          // navigationBarStyle = {{backgroundColor : '#5B0492'}}
-          // backButtonTintColor = '#fff'
-          // leftButtonStyle = {{color : '#fff',tintColor : '#fff'}}
+            // backButtonTextStyle = {{color:'#FFFFFF'}}
+            barButtonIconStyle={{ tintColor: '#EB1F25' }}
+            // titleStyle = {{color : '#ffffff',fontFamily : 'Roboto-Regular',}}
+            // navigationBarStyle = {{backgroundColor : '#5B0492'}}
+            backButtonTintColor='#EB1F25'
+            leftButtonStyle={{ color: '#EB1F25', tintColor: '#EB1F25' }}
           // hideNavBar={true}
           />
-          <Scene
-            key="Tranding"
-            component={Single_Tranding_Screen}
-            title=""
-          // backButtonTextStyle = {{color:'#FFFFFF'}}
-          // barButtonIconStyle={{ tintColor: '#fff' }}
-          // titleStyle = {{color : '#ffffff',fontFamily : 'Roboto-Regular',}}
-          // navigationBarStyle = {{backgroundColor : '#5B0492'}}
-          // backButtonTintColor = '#fff'
-          // leftButtonStyle = {{color : '#fff',tintColor : '#fff'}}
-          // hideNavBar={true}
-          />
+
           <Scene
             key="Location"
             component={Location_Pickup_Screen}
             title=""
-          // backButtonTextStyle = {{color:'#FFFFFF'}}
-          // barButtonIconStyle={{ tintColor: '#fff' }}
-          // titleStyle = {{color : '#ffffff',fontFamily : 'Roboto-Regular',}}
-          // navigationBarStyle = {{backgroundColor : '#5B0492'}}
-          // backButtonTintColor = '#fff'
-          // leftButtonStyle = {{color : '#fff',tintColor : '#fff'}}
+            // backButtonTextStyle = {{color:'#FFFFFF'}}
+            barButtonIconStyle={{ tintColor: '#EB1F25' }}
+            // titleStyle = {{color : '#ffffff',fontFamily : 'Roboto-Regular',}}
+            // navigationBarStyle = {{backgroundColor : '#5B0492'}}
+            backButtonTintColor='#EB1F25'
+            leftButtonStyle={{ color: '#EB1F25', tintColor: '#EB1F25' }}
           // hideNavBar={true}
           />
           <Scene
             key="Address"
             component={Search_Address_Screen}
             title=""
-          // backButtonTextStyle = {{color:'#FFFFFF'}}
-          // barButtonIconStyle={{ tintColor: '#fff' }}
-          // titleStyle = {{color : '#ffffff',fontFamily : 'Roboto-Regular',}}
-          // navigationBarStyle = {{backgroundColor : '#5B0492'}}
-          // backButtonTintColor = '#fff'
-          // leftButtonStyle = {{color : '#fff',tintColor : '#fff'}}
+            // backButtonTextStyle = {{color:'#FFFFFF'}}
+            barButtonIconStyle={{ tintColor: '#EB1F25' }}
+            // titleStyle = {{color : '#ffffff',fontFamily : 'Roboto-Regular',}}
+            // navigationBarStyle = {{backgroundColor : '#5B0492'}}
+            backButtonTintColor='#EB1F25'
+            leftButtonStyle={{ color: '#EB1F25', tintColor: '#EB1F25' }}
           // hideNavBar={true}
           />
           <Scene
             key="CurrentLoc"
             component={Current_Location_Pick_Screen}
             title=""
-          // backButtonTextStyle = {{color:'#FFFFFF'}}
-          // barButtonIconStyle={{ tintColor: '#fff' }}
-          // titleStyle = {{color : '#ffffff',fontFamily : 'Roboto-Regular',}}
-          // navigationBarStyle = {{backgroundColor : '#5B0492'}}
-          // backButtonTintColor = '#fff'
-          // leftButtonStyle = {{color : '#fff',tintColor : '#fff'}}
+            // backButtonTextStyle = {{color:'#FFFFFF'}}
+            barButtonIconStyle={{ tintColor: '#EB1F25' }}
+            // titleStyle = {{color : '#ffffff',fontFamily : 'Roboto-Regular',}}
+            // navigationBarStyle = {{backgroundColor : '#5B0492'}}
+            backButtonTintColor='#EB1F25'
+            leftButtonStyle={{ color: '#EB1F25', tintColor: '#EB1F25' }}
           // hideNavBar={true}
           />
-          <Scene
-            key="SingleDeal"
-            component={Single_Deals_Info_Screen}
-            title=""
-          // backButtonTextStyle = {{color:'#FFFFFF'}}
-          // barButtonIconStyle={{ tintColor: '#fff' }}
-          // titleStyle = {{color : '#ffffff',fontFamily : 'Roboto-Regular',}}
-          // navigationBarStyle = {{backgroundColor : '#5B0492'}}
-          // backButtonTintColor = '#fff'
-          // leftButtonStyle = {{color : '#fff',tintColor : '#fff'}}
-          // hideNavBar={true}
-          />
+
           <Scene
             key="OrderSt"
             component={Order_Pendding_Screen}
             title=""
-          // backButtonTextStyle = {{color:'#FFFFFF'}}
-          // barButtonIconStyle={{ tintColor: '#fff' }}
-          // titleStyle = {{color : '#ffffff',fontFamily : 'Roboto-Regular',}}
-          // navigationBarStyle = {{backgroundColor : '#5B0492'}}
-          // backButtonTintColor = '#fff'
-          // leftButtonStyle = {{color : '#fff',tintColor : '#fff'}}
+            // backButtonTextStyle = {{color:'#FFFFFF'}}
+            barButtonIconStyle={{ tintColor: '#EB1F25' }}
+            // titleStyle = {{color : '#ffffff',fontFamily : 'Roboto-Regular',}}
+            // navigationBarStyle = {{backgroundColor : '#5B0492'}}
+            backButtonTintColor='#EB1F25'
+            leftButtonStyle={{ color: '#EB1F25', tintColor: '#EB1F25' }}
           // hideNavBar={true}
           />
 
@@ -592,24 +609,36 @@ const App: () => Node = () => {
             component={Reset_Password_Screen}
             path={"/password-reset/?q=token&q=username"}
             title=""
-          // backButtonTextStyle = {{color:'#FFFFFF'}}
-          // barButtonIconStyle={{ tintColor: '#fff' }}
-          // titleStyle = {{color : '#ffffff',fontFamily : 'Roboto-Regular',}}
-          // navigationBarStyle = {{backgroundColor : '#5B0492'}}
-          // backButtonTintColor = '#fff'
-          // leftButtonStyle = {{color : '#fff',tintColor : '#fff'}}
+            // backButtonTextStyle = {{color:'#FFFFFF'}}
+            barButtonIconStyle={{ tintColor: '#EB1F25' }}
+            // titleStyle = {{color : '#ffffff',fontFamily : 'Roboto-Regular',}}
+            // navigationBarStyle = {{backgroundColor : '#5B0492'}}
+            backButtonTintColor='#EB1F25'
+            leftButtonStyle={{ color: '#EB1F25', tintColor: '#EB1F25' }}
           // hideNavBar={true}
           />
           <Scene
             key="forgetPass"
             component={Request_Reset_Password_Screen}
             title=""
-          // backButtonTextStyle = {{color:'#FFFFFF'}}
-          // barButtonIconStyle={{ tintColor: '#fff' }}
-          // titleStyle = {{color : '#ffffff',fontFamily : 'Roboto-Regular',}}
-          // navigationBarStyle = {{backgroundColor : '#5B0492'}}
-          // backButtonTintColor = '#fff'
-          // leftButtonStyle = {{color : '#fff',tintColor : '#fff'}}
+            // backButtonTextStyle = {{color:'#FFFFFF'}}
+            barButtonIconStyle={{ tintColor: '#EB1F25' }}
+            // titleStyle = {{color : '#ffffff',fontFamily : 'Roboto-Regular',}}
+            // navigationBarStyle = {{backgroundColor : '#5B0492'}}
+            backButtonTintColor='#EB1F25'
+            leftButtonStyle={{ color: '#EB1F25', tintColor: '#EB1F25' }}
+          // hideNavBar={true}
+          />
+          <Scene
+            key="LocationFav"
+            component={Add_ToFav_Location_Screen}
+            title=""
+            // backButtonTextStyle = {{color:'#FFFFFF'}}
+            barButtonIconStyle={{ tintColor: '#EB1F25' }}
+            // titleStyle = {{color : '#ffffff',fontFamily : 'Roboto-Regular',}}
+            // navigationBarStyle = {{backgroundColor : '#5B0492'}}
+            backButtonTintColor='#EB1F25'
+            leftButtonStyle={{ color: '#EB1F25', tintColor: '#EB1F25' }}
           // hideNavBar={true}
           />
 

@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/AntDesign';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { setCartItems } from '../../redux/actions';
+import {StoreOderInfo} from '../../assert/storeage/data_store';
 
 import AwesomeAlert from 'react-native-awesome-alerts';
 import { Actions } from 'react-native-router-flux';
@@ -157,6 +158,7 @@ const Single_Deals_Info_Screen = ({ ...props }) => {
             "foodItems": list,
         };
         dispatch(setCartItems(orderObj));
+        StoreOderInfo(orderObj);
 
         setModelTitel("Deal Added");
         setModelMessage("Deal added to your cart!");

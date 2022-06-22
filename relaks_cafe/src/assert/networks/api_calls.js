@@ -45,21 +45,21 @@ const Funtion_Register = async (user) => {
 const Funtion_FaceBook_Register = async () => {
     try {
         var url = BASE_URL + "api/v1/auth/facebook";
-        var config = {
-            method: 'get',
-            url:url ,
+        let responce = await fetch(url, {
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-            }
-        };
-
-        axios.get(
-            config
-        ).then((response) => {
-            return response;
-        }).catch((err) => {
-            return err;
+            },
         });
+        let code = responce.status;
+        //let responce_Values = await responce.json();
+        let responce_Values = await responce.text();
+        console.log("fbs "+responce_Values);
+        var data = {
+            "code" : "code",
+            "responce" : "responce_Values"
+        }
+        return data;
         
     } catch (error) {
         console.log("error on funtion_facebook_register : " + error);
@@ -290,7 +290,7 @@ const Funtion_Place_Foods_Order = async (order, tokens) => {
             "foodItems": order.foodItems,
           });
 
-        //console.log("token "+TokenVal);
+        console.log("token "+tokens);
        // console.log("url "+url);
         let responce = await fetch(url, {
             method: 'POST',
@@ -344,13 +344,13 @@ const Funtion_Single_Foods_Info = async (id) => {
         console.log("error on funtion_get_deals_list : " + error);
     }
 }
-const Funtion_Check_Avalible_tabel = async (times) => {
+const Funtion_Check_Avalible_tabel = async (times, token) => {
 
    // console.log("pass parm "+JSON.stringify(times));
 
     try {
         var url = BASE_URL + "api/v1/tables/available-tables";
-        console.log("token "+TokenVal);
+        //console.log("token "+TokenVal);
         var raw = JSON.stringify({
             'checkIn': times.checkIn,
             'checkOut': times.checkOut
@@ -359,7 +359,7 @@ const Funtion_Check_Avalible_tabel = async (times) => {
         let responce = await fetch(url, {
             method: 'POST',
             headers: {
-                Authorization: `Bearer ${TokenVal}`,
+                Authorization: `Bearer ${token}`,
                 'Content-Type': 'application/json',
             },
             body : raw,
@@ -380,7 +380,7 @@ const Funtion_Check_Avalible_tabel = async (times) => {
     }
 }
 
-const Funtion_Reservation_tabel = async (table) => {
+const Funtion_Reservation_tabel = async (table, token) => {
 
     //console.log("bookings "+JSON.stringify(table));
 
@@ -398,7 +398,7 @@ const Funtion_Reservation_tabel = async (table) => {
         let responce = await fetch(url, {
             method: 'POST',
             headers: {
-                Authorization: `Bearer ${TokenVal}`,
+                Authorization: `Bearer ${token}`,
                 'Content-Type': 'application/json',
             },
             body : data,
@@ -471,6 +471,80 @@ const Funtion_Reset_Pasword = async (passObj,token) => {
     }
 }
 
+const Funtion_Get_All_Orders = async (token) => {
+    try {
+        var url = BASE_URL + "api/v1/orders";
+
+
+        let responce = await fetch(url, {
+            method: 'GET',
+            headers: {
+                "Authorization": "Bearer "+token,
+                'Content-Type': 'application/json',
+            }
+        });
+        let code = responce.status;
+        let responce_Values = await responce.json();
+        var data = {
+            "code" : code,
+            "responce" : responce_Values
+        }
+        return data;
+    } catch (error) {
+        console.log("error on funtion_get_all_order_list : " + error);
+    }
+}
+
+const Funtion_Update_Profile_Info = async (userInfo,token) => {
+    try {
+        var url = BASE_URL + "api/v1/auth/me";
+
+        var raw = JSON.stringify(userInfo);
+
+        let responce = await fetch(url, {
+            method: 'PATCH',
+            headers: {
+                "Authorization": "Bearer "+token,
+                'Content-Type': 'application/json',
+            },
+            body : raw,
+        });
+        let code = responce.status;
+        let responce_Values = await responce.json();
+        var data = {
+            "code" : code,
+            "responce" : responce_Values
+        }
+        return data;
+    } catch (error) {
+        console.log("error on funtion_update_profile_info : " + error);
+    }
+}
+
+const Funtion_Get_Tabels_Info = async (token) => {
+    try {
+        var url = BASE_URL + "api/v1/tables/reservations";
+
+
+        let responce = await fetch(url, {
+            method: 'GET',
+            headers: {
+                "Authorization": "Bearer "+token,
+                'Content-Type': 'application/json',
+            }
+        });
+        let code = responce.status;
+        let responce_Values = await responce.json();
+        var data = {
+            "code" : code,
+            "responce" : responce_Values
+        }
+        return data;
+    } catch (error) {
+        console.log("error on funtion_get_tabel_reservation_info : " + error);
+    }
+}
+
 export {Funtion_FaceBook_Register};
 export {Funtion_Google_Register};  
 export {Funtion_Auth};      
@@ -487,4 +561,7 @@ export {Funtion_Check_Avalible_tabel};
 export {Funtion_Reservation_tabel};
 export {Funtion_Request_ForgetPasword};
 export {Funtion_Reset_Pasword};
+export {Funtion_Get_All_Orders};
+export {Funtion_Update_Profile_Info};
+export {Funtion_Get_Tabels_Info};
 

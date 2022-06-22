@@ -4,7 +4,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import { Actions } from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/AntDesign';
 
-
+import {Funtion_FaceBook_Register} from '../../assert/networks/api_calls';
 
 const BtnEmailView = () => {
     return (
@@ -27,9 +27,18 @@ const BtnEmailView = () => {
 }
 
 const BtnFaceBookView = () => {
+
+    function regFacebook (){
+        Funtion_FaceBook_Register().then((response)=>{
+            alert("fb "+JSON.stringify(response));
+        }).catch((error)=>{
+            console.log("error happen when fb register "+error);
+        })
+    }
+
     return (
         <View style={Styles.btnContainer}>
-            <TouchableOpacity onPress={()=>{alert("ypu press me")}}>
+            <TouchableOpacity onPress={()=>{regFacebook();}}>
                 <View style={Styles.btnBorder}>
                     <View style={Styles.btn_icon_holder}>
                         <Icon color="#4267B2" name="facebook-square" size={30} />

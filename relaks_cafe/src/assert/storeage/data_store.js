@@ -76,6 +76,40 @@ const GetOrderInfo = () => {
     }
 }
 
+const StoreFavAddressInfo = async (favAddressInfo) => {
+    try {
+        const jsonValue = JSON.stringify(favAddressInfo)
+        await AsyncStorage.setItem('favAddress', jsonValue);
+        console.log("save info "+favAddressInfo);
+    } catch (error) {
+        console.log("error happen save favAddress " + error);
+    }
+}
+
+const StoreAddressInfo = async (addressInfo) => {
+    try {
+        const jsonValue = JSON.stringify(addressInfo)
+        await AsyncStorage.setItem('addressInfo', jsonValue);
+       // console.log("save info "+addressInfo);
+    } catch (error) {
+        console.log("error happen save addressInfo " + error);
+    }
+}
+
+const GetFavAddressInfo = () => {
+    try {
+        const value = AsyncStorage.getItem('favAddress');
+        if (value !== null) {
+            // value previously stored
+            return JSON.parse(value);
+        } else {
+            return null;
+        }
+    } catch (error) {
+        console.log("error happen get favAddress " + error);
+    }
+}
+
 
 export { StoreToke };
 export { GetToken };
@@ -83,3 +117,6 @@ export { StoreUserInfo };
 export { GetUserInfo };
 export { StoreOderInfo };
 export { GetOrderInfo };
+export {StoreFavAddressInfo};
+export {GetFavAddressInfo};
+export {StoreAddressInfo};

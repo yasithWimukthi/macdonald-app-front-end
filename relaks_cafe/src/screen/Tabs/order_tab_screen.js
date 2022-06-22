@@ -13,13 +13,21 @@ import NetInfo from "@react-native-community/netinfo";
 
 import { useSelector, useDispatch } from 'react-redux';
 import AwesomeAlert from 'react-native-awesome-alerts';
+import { setCartItems } from '../../redux/actions';
 
 const OderHeader = () => {
 
-    const { address } = useSelector(state => state.userReducer);
+    const { address,items } = useSelector(state => state.userReducer);
+    const dispatch = useDispatch();
+
+    const [isDelivary, setIsDelivery] = useState(1);
 
     const onSelectSwitch = index => {
-        alert('Selected index: ' + index);
+        //alert('Selected index: ' + index);
+        setIsDelivery(index);
+        var oders = items;
+        oders.isDelivery = (index == 1) ? false : true;
+        dispatch(setCartItems(oders));
     };
 
     return (

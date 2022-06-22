@@ -186,11 +186,13 @@ const AuthScreen = () => {
                         //sucessfully created
                         var dts = response.responce;
                         var us = {
+                            "ids": "0",
                             "firstName": dts.data.firstName,
                             "lastName": dts.data.lastName,
                             "loginType": dts.data.loginType,
                             "email": uName,
-                            "token": dts.token
+                            "token": dts.token,
+                            "mobile" : ""
                         }
 
                         setTokens(dts.token);

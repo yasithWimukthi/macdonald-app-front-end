@@ -1,9 +1,12 @@
-import React, { PropTypes, Component } from 'react';
-import { View, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import React, { PropTypes, Component, useState, useEffect } from 'react';
+import { View, Image, StyleSheet, Text, TouchableOpacity, FlatList, ScrollView } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/AntDesign';
 import { Container } from 'native-base';
-import ZigzagView from "react-native-zigzag-view"
+import ZigzagView from "react-native-zigzag-view";
+import { useSelector, useDispatch } from 'react-redux';
+
+import { Funtion_Get_All_Orders, Funtion_Get_Tabels_Info } from '../../assert/networks/api_calls';
 
 const TitelComponet = () => {
     return (
@@ -83,21 +86,182 @@ const BottomDescriptionTile = () => {
 }
 
 
-function resent_tab_screen() {
+const OderListView = ({ orderList }) => {
+    return (
+        <View style={Styles.orderListContainer}>
+            <View style={Styles.orderListHoler}>
+                <View style={Styles.titel_hold}>
+                    <Text style={Styles.titel_heder}>Order History</Text>
+                </View>
+                <ScrollView style={{ flex: 1 }}>
+                    <FlatList
+                        data={orderList}
+                        keyExtractor={(item, index) => index}
+                        renderItem={({ item }) => {
+                            // console.log("single order id " + item.id);
+                            var dte = item.updatedAt;
+                            dte = dte.split("T");
+                            return (
+                                <TouchableOpacity style={Styles.orderListTileContainer} onPress={() => { }}>
+                                    <View style={[Styles.orderListTileContainer, { backgroundColor: (item.status == "cancelled") ? "#FFCCCB" : "#ADD8E6" }]}>
+                                        <View style={Styles.orderTileViews1}>
+                                            <View style={Styles.orderInfoView}>
+                                                <Text style={Styles.orderInfoText}>{"Order Number " + item.id}</Text>
+                                            </View>
+                                            <View style={Styles.orderInfoView}>
+                                                <Text style={Styles.orderInfoText}>{"Total : " + item.totalPrice}</Text>
+                                            </View>
+                                            <View style={Styles.orderInfoView}>
+                                                <Text style={Styles.orderInfoText}>{"Date : " + dte[0]}</Text>
+                                            </View>
+                                            <View style={Styles.orderInfoView}>
+                                                <Text style={Styles.orderInfoText}>{"Delivery Type " + (item.isDelivery == "0") ? "PICKUP" : "RC-DELIVERY"}</Text>
+                                            </View>
+                                        </View>
+                                        <View style={Styles.orderTileViews2}>
+                                            <Text style={[Styles.orderInfoTextBold, { color: (item.status == "cancelled") ? "red" : "blue" }]}>{"" + ((item.status == "cancelled") ? "Cancelled" : "Pending")}</Text>
+                                        </View>
+                                    </View>
+                                </TouchableOpacity>
+                            );
+                        }}
+                    />
+                </ScrollView>
+            </View>
+        </View>
+    )
+}
+
+const RecentBookTabelList = ({ bookList }) => {
+    return (
+        <View style={Styles.orderListContainer}>
+            <View style={Styles.orderListHoler}>
+            <View style={Styles.titel_hold}>
+                    <Text style={Styles.titel_heder}>Reservation History</Text>
+                </View>
+                <ScrollView style={{ flex: 1 }}>
+                    <FlatList
+                        data={bookList}
+                        keyExtractor={(item, index) => index}
+                        style={{ marginBottom:30, }}
+                        renderItem={({ item }) => {
+                            // console.log("single order id " + item.id);
+                            var dte = item.checkOut;
+                            dte = dte.split("T");
+                            var checking = item.checkIn;
+                            var checkut = item.checkOut;
+                            checking = checking.split("T");
+                            checkut = checkut.split("T");
+                            return (
+                                <TouchableOpacity style={Styles.orderListTileContainer} onPress={() => { }}>
+                                    <View style={[Styles.orderListTileContainer, { backgroundColor: (item.status == "cancelled") ? "#FFCCCB" : "#ADD8E6" }]}>
+                                        <View style={Styles.orderTileViews1}>
+                                            <View style={Styles.orderInfoView}>
+                                                <Text style={Styles.orderInfoText}>{"Check-In :" + checking[1] + " "}</Text>
+                                            </View>
+                                            <View style={Styles.orderInfoView}>
+                                                <Text style={Styles.orderInfoText}>{"Check-Out : " + checkut[1]}</Text>
+                                            </View>
+                                            <View style={Styles.orderInfoView}>
+                                                <Text style={Styles.orderInfoText}>{"Date : " + dte[0]}</Text>
+                                            </View>
+                                            <View style={Styles.orderInfoView}>
+                                                <Text style={Styles.orderInfoText}>{"Reservation Note " + item.note}</Text>
+                                            </View>
+                                        </View>
+                                        <View style={Styles.orderTileViews2}>
+                                            <Text style={[Styles.orderInfoTextBold]}>{"Tabel Number " + item.tableId}</Text>
+                                        </View>
+                                    </View>
+                                </TouchableOpacity>
+                            );
+                        }}
+                    />
+                </ScrollView>
+            </View>
+        </View>
+    );
+}
+
+
+function Resent_Tab_Screen() {
+
+    const [recentOderList, setRecentOrderList] = useState([]);
+    const [recentTbelBookList, setRecentTbelBookList] = useState([]);
+    const { user } = useSelector(state => state.userReducer);
+
+
+    useEffect(() => {
+        getAllOrderList();
+        getRecentTabelInfos();
+    }, [recentOderList]);
+
+
+    function getRecentTabelInfos() {
+        Funtion_Get_Tabels_Info(user.token).then((response) => {
+            if (response.code == '201') {
+                setRecentTbelBookList(response.responce.data);
+            }
+        }).catch((err) => {
+            console.log("error happen on get all reveration tables infos" + err);
+        });
+    }
+
+    function getAllOrderList() {
+
+        var userid = user.ids;
+
+        Funtion_Get_All_Orders(user.token).then((response) => {
+            //console.log("order list "+JSON.stringify(response.responce));
+            var tempList = [];
+            if (response.code == "200") {
+                var fullList = response.responce.data;
+                // fullList.forEach((order) => {
+                //     if (order.userId == userid) {
+                //         tempList.push(order);
+                //     }
+                // });
+
+                setRecentOrderList(fullList);
+
+                console.log("filer list by userid length " + tempList.length);
+                // console.log("state list by userid data  " + JSON.stringify(recentOderList));
+
+            } else {
+                setRecentOrderList([]);
+            }
+
+        }).catch((error) => {
+            console.log("error happen load recent order list " + error);
+        });
+
+    }
+
     return (
         <View style={Styles.main}>
             <View style={Styles.titel_holder}>
                 <TitelComponet />
             </View>
-            <View style={Styles.titel_holder}>
-                <PicupTiles />
-            </View>
-            <View style={Styles.titel_holder}>
-                <DelivaryTile />
-            </View>
-            <View style={Styles.titel_holder}>
-                <BottomDescriptionTile />
-            </View>
+            <ScrollView>
+                {
+                    (recentOderList.length > 0) ?
+                        <OderListView orderList={recentOderList} />
+                        :
+                        <View>
+                            <View style={Styles.titel_holder}>
+                                <PicupTiles />
+                            </View>
+                            <View style={Styles.titel_holder}>
+                                <DelivaryTile />
+                            </View>
+                            <View style={Styles.titel_holder}>
+                                <BottomDescriptionTile />
+                            </View>
+                        </View>
+                }
+
+                <RecentBookTabelList bookList={recentTbelBookList} />
+            </ScrollView>
         </View>
     );
 }
@@ -211,8 +375,64 @@ const Styles = StyleSheet.create({
         height: hp('15%'),
         // alignItems: 'center',
         justifyContent: 'center',
-    }
+    },
+    orderListContainer: {
+        width: wp('100%'),
+        height: hp('80%'),
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 15,
+
+    },
+    orderListHoler: {
+        width: wp('95%'),
+        height: hp('80%'),
+        justifyContent: 'center',
+        
+    },
+    orderListTileContainer: {
+        width: wp('95%'),
+        height: hp('12%'),
+        //alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: wp('4%'),
+        flexDirection: 'row',
+        marginTop: 2,
+        marginBottom: 1,
+    },
+    orderTileViews1: {
+        width: wp('60%'),
+        height: hp('10%'),
+        //alignItems: 'center',
+        justifyContent: 'center',
+
+    },
+    orderTileViews2: {
+        width: wp('35%'),
+        height: hp('10%'),
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    orderInfoView: {
+        width: wp('58%'),
+        //alignItems: 'center',
+        justifyContent: 'center',
+        marginLeft: 8,
+        marginTop: 2,
+    },
+    orderInfoText: {
+        fontFamily: 'NexaTextDemo-Light',
+        fontSize: 13,
+        color: '#000',
+        letterSpacing: 0.1,
+    },
+    orderInfoTextBold: {
+        fontFamily: 'NexaTextDemo-Bold',
+        fontSize: 16,
+        color: '#000',
+        letterSpacing: 0.1,
+    },
 
 });
 
-export default resent_tab_screen;
+export default Resent_Tab_Screen;

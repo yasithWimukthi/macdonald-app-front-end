@@ -10,7 +10,7 @@ import app_logo from '../../assert/images/splash_app_logo.png';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { setUserInfo, setCartItems } from '../../redux/actions';
+import { setUserInfo, setCartItems,setFavAddressInfo,setAddressInfo } from '../../redux/actions';
 
 import { io, Socket } from 'socket.io-client';
 
@@ -97,6 +97,34 @@ const SplashScreen = () => {
                     Actions.auth();
                 }
             });
+
+            AsyncStorage.getItem('favAddress').then((favAddress) => {
+                if (favAddress != null) {
+                    var dumy = JSON.parse(favAddress);
+                    //console.log("datass "+JSON.stringify(dumy.favAdd));
+                    var objs = {
+                        "favAdd" : dumy.favAdd,
+                    }
+                    //objs.favAdd.push(dumy.favAdd);
+                    dispatch(setFavAddressInfo(objs));
+                } else {
+                }
+
+            });
+
+            AsyncStorage.getItem('addressInfo').then((addressInfo) => {
+                if (addressInfo != null) {
+                    var dumy = JSON.parse(addressInfo);
+                    console.log("datass "+JSON.stringify(dumy));
+                    // var objs = {
+                    //     "favAdd" : dumy.favAdd,
+                    // }
+                    dispatch(setAddressInfo(dumy));
+                } else {
+                }
+
+            });
+
         }, 3000);
     }
 

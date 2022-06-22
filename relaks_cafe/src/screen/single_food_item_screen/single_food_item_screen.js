@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/AntDesign';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { setCartItems } from '../../redux/actions';
+import { StoreOderInfo } from '../../assert/storeage/data_store';
 
 import AwesomeAlert from 'react-native-awesome-alerts';
 
@@ -23,11 +24,11 @@ const FoodName = ({ foodName }) => {
     );
 }
 
-const PortionTitel = ({ protionList, updateSeletedPortion }) => {
+const PortionTitel = ({ protionList, updateSeletedPortion, updateValue }) => {
 
     var ids = 0;
 
-    if (protionList.length >= 1) {
+    if (protionList.length >= 1 && updateValue == null) {
         ids = protionList[0].id;
         updateSeletedPortion(protionList[0]);
     }
@@ -37,7 +38,9 @@ const PortionTitel = ({ protionList, updateSeletedPortion }) => {
     return (
         <View style={Styles.portion_Container}>
             <View style={Styles.portion_Holder}>
-
+                <View>
+                    <Text style={Styles.portionTexts}>Select Your Portion</Text>
+                </View>
                 <ScrollView horizontal>
 
                     <FlatList
@@ -48,12 +51,15 @@ const PortionTitel = ({ protionList, updateSeletedPortion }) => {
                         renderItem={({ item }) => {
                             return (
                                 <TouchableOpacity onPress={() => { setSelectItem(item.id); updateSeletedPortion(item); }}>
-                                    <View style={[Styles.single_portion_View, { backgroundColor: selectItem == item.id ? '#ADD8E6' : '#f5f5f5' }]}>
+                                    <View style={[Styles.single_portion_View, { backgroundColor: selectItem == item.id ? '#EB1F25' : '#f5f5f5' }]}>
                                         <View style={Styles.single_portion_info_holder}>
-                                            <Text>{"€ " + item.price}</Text>
+                                            <Text style={{ color: selectItem == item.id ? '#fff' : '#f5f5f5' }}>{"€ " + item.price}</Text>
                                         </View>
                                         <View style={Styles.single_portion_info_holder}>
-                                            <Text>{item.calories + " kcal"}</Text>
+                                            <Text style={{ color: selectItem == item.id ? '#fff' : '#f5f5f5' }}>{item.name}</Text>
+                                        </View>
+                                        <View style={Styles.single_portion_info_holder}>
+                                            <Text style={{ color: selectItem == item.id ? '#fff' : '#f5f5f5' }}>{item.calories + " kcal"}</Text>
                                         </View>
                                     </View>
                                 </TouchableOpacity>
@@ -103,9 +109,9 @@ const QtyInfoView = ({ qty, updateQty, updateNote }) => {
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <View style={Styles.Qty_Input_holder2}>
+                    {/* <View style={Styles.Qty_Input_holder2}>
 
-                    </View>
+                    </View> */}
                 </View>
                 <View style={[Styles.Qty_Input_View, { borderWidth: 1, borderColor: '#f5f5f5' }]}>
                     <TextInput style={Styles.qty_input_text} placeholder="Special Note.." onChangeText={(value) => { updateNote(value); }} multiline={true} />
@@ -138,6 +144,7 @@ const BtnAddToCartView = ({ funtions, protionCount }) => {
 const Single_FoodInfo_Screen = ({ ...props }) => {
 
     //reducx state
+    //alert("postion info "+JSON.stringify(props.items.portions));
     const { items } = useSelector(state => state.userReducer);
     const dispatch = useDispatch();
 
@@ -160,9 +167,11 @@ const Single_FoodInfo_Screen = ({ ...props }) => {
     useEffect(() => {
         setVisible((items.foodItems.length > 0) ? true : false);
         setTolats(items.totalPrice);
+        //alert("update "+JSON.stringify(selectdPortion));
     });
 
     function AddToCart() {
+        // alert("selecyed "+JSON.stringify(selectdPortion));
         var portionLit = items.foodItems;
         var seleted_po = {
             "id": item.id,
@@ -213,6 +222,7 @@ const Single_FoodInfo_Screen = ({ ...props }) => {
             "foodItems": portionLit,
         };
         dispatch(setCartItems(orderObj));
+        StoreOderInfo(orderObj);
 
         setModelTitel("Item Added");
         setModelMessage("Item added to your cart!");
@@ -226,7 +236,7 @@ const Single_FoodInfo_Screen = ({ ...props }) => {
                 <FoodName foodName={foodName} />
 
                 {/* <PortionTitel potionPrice={"100.00"} calaoriesCount={"537"} /> */}
-                <PortionTitel protionList={protionlist} updateSeletedPortion={setSeletedPortion} />
+                <PortionTitel protionList={protionlist} updateSeletedPortion={setSeletedPortion} updateValue={selectdPortion} />
 
                 <ItemImageView imageUrl={itemImage} />
 
@@ -236,7 +246,7 @@ const Single_FoodInfo_Screen = ({ ...props }) => {
                     <BtnAddToCartView funtions={() => { AddToCart(); }} protionCount={protionlist.length} />
                 </View>
 
-                <View style={{ height : hp('5%') }}>
+                <View style={{ height: hp('5%') }}>
 
                 </View>
             </ScrollView>
@@ -255,7 +265,7 @@ const Single_FoodInfo_Screen = ({ ...props }) => {
                         <TouchableOpacity onPress={() => { Actions.Cart(); }}>
                             <View style={Styles.cartTile_btn_holder}>
                                 <View style={Styles.btn_holder}>
-                                    <Text style={[Styles.itemText,{color: '#000',}]}>View Cart</Text>
+                                    <Text style={[Styles.itemText, { color: '#000', }]}>View Cart</Text>
                                 </View>
                             </View>
                         </TouchableOpacity>
@@ -325,13 +335,13 @@ const Styles = StyleSheet.create({
     },
     portion_Holder: {
         width: wp('90%'),
-        height: hp('12%'),
+        height: hp('14%'),
         justifyContent: 'center',
-        flexDirection: 'row'
+        //flexDirection: 'row'
     },
     single_portion_View: {
         width: wp('28%'),
-        height: hp('10%'),
+        height: hp('11%'),
         margin: 5,
         justifyContent: 'center',
         alignItems: 'center',
@@ -372,6 +382,7 @@ const Styles = StyleSheet.create({
         width: wp('90%'),
         height: hp('18%'),
         justifyContent: 'center',
+        alignItems: 'center'
     },
     Qty_Input_View: {
         marginTop: 10,
@@ -510,6 +521,12 @@ const Styles = StyleSheet.create({
         borderRadius: 5,
         backgroundColor: 'red'
     },
+    portionTexts : {
+        fontFamily: 'NexaTextDemo-Light',
+        fontSize: 14,
+        color: '#000',
+        letterSpacing: 0.04,
+    }
 
 
 });

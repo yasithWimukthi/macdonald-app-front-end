@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/AntDesign';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { setCartItems } from '../../redux/actions';
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 const Details_View = () => {
     const { address } = useSelector(state => state.userReducer);
@@ -29,7 +30,7 @@ const Details_View = () => {
                     </TouchableOpacity>
                 </View>
                 <View style={Styles.desciption}>
-                    <Text style={Styles.subCartInfo}>Adults need around 2000 kcal per day, Equalent to {'\n'}B400KJ. Additional nutrition information is avalible {'\n'}in the more tab of your app.</Text>
+                    <Text style={Styles.subCartInfo}>Adults need around 2000 kcal per day, Equalent to {'\n'}B400KJ. </Text>
                 </View>
             </View>
         </View>
@@ -53,7 +54,7 @@ const ItemTile = ({ portionList }) => {
         //console.log("list " + JSON.stringify(items));
 
         if (editStatus == "Edit") {
-            setQty(item.quantity);
+           // setQty(item.quantity);
             setEditStatus("Update");
             setEditEnable(!editEnable);
         } else {
@@ -63,6 +64,7 @@ const ItemTile = ({ portionList }) => {
                 //this item is deal
                 var obj = {
                     "id": item.id,
+                    //"quantity": qty,
                     "quantity": qty,
                     "portionId": item.portionId,
                     "note": item.note,
@@ -84,8 +86,6 @@ const ItemTile = ({ portionList }) => {
                 filteredItems.forEach(element => {
                     tempArry.push(element);
                 });
-
-                
 
                 list = tempArry;
 
@@ -113,7 +113,6 @@ const ItemTile = ({ portionList }) => {
 
             } else {
                 // this item is food
-
                 var obj = {
                     "id": item.id,
                     "quantity": qty,
@@ -254,7 +253,7 @@ const ItemTile = ({ portionList }) => {
                                                     <View style={Styles.item_info_Holder}>
                                                         <Text style={Styles.productInfo}>{item.itemName}</Text>
                                                     </View>
-                                                    <View style={[Styles.item_info_Holder, { flexDirection: 'row', alignItems: 'flex-start' }]}>
+                                                    <View style={[Styles.item_info_Holder, { flexDirection: 'row', alignItems: 'flex-start',marginTop:hp('1.8%') }]}>
                                                         <TouchableOpacity onPress={() => { updatePortion(item); }}>
                                                             <View style={Styles.button_Holder}>
                                                                 <Text>{editStatus}</Text>
@@ -344,11 +343,25 @@ const ProcessCheckOutBtn = ({ funtions, totalPrice }) => {
 
 const Cart_Screen = () => {
 
-    const { items } = useSelector(state => state.userReducer);
+    const { items, user } = useSelector(state => state.userReducer);
     const dispatch = useDispatch();
 
-    //  alert("datas "+JSON.stringify(items));
+    const [show, setShow] = useState(false);
+    const [showEdit, setShowEdit] = useState(false);
+    const [showRemove, setShowRemove] = useState(false);
+    const [modelTitel, setModelTitel] = useState("");
+    const [modelMessage, setModelMessage] = useState("");
 
+    function checkInfos(){
+        console.log("userinfo "+JSON.stringify(user));
+        if(user.mobile != "" && user.mobile != null){
+            Actions.Pay();
+        }else{
+            setModelTitel("Plase complete your profile");
+            setModelMessage("Before place order, complete your profile for furture contacts.");
+            setShow(true);
+        }
+    }
 
     return (
         <View style={Styles.main}>
@@ -357,8 +370,69 @@ const Cart_Screen = () => {
             <ItemTile portionList={items.foodItems} />
 
             <View style={Styles.screenTitel}>
-                <ProcessCheckOutBtn funtions={() => { Actions.Pay(); }} totalPrice={items.totalPrice} />
+                <ProcessCheckOutBtn funtions={() => { checkInfos(); }} totalPrice={items.totalPrice} />
             </View>
+
+            <AwesomeAlert
+                show={show}
+                showProgress={false}
+                title={modelTitel}
+                message={modelMessage}
+                closeOnTouchOutside={true}
+                closeOnHardwareBackPress={false}
+                showCancelButton={true}
+                showConfirmButton={true}
+                cancelText="cancel"
+                confirmText="Ok"
+                confirmButtonColor="red" //#DD6B55
+                onCancelPressed={() => {
+                    setShow(false);
+                }}
+                onConfirmPressed={() => {
+                    setShow(false);
+                    Actions.Personal();
+                }}
+            />
+            <AwesomeAlert
+                show={showEdit}
+                showProgress={false}
+                title={modelTitel}
+                message={modelMessage}
+                closeOnTouchOutside={true}
+                closeOnHardwareBackPress={false}
+                showCancelButton={false}
+                showConfirmButton={true}
+                cancelText="cancel"
+                confirmText="Ok"
+                confirmButtonColor="red" //#DD6B55
+                onCancelPressed={() => {
+                    setShow(false);
+                }}
+                onConfirmPressed={() => {
+                    setShow(false);
+                    Actions.Personal();
+                }}
+            />
+            <AwesomeAlert
+                show={showRemove}
+                showProgress={false}
+                title={modelTitel}
+                message={modelMessage}
+                closeOnTouchOutside={true}
+                closeOnHardwareBackPress={false}
+                showCancelButton={true}
+                showConfirmButton={true}
+                cancelText="cancel"
+                confirmText="Ok"
+                confirmButtonColor="red" //#DD6B55
+                onCancelPressed={() => {
+                    setShow(false);
+                }}
+                onConfirmPressed={() => {
+                    setShow(false);
+                    Actions.Personal();
+                }}
+            />
         </View>
     );
 }
@@ -469,7 +543,7 @@ const Styles = StyleSheet.create({
         height: hp('5%'),
         margin: 2,
         borderWidth: 1,
-        borderColor: '#fff',
+        borderColor: '#000', //fff
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 5,

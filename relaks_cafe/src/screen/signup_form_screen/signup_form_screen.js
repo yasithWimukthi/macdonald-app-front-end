@@ -10,6 +10,11 @@ import { Funtion_Register } from '../../assert/networks/api_calls';
 import NetInfo from "@react-native-community/netinfo";
 import AwesomeAlert from 'react-native-awesome-alerts';
 
+import { useSelector, useDispatch } from 'react-redux';
+import { setUserInfo } from '../../redux/actions';
+
+import { StoreUserInfo } from '../../assert/storeage/data_store';
+
 const TitelView = () => {
     return (
         <View style={Styles.titelContainer}>
@@ -209,6 +214,9 @@ const BtnLoginView = ({ onpress_funtion }) => {
 
 const signup_form_screen = () => {
 
+    const { user } = useSelector(state => state.userReducer);
+    const dispatch = useDispatch();
+
     const [user_Fname, setUserFname] = useState("");
     const [user_Lname, setUserLname] = useState("");
     const [user_Email, setUserEmail] = useState("");
@@ -251,11 +259,31 @@ const signup_form_screen = () => {
                     console.log("response " + JSON.stringify(response));
                     //Actions.auth();
                     if (response.code == '201') {
+                        var dts = response.responce;
+                        var us = {
+                            "ids": dts.data.id,
+                            "firstName": dts.data.firstName,
+                            "lastName": dts.data.lastName,
+                            "loginType": dts.data.loginType,
+                            "email": dts.data.email,
+                            "token": "",
+                            "mobile" : user_Contact
+                        }
+
+                        //setTokens(dts.token);
+
+                        dispatch(setUserInfo(us));
+
+                        StoreUserInfo(us);
+
                         //sucessfully created
                         setModelTitel("Successfully");
                         setModelMessage("user registered sucess!");
                         setShow(true);
                         Actions.auth();
+
+
+
                     } else if (response.code == '409') {
                         // alredy on user
                         setModelTitel("Error");

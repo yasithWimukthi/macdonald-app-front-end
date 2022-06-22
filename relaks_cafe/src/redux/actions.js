@@ -2,6 +2,7 @@ export const SET_USER_TOKEN = "SET_USER_TOKEN";
 export const SET_USER_INFO = "SET_USER_INFO";
 export const SET_CART_ITEMS = "SET_CART_ITEMS";
 export const SET_ADDRESS_INFO = "SET_ADDRESS_INFO";
+export const SET_FAV_ADDRESS_INFO = "SET_FAV_ADDRESS_INFO"
 
 
 export const setToken = token => dispatch =>{
@@ -29,5 +30,12 @@ export const setAddressInfo = address => dispatch => {
     dispatch({
         type : SET_ADDRESS_INFO,
         payload : address,
+    })
+}
+
+export const setFavAddressInfo = favaddress => dispatch => {
+    dispatch({
+        type : SET_FAV_ADDRESS_INFO,
+        payload : favaddress,
     })
 }
