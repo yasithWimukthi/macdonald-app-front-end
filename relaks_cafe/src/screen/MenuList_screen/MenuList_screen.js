@@ -11,6 +11,8 @@ import AwesomeAlert from 'react-native-awesome-alerts';
 import { useSelector, useDispatch } from 'react-redux';
 import { setCartItems } from '../../redux/actions';
 
+import BottomBarView from '../../componet/bootmTabBar';
+
 const FeaturesMenuItem = ({ imageUrl, MenuName, singleInfo, mealInfo }) => {
     return (
         <ZigzagView
@@ -117,12 +119,25 @@ const MenuList_Screen = ({ ...props }) => { //
     function getFoodList(ids) {
         Funtion_Get_Foods_List(ids).then((response) => {
             if (response.code == '200') {
-                // setModelTitel("SuccessFully");
-                // setModelMessage("Table reservation successfully");
-                // setShow(true);
-                //redirct to home
-                //Actions.authenticated();
-                setFoodList(response.responce.data);
+                
+                var tempList = response.responce.data;
+                var filteredItems = tempList.filter(item => item.portions.length != 0);
+               // console.log("temp list "+JSON.stringify(filteredItems));
+                var finalList = [];
+                filteredItems.forEach((itms)=>{
+                    var status = true;
+                    var arrays = itms.portions;
+                    for (var i = 0; i < arrays.length; i++) {
+                        if (arrays[i].isAvailable == "0"){
+                            status = false;
+                            break;
+                        }
+                    }
+                    if(status){
+                        finalList.push(itms);
+                    }
+                });
+                setFoodList(finalList);
             }else if (response.code == '404') {
                 setModelTitel("Error");
                 setModelMessage("Category not found. Try again");
@@ -157,15 +172,17 @@ const MenuList_Screen = ({ ...props }) => { //
 
                 <SingleMenuItem foodList={foodList} />
 
-                {/* <SingleMenuItem MenuName={"Sasuage and Egg Muffin"} singleInfo={"€ 2.89 2301 KJ/ 551 kcal "} mealInfo={"€ 3.99 2301 KJ/ 551 kcal"} imageUrl={"https://st4.depositphotos.com/14582236/22073/v/950/depositphotos_220731050-stock-illustration-cold-brewed-coffee-banner-ads.jpg"} />
-
-                <SingleMenuItem MenuName={"Double Baccon and Egg Muffin"} singleInfo={"€ 2.89 2301 KJ/ 551 kcal "} mealInfo={"€ 3.99 2301 KJ/ 551 kcal"} imageUrl={"https://st4.depositphotos.com/14582236/22073/v/950/depositphotos_220731050-stock-illustration-cold-brewed-coffee-banner-ads.jpg"} />
-
-                <SingleMenuItem MenuName={"Baccon and Egg Muffin"} singleInfo={"€ 2.89 2301 KJ/ 551 kcal "} mealInfo={"€ 3.99 2301 KJ/ 551 kcal"} imageUrl={"https://st4.depositphotos.com/14582236/22073/v/950/depositphotos_220731050-stock-illustration-cold-brewed-coffee-banner-ads.jpg"} />
-
-                <SingleMenuItem MenuName={"Cheese and Egg Muffin"} singleInfo={"€ 2.89 2301 KJ/ 551 kcal "} mealInfo={"€ 3.99 2301 KJ/ 551 kcal"} imageUrl={"https://st4.depositphotos.com/14582236/22073/v/950/depositphotos_220731050-stock-illustration-cold-brewed-coffee-banner-ads.jpg"} /> */}
+                {
+                    (foodList.length == "0") ? 
+                    <View style={Styles.NotItemHolder}>
+                        <View style={Styles.NotItemContainer}>
+                            <Text style={Styles.NoItemTextTextInfo}>Sorry No Avalible Food Right Now, Try Another Food Category.</Text>
+                        </View>
+                    </View> : null
+                }
 
             </ScrollView>
+            {/* <BottomBarView/> */}
             {
                 (visbile) ? <View style={Styles.cartTile}>
                     <View style={Styles.cartTile_holder}>
@@ -364,7 +381,25 @@ const Styles = StyleSheet.create({
         borderRadius: 5,
         backgroundColor: 'red'
     },
-
+    NotItemHolder: {
+        width: wp('100%%'),
+        height: hp('50%'),
+        justifyContent: 'center',
+        alignItems:'center'
+    },
+    NotItemContainer: {
+        width: wp('90%%'),
+        height: hp('22%'),
+        justifyContent: 'center',
+        alignItems:'center'
+    },
+    NoItemTextTextInfo: {
+        fontFamily: 'NexaTextDemo-Light',
+        fontSize: 18,
+        color: 'red',
+        letterSpacing: 0.04,
+        textAlign:"center"
+    },
 });
 
 export default MenuList_Screen;

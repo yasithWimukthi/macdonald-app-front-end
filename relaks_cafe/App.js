@@ -7,7 +7,7 @@
  */
 
 import React, { PropTypes, Component, useState } from 'react';
-import type { Node } from 'react';
+//import type { Node } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -79,11 +79,12 @@ import PushNotification, { Importance } from 'react-native-push-notification';
 import RefundPayement from './src/componet/refundPayemnt';
 
 
-const SOKCET_SERVER_ADDRESS = "https://cafe-app-352118.el.r.appspot.com";
+const SOKCET_SERVER_ADDRESS = "https://relaks-cafe.herokuapp.com";
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const App: () => Node = () => {
+const App = () => {
+ // const App: () => Node = () => {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
@@ -229,10 +230,10 @@ const App: () => Node = () => {
       color: "red", // (optional) default: system default
       vibrate: false, // (optional) default: true
       vibration: 0, // vibration length in milliseconds, ignored if vibrate=false, default: 1000
-      priority: "high", // (optional) set notification priority, default: high
+      priority: "default", // (optional) set notification priority, default: high
       visibility: "private", // (optional) set notification visibility, default: private
       ignoreInForeground: false,// (optional) If this notification is duplicative of a Launcher shortcut, sets the id of the shortcut, in case the Launcher wants to hide the shortcut, default undefined
-      onlyAlertOnce: false, // (optional) alert will open only once with sound and notify, default: false
+      onlyAlertOnce: true, // (optional) alert will open only once with sound and notify, default: false
 
       when: null, // (optional) Add a timestamp (Unix timestamp value in milliseconds) pertaining to the notification (usually the time the event occurred). For apps targeting Build.VERSION_CODES.N and above, this time is not shown anymore by default and must be opted into by using `showWhen`, default: null.
       usesChronometer: false, // (optional) Show the `when` field as a stopwatch. Instead of presenting `when` as a timestamp, the notification will show an automatically updating display of the minutes and seconds since when. Useful when showing an elapsed time (like an ongoing phone call), default: false.
@@ -253,9 +254,9 @@ const App: () => Node = () => {
       userInfo: {}, // (optional) default: {} (using null throws a JSON value '<null>' error)
       playSound: true, // (optional) default: true
       soundName: "default", // (optional) Sound to play when the notification is shown. Value of 'default' plays the default sound. It can be set to a custom sound such as 'android.resource://com.xyz/raw/my_sound'. It will look for the 'my_sound' audio file in 'res/raw' directory and play it. default: 'default' (default sound is played)
-      number: 10, // (optional) Valid 32 bit integer specified as string. default: none (Cannot be zero)
+      //number: 10, // (optional) Valid 32 bit integer specified as string. default: none (Cannot be zero)
       repeatType: "day", // (optional) Repeating interval. Check 'Repeating Notifications' section for more info. 
-      repeatTime: 2,
+      repeatTime: 1,
       data: {
         "status": status,
         "ref": ref,

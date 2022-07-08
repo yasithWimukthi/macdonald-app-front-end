@@ -156,7 +156,10 @@ const ExpolourMenu = ({ menuList }) => {
 }
 
 
-function Order_Tab_Screen() {
+function Order_Tab_Screen({...props}) {
+
+    //alert("props "+JSON.stringify(props));
+    //console.log("props "+JSON.stringify(props));
 
     const [menuList, setMenuList] = useState([]);
     const [show, setShow] = useState(false);

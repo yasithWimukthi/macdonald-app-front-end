@@ -12,6 +12,8 @@ import AwesomeAlert from 'react-native-awesome-alerts';
 
 import { Actions } from 'react-native-router-flux';
 
+import BottomBarView from '../../componet/bootmTabBar';
+
 const FoodName = ({ foodName }) => {
     return (
         <View style={Styles.foodName_Container}>
@@ -53,13 +55,13 @@ const PortionTitel = ({ protionList, updateSeletedPortion, updateValue }) => {
                                 <TouchableOpacity onPress={() => { setSelectItem(item.id); updateSeletedPortion(item); }}>
                                     <View style={[Styles.single_portion_View, { backgroundColor: selectItem == item.id ? '#EB1F25' : '#f5f5f5' }]}>
                                         <View style={Styles.single_portion_info_holder}>
-                                            <Text style={{ color: selectItem == item.id ? '#fff' : '#f5f5f5' }}>{"€ " + item.price}</Text>
+                                            <Text style={{ color: selectItem == item.id ? '#fff' : '#000' }}>{"€ " + item.price}</Text>
                                         </View>
                                         <View style={Styles.single_portion_info_holder}>
-                                            <Text style={{ color: selectItem == item.id ? '#fff' : '#f5f5f5' }}>{item.name}</Text>
+                                            <Text style={{ color: selectItem == item.id ? '#fff' : '#000' }}>{item.name}</Text>
                                         </View>
                                         <View style={Styles.single_portion_info_holder}>
-                                            <Text style={{ color: selectItem == item.id ? '#fff' : '#f5f5f5' }}>{item.calories + " kcal"}</Text>
+                                            <Text style={{ color: selectItem == item.id ? '#fff' : '#000' }}>{item.calories + " kcal"}</Text>
                                         </View>
                                     </View>
                                 </TouchableOpacity>
@@ -148,8 +150,14 @@ const Single_FoodInfo_Screen = ({ ...props }) => {
     const { items } = useSelector(state => state.userReducer);
     const dispatch = useDispatch();
 
+    var tempList = props.items.portions;
+    //console.log("postons get "+JSON.stringify(tempList));
+
+    var filteredItems = tempList.filter(item => item.isAvailable != 0);
+
     const [foodName, setFoodName] = useState(props.items.name);
-    const [protionlist, setPortionList] = useState(props.items.portions);
+    //const [protionlist, setPortionList] = useState(props.items.portions);
+    const [protionlist, setPortionList] = useState(filteredItems);
     const [item, setItem] = useState(props.items);
     const [itemImage, setItemImage] = useState(props.items.imgUrl);
     const [qty, setQty] = useState(1);
@@ -246,11 +254,11 @@ const Single_FoodInfo_Screen = ({ ...props }) => {
                     <BtnAddToCartView funtions={() => { AddToCart(); }} protionCount={protionlist.length} />
                 </View>
 
-                <View style={{ height: hp('5%') }}>
+                <View style={{ height: hp('4%') }}>
 
                 </View>
             </ScrollView>
-
+            {/* <BottomBarView/> */}
             {
                 (visbile) ? <View style={Styles.cartTile}>
                     <View style={Styles.cartTile_holder}>
@@ -272,7 +280,7 @@ const Single_FoodInfo_Screen = ({ ...props }) => {
                     </View>
                 </View> : null
             }
-
+            
             <AwesomeAlert
                 show={show}
                 showProgress={false}

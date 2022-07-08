@@ -17,7 +17,7 @@ import { setUserInfo } from '../../redux/actions';
 
 import { StoreUserInfo } from '../../assert/storeage/data_store';
 
-const SOKCET_SERVER_ADDRESS = "https://cafe-app-352118.el.r.appspot.com";
+const SOKCET_SERVER_ADDRESS = "https://relaks-cafe.herokuapp.com";
 import GET_TOKEN from '../../assert/networks/dataAccess';
 
 import PushNotification,{Importance} from 'react-native-push-notification';
@@ -106,7 +106,7 @@ const BtnFaceBookView = ({ facebook_onpress }) => {
 const BtnGoogleView = () => {
     return (
         <View style={Styles.btnContainer}>
-            <TouchableOpacity onPress={() => { alert("ypu press me") }}>
+            <TouchableOpacity onPress={() => { alert("you press me") }}>
                 <View style={Styles.btnBorder}>
                     <View style={Styles.btn_icon_holder}>
                         <Icon color="#4285F4" name="google" size={30} />
@@ -166,25 +166,33 @@ const AuthScreen = () => {
 
     function login() {
 
-        var user = {
+        var users = {
             "email": uName,
             "password": uPass
         };
 
         NetInfo.fetch().then(state => {
             if (state.isConnected) {
-                //var response = Funtion_Auth(user);
-                Funtion_Auth(user).then((response) => {
-                    //alert("response " + JSON.stringify(response));
-                    //
+                Funtion_Auth(users).then((response) => {
                     setSpinerVisible(true);
-                    //setShow(true);
                     console.log("response " + JSON.stringify(response));
-                    //Actions.authenticated();
 
                     if (response.code == '200') {
                         //sucessfully created
                         var dts = response.responce;
+                        // var us = null;
+                        // if(user.mobile != "" && user.mobile != null){
+                        //      us = {
+                        //         "ids": "0",
+                        //         "firstName": dts.data.firstName,
+                        //         "lastName": dts.data.lastName,
+                        //         "loginType": dts.data.loginType,
+                        //         "email": uName,
+                        //         "token": dts.token,
+                        //         "mobile" : user.mobile
+                        //     }
+                        // }else{  
+                        // }
                         var us = {
                             "ids": "0",
                             "firstName": dts.data.firstName,
@@ -192,7 +200,7 @@ const AuthScreen = () => {
                             "loginType": dts.data.loginType,
                             "email": uName,
                             "token": dts.token,
-                            "mobile" : ""
+                            "mobile" : dts.data.mobile,
                         }
 
                         setTokens(dts.token);
@@ -216,13 +224,11 @@ const AuthScreen = () => {
                         setModelMessage("Form Validation error!");
                         setShow(true);
                         setSpinerVisible(false);
-                        //alert("Alredy used this email, try again");
                     } else if (response.code == '401') {
                         setModelTitel("Error");
                         setModelMessage("Invalid Email Or Password!");
                         setShow(true);
                         setSpinerVisible(false);
-                        //alert("Invalid Email Or Password");
                     } else if (response.code == '500') {
                         setModelTitel("Error");
                         setModelMessage("Something went wrong, try again later");
@@ -234,8 +240,11 @@ const AuthScreen = () => {
                 });
 
             } else {
-                alert("net not conntectd");
+               // alert("net not conntectd");
                 //show error alert for not connect to internet
+                setModelTitel("Error");
+                setModelMessage("Please check your device internet connection");
+                setShow(true);
             }
         });
     }
@@ -336,10 +345,10 @@ const AuthScreen = () => {
           color: "red", // (optional) default: system default
           vibrate: false, // (optional) default: true
           vibration: 0, // vibration length in milliseconds, ignored if vibrate=false, default: 1000
-          priority: "high", // (optional) set notification priority, default: high
+          priority: "default", // (optional) set notification priority, default: high
           visibility: "private", // (optional) set notification visibility, default: private
           ignoreInForeground: false,// (optional) If this notification is duplicative of a Launcher shortcut, sets the id of the shortcut, in case the Launcher wants to hide the shortcut, default undefined
-          onlyAlertOnce: false, // (optional) alert will open only once with sound and notify, default: false
+          onlyAlertOnce: true, // (optional) alert will open only once with sound and notify, default: false
     
           when: null, // (optional) Add a timestamp (Unix timestamp value in milliseconds) pertaining to the notification (usually the time the event occurred). For apps targeting Build.VERSION_CODES.N and above, this time is not shown anymore by default and must be opted into by using `showWhen`, default: null.
           usesChronometer: false, // (optional) Show the `when` field as a stopwatch. Instead of presenting `when` as a timestamp, the notification will show an automatically updating display of the minutes and seconds since when. Useful when showing an elapsed time (like an ongoing phone call), default: false.
@@ -360,9 +369,9 @@ const AuthScreen = () => {
           userInfo: {}, // (optional) default: {} (using null throws a JSON value '<null>' error)
           playSound: true, // (optional) default: true
           soundName: "default", // (optional) Sound to play when the notification is shown. Value of 'default' plays the default sound. It can be set to a custom sound such as 'android.resource://com.xyz/raw/my_sound'. It will look for the 'my_sound' audio file in 'res/raw' directory and play it. default: 'default' (default sound is played)
-          number: 10, // (optional) Valid 32 bit integer specified as string. default: none (Cannot be zero)
+          //number: 10, // (optional) Valid 32 bit integer specified as string. default: none (Cannot be zero)
           repeatType: "day", // (optional) Repeating interval. Check 'Repeating Notifications' section for more info. 
-          repeatTime: 2,
+          repeatTime: 1,
           data : {
             "status" : status,
             "ref" : ref,

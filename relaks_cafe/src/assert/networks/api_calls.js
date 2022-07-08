@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import GET_TOKEN from '../../assert/networks/dataAccess';
 
-let BASE_URL = "https://cafe-app-352118.el.r.appspot.com/";
+let BASE_URL = "https://relaks-cafe.herokuapp.com/"; // https://cafe-app-352118.el.r.appspot.com/
 
 const TokenVal = GET_TOKEN;
 
@@ -382,7 +382,7 @@ const Funtion_Check_Avalible_tabel = async (times, token) => {
 
 const Funtion_Reservation_tabel = async (table, token) => {
 
-    //console.log("bookings "+JSON.stringify(table));
+    console.log("bookings "+JSON.stringify(table));
 
     try {
         var url = BASE_URL + "api/v1/tables/reserve-table";

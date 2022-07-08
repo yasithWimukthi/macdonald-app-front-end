@@ -6,11 +6,61 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import { Actions } from 'react-native-router-flux';
 
 import { useSelector, useDispatch } from 'react-redux';
+import { setCartItems, setAddressInfo, setFavAddressInfo, setUserInfo } from '../../redux/actions';
 
-const ProfileTitel = ({username}) => {
-    return (
+const ProfileTitel = ({ username }) => {
+
+    const dispatch = useDispatch();
+
+    function signOutFromAccount() {
+        var users = {
+            "ids": "0",
+            "firstName": "",
+            "lastName": "",
+            "loginType": "",
+            "email": "",
+            "token": "",
+            "mobile": ""
+        };
+
+        var itemss = {
+            "isDelivery": false,
+            "refId": "",
+            "noOfItems": 0,
+            "totalPrice": 0.00,
+            "promotionId": 0,
+            "location": {
+                "latitude": "34.052235",
+                "longitude": "-118.243683"
+            },
+            "foodItems": []
+        };
+
+        var address = {
+            "mainAddress": "Plase select Location",
+            "subAddress": "tap on change location",
+            "location": {
+                "latitude": "34.052235",
+                "longitude": "-118.243683"
+            }
+        }
+        var favaddress = {
+            "favAdd": []
+        }
+
+        dispatch(setCartItems(itemss));
+        dispatch(setAddressInfo(address));
+        dispatch(setFavAddressInfo(favaddress));
+        dispatch(setUserInfo(users));
+
+        Actions.auth();
         
-            <View style={Styles.TitelConatiner}>
+    }
+
+
+    return (
+
+        <View style={Styles.TitelConatiner}>
             <View style={Styles.TitelHolder}>
                 <View style={Styles.TitelTextHolder}>
                     <Text style={Styles.TitelBoldTexts}>Your Profile</Text>
@@ -19,106 +69,108 @@ const ProfileTitel = ({username}) => {
                     <View style={Styles.TitelNameConatiner}>
                         <Text style={Styles.TitelSubTexts}>{username}</Text>
                     </View>
-                    <View style={Styles.TitelSignConatiner}>
-                        <Text style={Styles.TitelSubUnderTexts}>Sign out</Text>
-                    </View>
+                    <TouchableOpacity onPress={() => { signOutFromAccount(); }}>
+                        <View style={Styles.TitelSignConatiner}>
+                            <Text style={Styles.TitelSubUnderTexts}>Sign out</Text>
+                        </View>
+                    </TouchableOpacity>
                 </View>
             </View>
         </View>
-        
+
     );
 }
 
 
 const PersonalSettingTile = () => {
-    return(
-        <TouchableOpacity onPress={()=>{Actions.Personal(); }}>
-        <View style={Styles.TileConatiner}>
-            <View style={Styles.TileHolder}>
-                <View style={Styles.TileIconHolder}>
-                    <Icon color="#000" name="bars" size={20} />
-                </View>
-                <View style={Styles.TileTextHolder}>
-                    <Text style={Styles.TitelTexts}>Personal Settings</Text>
-                </View>
-                <View style={Styles.TileIconHolder}>
-                    <Icon color="#000" name="right" size={20} />
+    return (
+        <TouchableOpacity onPress={() => { Actions.Personal(); }}>
+            <View style={Styles.TileConatiner}>
+                <View style={Styles.TileHolder}>
+                    <View style={Styles.TileIconHolder}>
+                        <Icon color="#000" name="bars" size={20} />
+                    </View>
+                    <View style={Styles.TileTextHolder}>
+                        <Text style={Styles.TitelTexts}>Personal Settings</Text>
+                    </View>
+                    <View style={Styles.TileIconHolder}>
+                        <Icon color="#000" name="right" size={20} />
+                    </View>
                 </View>
             </View>
-        </View>
         </TouchableOpacity>
     );
 }
 
 const PrivanceyTile = () => {
-    return(
-        <TouchableOpacity onPress={()=>{Actions.privancy(); }}>
-        <View style={Styles.TileConatiner}>
-            <View style={Styles.TileHolder}>
-                <View style={Styles.TileIconHolder}>
-                    <Icon color="#000" name="lock" size={20} />
-                </View>
-                <View style={Styles.TileTextHolder}>
-                    <Text style={Styles.TitelTexts}>Privacy</Text>
-                </View>
-                <View style={Styles.TileIconHolder}>
-                    <Icon color="#000" name="right" size={20} />
+    return (
+        <TouchableOpacity onPress={() => { Actions.privancy(); }}>
+            <View style={Styles.TileConatiner}>
+                <View style={Styles.TileHolder}>
+                    <View style={Styles.TileIconHolder}>
+                        <Icon color="#000" name="lock" size={20} />
+                    </View>
+                    <View style={Styles.TileTextHolder}>
+                        <Text style={Styles.TitelTexts}>Privacy</Text>
+                    </View>
+                    <View style={Styles.TileIconHolder}>
+                        <Icon color="#000" name="right" size={20} />
+                    </View>
                 </View>
             </View>
-        </View>
         </TouchableOpacity>
     );
 }
 
 const PaymentTile = () => {
-    return(
-        <TouchableOpacity onPress={()=>{Actions.privancy(); }}>
-        <View style={Styles.TileConatiner}>
-            <View style={Styles.TileHolder}>
-                <View style={Styles.TileIconHolder}>
-                    <Icon color="#000" name="creditcard" size={20} />
-                </View>
-                <View style={Styles.TileTextHolder}>
-                    <Text style={Styles.TitelTexts}>Payment Methods</Text>
-                </View>
-                <View style={Styles.TileIconHolder}>
-                    <Icon color="#000" name="right" size={20} />
+    return (
+        <TouchableOpacity onPress={() => { Actions.privancy(); }}>
+            <View style={Styles.TileConatiner}>
+                <View style={Styles.TileHolder}>
+                    <View style={Styles.TileIconHolder}>
+                        <Icon color="#000" name="creditcard" size={20} />
+                    </View>
+                    <View style={Styles.TileTextHolder}>
+                        <Text style={Styles.TitelTexts}>Payment Methods</Text>
+                    </View>
+                    <View style={Styles.TileIconHolder}>
+                        <Icon color="#000" name="right" size={20} />
+                    </View>
                 </View>
             </View>
-        </View>
         </TouchableOpacity>
     );
 }
 
 const CommunicationTile = () => {
-    return(
-        <TouchableOpacity onPress={()=>{Actions.writeUs(); }}>
-        <View style={Styles.TileConatiner}>
-            <View style={Styles.TileHolder}>
-                <View style={Styles.TileIconHolder}>
-                    <Icon color="#000" name="mail" size={20} />
-                </View>
-                <View style={Styles.TileTextHolder}>
-                    <Text style={Styles.TitelTexts}>Communications</Text>
-                </View>
-                <View style={Styles.TileIconHolder}>
-                    <Icon color="#000" name="right" size={20} />
+    return (
+        <TouchableOpacity onPress={() => { Actions.writeUs(); }}>
+            <View style={Styles.TileConatiner}>
+                <View style={Styles.TileHolder}>
+                    <View style={Styles.TileIconHolder}>
+                        <Icon color="#000" name="mail" size={20} />
+                    </View>
+                    <View style={Styles.TileTextHolder}>
+                        <Text style={Styles.TitelTexts}>Communications</Text>
+                    </View>
+                    <View style={Styles.TileIconHolder}>
+                        <Icon color="#000" name="right" size={20} />
+                    </View>
                 </View>
             </View>
-        </View>
         </TouchableOpacity>
     );
 }
 
 const DeleteAccountTile = () => {
-    return(
+    return (
         <View style={Styles.DeleteConatiner}>
             <View style={Styles.DeleteHolder}>
-                
+
                 <View style={Styles.DeleteTextHolder}>
                     <Text style={Styles.DeleteTexts}>Delete account</Text>
                 </View>
-                
+
             </View>
         </View>
     );
@@ -130,12 +182,12 @@ const profile_screen = () => {
 
     return (
         <View style={Styles.main}>
-             <ProfileTitel username={user.firstName +" "+user.lastName}/>  
-             <PersonalSettingTile/> 
-             <PrivanceyTile/>
-             <PaymentTile/>
-             <CommunicationTile/>
-             <DeleteAccountTile/>
+            <ProfileTitel username={user.firstName + " " + user.lastName} />
+            <PersonalSettingTile />
+            <PrivanceyTile />
+            <PaymentTile />
+            <CommunicationTile />
+            <DeleteAccountTile />
 
         </View>
     );
@@ -170,31 +222,31 @@ const Styles = StyleSheet.create({
         justifyContent: 'center',
         flexDirection: 'row'
     },
-    TitelNameConatiner:{
+    TitelNameConatiner: {
         width: wp('70%'),
         height: hp('2%'),
         justifyContent: 'center',
-        alignItems:"flex-start"
+        alignItems: "flex-start"
     },
-    TitelSignConatiner:{
+    TitelSignConatiner: {
         width: wp('20%'),
         height: hp('2%'),
         justifyContent: 'center',
-        alignItems:'flex-end'
+        alignItems: 'flex-end'
     },
-    TitelBoldTexts:{
+    TitelBoldTexts: {
         fontFamily: 'NexaTextDemo-Bold',
         fontSize: 21,
         color: '#000',
         letterSpacing: 0.04,
     },
-    TitelSubTexts:{
+    TitelSubTexts: {
         fontFamily: 'NexaTextDemo-Light',
         fontSize: 14,
         color: '#000',
         letterSpacing: 0.04,
     },
-    TitelSubUnderTexts:{
+    TitelSubUnderTexts: {
         fontFamily: 'NexaTextDemo-Light',
         fontSize: 14,
         color: '#EB1F25',
@@ -206,33 +258,33 @@ const Styles = StyleSheet.create({
         height: hp('12%'),
         alignItems: 'center',
         justifyContent: 'center',
-        borderBottomWidth : 1,
-        borderBottomColor : '#c0c0c0',
+        borderBottomWidth: 1,
+        borderBottomColor: '#c0c0c0',
     },
-    TileHolder : {
+    TileHolder: {
         width: wp('90%'),
         height: hp('10%'),
         alignItems: 'center',
         justifyContent: 'center',
-        flexDirection:'row'
+        flexDirection: 'row'
     },
-    TileIconHolder : {
+    TileIconHolder: {
         width: wp('10%'),
         height: hp('8%'),
         alignItems: 'center',
         justifyContent: 'center',
     },
-    TileTextHolder : {
+    TileTextHolder: {
         width: wp('70%'),
         height: hp('8%'),
         justifyContent: 'center',
     },
-    TitelTexts:{
+    TitelTexts: {
         fontFamily: 'NexaTextDemo-Light',
         fontSize: 14,
         color: '#000',
         letterSpacing: 0.04,
-        marginLeft:wp('2%')
+        marginLeft: wp('2%')
     },
     DeleteConatiner: {
         width: wp('100%'),
@@ -246,18 +298,18 @@ const Styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    DeleteTextHolder : {
+    DeleteTextHolder: {
         width: wp('90%'),
         height: hp('6%'),
         justifyContent: 'center',
-        alignItems:'center'
+        alignItems: 'center'
     },
-    DeleteTexts:{
+    DeleteTexts: {
         fontFamily: 'NexaTextDemo-Light',
         fontSize: 13,
         color: '#EB1F25',
         letterSpacing: 0.04,
-        marginLeft:wp('2%'),
+        marginLeft: wp('2%'),
         textDecorationLine: 'underline',
 
     },

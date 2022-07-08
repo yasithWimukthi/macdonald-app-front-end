@@ -56,13 +56,13 @@ const PortionTitel = ({ protionList, updateSeletedPortion, updateValue }) => {
                                 <TouchableOpacity onPress={() => { setSelectItem(item.id); updateSeletedPortion(item); }}>
                                     <View style={[Styles.single_portion_View, { backgroundColor: selectItem == item.id ? '#EB1F25' : '#f5f5f5' }]}>
                                         <View style={Styles.single_portion_info_holder}>
-                                            <Text style={{ color: selectItem == item.id ? '#fff' : '#f5f5f5' }}>{"€ " + item.price}</Text>
+                                            <Text style={{ color: selectItem == item.id ? '#fff' : '#000' }}>{"€ " + item.price}</Text>
                                         </View>
                                         <View style={Styles.single_portion_info_holder}>
-                                            <Text style={{ color: selectItem == item.id ? '#fff' : '#f5f5f5' }}>{item.name}</Text>
+                                            <Text style={{ color: selectItem == item.id ? '#fff' : '#000' }}>{item.name}</Text>
                                         </View>
                                         <View style={Styles.single_portion_info_holder}>
-                                            <Text style={{ color: selectItem == item.id ? '#fff' : '#f5f5f5' }}>{item.calories + " kcal"}</Text>
+                                            <Text style={{ color: selectItem == item.id ? '#fff' : '#000' }}>{item.calories + " kcal"}</Text>
                                         </View>
                                     </View>
                                 </TouchableOpacity>

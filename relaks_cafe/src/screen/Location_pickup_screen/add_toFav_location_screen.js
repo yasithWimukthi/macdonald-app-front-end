@@ -453,9 +453,12 @@ const Add_ToFav_Location_Screen = () => {
 
         if(favNm != null && favNm != ""){
             StoreFavAddressInfo(favaddress);
-            alert("successfully added to fav");
+            //alert("successfully added to fav");
+            setModelTitel("successfull");
+            setModelMessage("successfully added to fav list");
+            setShow(true);
         }else{
-            setModelTitel("Plase fill favourite namw");
+            setModelTitel("Plase fill favourite name");
             setModelMessage("Before add to favorite, plase give a fav name.");
             setShow(true);
         }

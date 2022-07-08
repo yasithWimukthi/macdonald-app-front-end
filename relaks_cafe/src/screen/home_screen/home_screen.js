@@ -26,28 +26,7 @@ import { setCartItems } from '../../redux/actions';
 
 const Tab = createBottomTabNavigator();
 
-const actions = [
-    {
-        text: "Radio",
-        icon: require("../../assert/images/splash_app_logo.png"),
-        name: "bt_language",
-        position: 1
-    },
-
-];
-const actions2 = [
-    {
-        text: "Cart",
-        icon: require("../../assert/images/splash_app_logo.png"),
-        name: "Cart",
-        position: 1
-    },
-
-];
-
 const home_screen = () => {
-
-    
 
     const { items } = useSelector(state => state.userReducer);
 

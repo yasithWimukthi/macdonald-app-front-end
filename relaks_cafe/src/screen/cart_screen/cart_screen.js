@@ -59,7 +59,6 @@ const ItemTile = ({ portionList }) => {
             setEditEnable(!editEnable);
         } else {
             //check seletct item is food or deal
-
             if (item.dealType == "deal") {
                 //this item is deal
                 var obj = {
@@ -256,26 +255,26 @@ const ItemTile = ({ portionList }) => {
                                                     <View style={[Styles.item_info_Holder, { flexDirection: 'row', alignItems: 'flex-start',marginTop:hp('1.8%') }]}>
                                                         <TouchableOpacity onPress={() => { updatePortion(item); }}>
                                                             <View style={Styles.button_Holder}>
-                                                                <Text>{editStatus}</Text>
+                                                                <Text style={{ color: '#000', }}>{editStatus}</Text>
                                                             </View>
                                                         </TouchableOpacity>
                                                         <TouchableOpacity onPress={() => { removePortion(item); }}>
                                                             <View style={Styles.button_Holder}>
-                                                                <Text>Remove</Text>
+                                                                <Text style={{ color: '#000', }}>Remove</Text>
                                                             </View>
                                                         </TouchableOpacity>
                                                     </View>
                                                 </View>
                                                 <View style={Styles.item_single_Holder}>
                                                     <View style={Styles.item_info_Holder2}>
-                                                        <Text>{"€" + (parseFloat(item.potionPrice) * parseFloat(item.quantity))}</Text>
+                                                        <Text style={{ color: '#000', }}>{"€" + (parseFloat(item.potionPrice) * parseFloat(item.quantity))}</Text>
                                                     </View>
                                                     <View style={Styles.item_info_Holder2}>
-                                                        <Text>{item.cal + " Kcal"}</Text>
+                                                        <Text style={{ color: '#000', }}>{item.cal + " Kcal"}</Text>
                                                     </View>
                                                     <View style={Styles.item_info_Holder2}>
                                                         {
-                                                            (!editEnable) ? <Text>{"Item Qty " + item.quantity}</Text> :
+                                                            (!editEnable) ? <Text style={{ color: '#000', }}>{"Item Qty " + item.quantity}</Text> :
                                                                 <View style={[Styles.Qty_Input_View, { flexDirection: 'row' }]}>
                                                                     <View style={Styles.Qty_Input_holder}>
                                                                         <View style={Styles.Qty_single_tite}>

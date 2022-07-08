@@ -53,7 +53,8 @@ const FirstFormContent = ({ fname, lname, mail, pass, repass, postal_code, mobil
                     <TextInput placeholder='*Email' keyboardType='email-address' onChangeText={(values) => { setUEmail(values); updateEmail(values); }} value={uEmail} placeholderTextColor="#000" style={Styles.defulatTextInput} />
                 </View>
                 <View style={Styles.inputContainer_Row}>
-                    <TextInput placeholder='*Mobile Number' keyboardType='numeric' maxLength={13} onChangeText={(values) => { setUContact(values); updateMobile(values); }} value={uContact} placeholderTextColor="#000" style={Styles.defulatTextInput} />
+                    <TextInput placeholder='*Mobile Number' keyboardType='numeric' maxLength={10} onChangeText={(values) => { setUContact(values); updateMobile(values); }} value={uContact} placeholderTextColor="#000" style={Styles.defulatTextInput} />
+                    {/* <TextInput placeholder='*Mobile Number' keyboardType='numeric' maxLength={13} onChangeText={(values) => { setUContact(values); updateMobile(values); }} value={uContact} placeholderTextColor="#000" style={Styles.defulatTextInput} /> */}
                 </View>
                 <View style={Styles.inputContainer_Row_icon}>
                     <View style={Styles.subinputContainer}>
@@ -233,13 +234,7 @@ const signup_form_screen = () => {
     const [modelTitel, setModelTitel] = useState("");
     const [modelMessage, setModelMessage] = useState("");
 
-
-
-
-
     function registerUser() {
-
-
         var user = {
             "f_name": user_Fname,
             "l_name": user_Lname,
@@ -282,8 +277,6 @@ const signup_form_screen = () => {
                         setShow(true);
                         Actions.auth();
 
-
-
                     } else if (response.code == '409') {
                         // alredy on user
                         setModelTitel("Error");
@@ -292,8 +285,14 @@ const signup_form_screen = () => {
                         ///alert("Alredy used this email, try again");
                     } else if (response.code == '400') {
                         // alert("Form Validation error");
+                        var dts = response.responce;
+
+                        var str = dts.errors;  
+                        str = str.replace(/[^A-z 0-9-]/g, '');
+
                         setModelTitel("Error");
-                        setModelMessage("Form Validation error");
+                        //setModelMessage("Form Validation error");
+                        setModelMessage(str);
                         setShow(true);
                         // request body validation
                     } else if (response.code == '500') {
@@ -324,16 +323,17 @@ const signup_form_screen = () => {
                             if (user_Password == user_RePassword) {
                                 if (user_PostalCode != null || user_PostalCode != "") {
                                     if (user_Contact != null || user_Contact != "") {
-                                        const regex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
-                                        var validate = !(!user_Contact || regex.test(user_Contact) === false);
-                                        if (validate) {
-                                            registerUser();
-                                        } else {
-                                            // not valida uk number
-                                            setModelTitel("Error");
-                                            setModelMessage("Please enter valid uk mobile number");
-                                            setShowRE(true);
-                                        }
+                                        registerUser();
+                                        // const regex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+                                        // var validate = !(!user_Contact || regex.test(user_Contact) === false);
+                                        // if (validate) {
+                                        //     registerUser();
+                                        // } else {
+                                        //     // not valida uk number
+                                        //     setModelTitel("Error");
+                                        //     setModelMessage("Please enter valid uk mobile number");
+                                        //     setShowRE(true);
+                                        // }
 
                                     } else {
                                         setModelTitel("Error");

@@ -43,7 +43,7 @@ const RegisterTypeView = ({ type }) => {
         </View>
     );
 }
-const NameView = ({ userName, editState, updateFName, updateLname }) => {
+const NameView = ({ userName, editState, updateFName, updateLname, fnameValue, lnameValue }) => {
     return (
         <View style={Styles.titelContainer}>
             <View style={Styles.titelHolder}>
@@ -53,10 +53,10 @@ const NameView = ({ userName, editState, updateFName, updateLname }) => {
                     (editState) ?
                         <View style={[Styles.titelConte, { flexDirection: 'row', alignItems: 'center' }]}>
                             <View style={Styles.boxView}>
-                                <TextInput style={[Styles.defulatTextInput, { width: wp('40%') }]} placeholderTextColor={"#000"} placeholder='Enter Frist Name' onChangeText={(text) => { updateFName(text) }} />
+                                <TextInput style={[Styles.defulatTextInput, { width: wp('40%') }]} value={fnameValue} placeholderTextColor={"#000"} placeholder='Enter Frist Name' onChangeText={(text) => { updateFName(text) }} />
                             </View>
                             <View style={Styles.boxView}>
-                                <TextInput style={[Styles.defulatTextInput, { width: wp('40%') }]} placeholderTextColor={"#000"} placeholder='Enter Last Name' onChangeText={(text) => { updateLname(text) }} />
+                                <TextInput style={[Styles.defulatTextInput, { width: wp('40%') }]} value={lnameValue} placeholderTextColor={"#000"} placeholder='Enter Last Name' onChangeText={(text) => { updateLname(text) }} />
                             </View>
 
 
@@ -86,14 +86,14 @@ const EmailView = ({ emails, editState, updateEmail }) => {
     );
 }
 
-const MobileViews = ({ mobileNumber, editState, updateMobile }) => {
+const MobileViews = ({ mobileNumber, editState, updateMobile, valueMobile }) => {
     return (
         <View style={Styles.titelContainer}>
             <View style={Styles.titelHolder}>
                 {
                     (editState) ?
                         <View style={Styles.titelConte}>
-                            <TextInput style={Styles.defulatTextInput} placeholderTextColor={"#000"} placeholder='Enter Contact Number (+441111111111)' onChangeText={(text) => { updateMobile(text) }} />
+                            <TextInput style={Styles.defulatTextInput} placeholderTextColor={"#000"} value={valueMobile} maxLength={10} placeholder='Enter Contact Number (+441111111111)' onChangeText={(text) => { updateMobile(text) }} />
                         </View>
                         :
                         <View style={Styles.titelConte}>
@@ -149,10 +149,10 @@ const Personal_Setting_Screen = () => {
     const { user } = useSelector(state => state.userReducer);
     const dispatch = useDispatch();
 
-    const [fristName, setFristName] = useState("");
-    const [lnameName, setLastName] = useState("");
+    const [fristName, setFristName] = useState(user.firstName);
+    const [lnameName, setLastName] = useState(user.lastName);
     const [emailAdd, setEmailAdd] = useState("");
-    const [contactNumber, setContactNumber] = useState("");
+    const [contactNumber, setContactNumber] = useState(user.mobile);
     const [password, setPassword] = useState("");
     const [enableEdit, setEnableEdit] = useState(false);
 
@@ -172,11 +172,40 @@ const Personal_Setting_Screen = () => {
         }
 
         if (contactNumber != null && contactNumber != "") {
-            updateObj.mobile = contactNumber;
+
+            if (user.mobile == contactNumber) {
+                // not update
+            } else {
+                if (updateObj == null) {
+                    updateObj = {
+                        "mobile": contactNumber,
+                    }
+                } else {
+                    updateObj.mobile = contactNumber;
+                }
+            }
+            // const regex = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+            // var validate = !(!contactNumber || regex.test(contactNumber) === false);
+            // if (validate) {
+            //     updateObj.mobile = contactNumber;
+            // } else {
+            //     // not valida uk number
+            //     setModelTitel("Error");
+            //     setModelMessage("Please enter valid uk mobile number");
+            //     setShow(true);
+            // }
+
         }
 
         if (password != null && password != "") {
-            updateObj.password = password
+            if (updateObj == null) {
+                updateObj = {
+                    "password": password,
+                }
+            } else {
+                updateObj.password = password
+            }
+
         }
 
         if (updateObj != null) {
@@ -185,8 +214,6 @@ const Personal_Setting_Screen = () => {
         } else {
             setEnableEdit(false);
         }
-
-
     }
 
     function enableEditinfo() {
@@ -195,12 +222,12 @@ const Personal_Setting_Screen = () => {
 
 
     function sendDataToServer(pramObj) {
+        // console.log("send data  " + JSON.stringify(pramObj));
         //alert("send obj " + JSON.stringify(pramObj));
         Funtion_Update_Profile_Info(pramObj, user.token).then((response) => {
             console.log("response " + JSON.stringify(response));
             if (response.code == "200") {
                 //User update sucessfully
-
 
                 //update user obj
                 var dts = response.responce;
@@ -228,8 +255,12 @@ const Personal_Setting_Screen = () => {
 
             } else if (response.code == "400") {
                 //Request body validation failed
+                var dts = response.responce;
+                var str = dts.errors;
+                str = str.replace(/[^A-z 0-9-]/g, '');
                 setModelTitel("Error");
-                setModelMessage("Request body validation failed");
+                //setModelMessage("Request body validation failed");
+                setModelMessage(str);
                 setShow(true);
             } else if (response.code == "401") {
                 //Authentication failed
@@ -257,9 +288,9 @@ const Personal_Setting_Screen = () => {
             <ScrollView>
                 <TitelView />
                 <RegisterTypeView type={user.loginType} />
-                <NameView userName={user.firstName + " " + user.lastName} editState={enableEdit} updateFName={setFristName} updateLname={setLastName} />
+                <NameView userName={user.firstName + " " + user.lastName} fnameValue={fristName} lnameValue={lnameName} editState={enableEdit} updateFName={setFristName} updateLname={setLastName} />
                 <EmailView emails={user.email} editState={enableEdit} updateEmail={setEmailAdd} />
-                <MobileViews mobileNumber={user.mobile} editState={enableEdit} updateMobile={setContactNumber} />
+                <MobileViews mobileNumber={user.mobile} editState={enableEdit} valueMobile={contactNumber} updateMobile={setContactNumber} />
 
                 {
                     (enableEdit) ? <PasswordViews updatePassword={setPassword} /> : null

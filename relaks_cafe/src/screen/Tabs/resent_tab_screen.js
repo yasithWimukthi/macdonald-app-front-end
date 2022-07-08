@@ -101,6 +101,22 @@ const OderListView = ({ orderList }) => {
                             // console.log("single order id " + item.id);
                             var dte = item.updatedAt;
                             dte = dte.split("T");
+                            var state = item.status;
+                            var colr = 'blue';
+                            var stateText = "Pending";
+                            if (state == "cancelled") {
+                                colr = "red";
+                                stateText = "Cancelled";
+                            } else if (state == "pending") {
+                                colr = 'blue';
+                                stateText = "Pending";
+                            } else if (state == "completed") {
+                                colr = 'green';
+                                stateText = "Complete";
+                            } else if (state == "accepted") {
+                                colr = 'yellow';
+                                stateText = "Accepted";
+                            }
                             return (
                                 <TouchableOpacity style={Styles.orderListTileContainer} onPress={() => { }}>
                                     <View style={[Styles.orderListTileContainer, { backgroundColor: (item.status == "cancelled") ? "#FFCCCB" : "#ADD8E6" }]}>
@@ -119,7 +135,8 @@ const OderListView = ({ orderList }) => {
                                             </View>
                                         </View>
                                         <View style={Styles.orderTileViews2}>
-                                            <Text style={[Styles.orderInfoTextBold, { color: (item.status == "cancelled") ? "red" : "blue" }]}>{"" + ((item.status == "cancelled") ? "Cancelled" : "Pending")}</Text>
+                                            {/* <Text style={[Styles.orderInfoTextBold, { color: (item.status == "cancelled") ? "red" : "blue" }]}>{"" + ((item.status == "cancelled") ? "Cancelled" : "Pending")}</Text> */}
+                                            <Text style={[Styles.orderInfoTextBold, { color: colr }]}>{"" + stateText}</Text>
                                         </View>
                                     </View>
                                 </TouchableOpacity>
@@ -136,14 +153,14 @@ const RecentBookTabelList = ({ bookList }) => {
     return (
         <View style={Styles.orderListContainer}>
             <View style={Styles.orderListHoler}>
-            <View style={Styles.titel_hold}>
+                <View style={Styles.titel_hold}>
                     <Text style={Styles.titel_heder}>Reservation History</Text>
                 </View>
                 <ScrollView style={{ flex: 1 }}>
                     <FlatList
                         data={bookList}
                         keyExtractor={(item, index) => index}
-                        style={{ marginBottom:30, }}
+                        style={{ marginBottom: 30, }}
                         renderItem={({ item }) => {
                             // console.log("single order id " + item.id);
                             var dte = item.checkOut;
@@ -194,13 +211,16 @@ function Resent_Tab_Screen() {
     useEffect(() => {
         getAllOrderList();
         getRecentTabelInfos();
-    }, [recentOderList]);
+        // }, [recentOderList]);
+    }, []);
 
 
     function getRecentTabelInfos() {
         Funtion_Get_Tabels_Info(user.token).then((response) => {
             if (response.code == '201') {
-                setRecentTbelBookList(response.responce.data);
+                var fullList = response.responce.data;
+                var tmp = fullList.sort(function(a, b){return parseInt(b.id)-parseInt(a.id)})
+                setRecentTbelBookList(tmp);
             }
         }).catch((err) => {
             console.log("error happen on get all reveration tables infos" + err);
@@ -212,7 +232,7 @@ function Resent_Tab_Screen() {
         var userid = user.ids;
 
         Funtion_Get_All_Orders(user.token).then((response) => {
-            //console.log("order list "+JSON.stringify(response.responce));
+            console.log("order list " + JSON.stringify(response.responce));
             var tempList = [];
             if (response.code == "200") {
                 var fullList = response.responce.data;
@@ -222,9 +242,11 @@ function Resent_Tab_Screen() {
                 //     }
                 // });
 
-                setRecentOrderList(fullList);
+                var tmp = fullList.sort(function(a, b){return parseInt(b.id)-parseInt(a.id)})
+               // console.log("fix "+JSON.stringify(tmp));
+                setRecentOrderList(tmp);
 
-                console.log("filer list by userid length " + tempList.length);
+                // console.log("filer list by userid length " + tempList.length);
                 // console.log("state list by userid data  " + JSON.stringify(recentOderList));
 
             } else {
@@ -239,15 +261,15 @@ function Resent_Tab_Screen() {
 
     return (
         <View style={Styles.main}>
-            <View style={Styles.titel_holder}>
-                <TitelComponet />
-            </View>
             <ScrollView>
                 {
                     (recentOderList.length > 0) ?
                         <OderListView orderList={recentOderList} />
                         :
                         <View>
+                            <View style={Styles.titel_holder}>
+                                <TitelComponet />
+                            </View>
                             <View style={Styles.titel_holder}>
                                 <PicupTiles />
                             </View>
@@ -388,7 +410,7 @@ const Styles = StyleSheet.create({
         width: wp('95%'),
         height: hp('80%'),
         justifyContent: 'center',
-        
+
     },
     orderListTileContainer: {
         width: wp('95%'),

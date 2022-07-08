@@ -1,5 +1,5 @@
 import React, { PropTypes, Component, useEffect, useState } from 'react';
-import { View, Image, StyleSheet, Text, TouchableOpacity, ScrollView, FlatList, Platform, TextInput, } from 'react-native';
+import { View, Image, StyleSheet, Text, TouchableOpacity, ScrollView, FlatList, Platform, TextInput } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ZigzagView from "react-native-zigzag-view"
@@ -9,11 +9,12 @@ import NetInfo from "@react-native-community/netinfo";
 
 import DatePicker from 'react-native-date-picker';
 
-import { Funtion_Reservation_tabel, Funtion_Check_Avalible_tabel,  } from '../../assert/networks/api_calls';
+import { Funtion_Reservation_tabel, Funtion_Check_Avalible_tabel, } from '../../assert/networks/api_calls';
 
 import AwesomeAlert from 'react-native-awesome-alerts';
 
 import { useSelector, useDispatch } from 'react-redux';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const CheckTabelList = ({ updateTabelList, updateCheckin, updateCheckout, updateModelVisible, updateModelTitel, updateModelMessage }) => {
 
@@ -39,7 +40,7 @@ const CheckTabelList = ({ updateTabelList, updateCheckin, updateCheckout, update
         }
 
         Funtion_Check_Avalible_tabel(tims, user.token).then((response) => {
-            console.log("response " + JSON.stringify(response));
+           // console.log("response table" + JSON.stringify(response));
             if (response.code == '200') {
                 // setModelTitel("SuccessFully");
                 // setModelMessage("Table reservation successfully");
@@ -168,7 +169,7 @@ const CheckTabelList = ({ updateTabelList, updateCheckin, updateCheckout, update
 }
 
 
-const TableListView = ({ tabelList, updateSelected, updateNote }) => {
+const TableListView = ({ tabelList, updateSelected, updateNote, updatBtnVisible }) => {
 
     //console.log("pass list "+JSON.stringify(tabelList));
     var ids = 0;
@@ -177,61 +178,65 @@ const TableListView = ({ tabelList, updateSelected, updateNote }) => {
     const [ItemSelected, setSelectItem] = useState(false);
 
     return (
-        <View style={Styles.List_Container}>
-            <View style={Styles.List_holder}>
-                <ScrollView>
-                    <View style={Styles.List_Titel_holder}>
-                        <Text style={Styles.tabelTitel}>Avalible Tables</Text>
-                    </View>
-                    <View style={Styles.List_Info_holder}>
-                        <FlatList
-                            data={tabelList}
-                            keyExtractor={(item, index) => index}
-                            numColumns={3}
-                            extraData={ItemSelected}
-                            renderItem={({ item }) => {
-                                //console.log("datas "+JSON.stringify(item));
-                                return (
-                                    <TouchableOpacity onPress={() => {
-                                        updateSelected(item);
-                                        tabelList.forEach(tabels => {
-
-                                            if (tabels.id == item.id) {
-                                                tabels.isSelected = true;
-                                            } else {
-                                                tabels.isSelected = false;
-                                            }
-                                        });
-                                    }}>
-                                        <View elevation={2} style={[Styles.singleTable, { backgroundColor: (item.isSelected) ? "red" : "#FFF" }]}>
-                                            <View style={Styles.singleTextHolder}>
-                                                <Text style={[Styles.table_info, { color: (item.isSelected) ? "#FFF" : "#000" }]}>{"Name : " + item.tableName}</Text>
-                                            </View>
-                                            <View style={Styles.singleTextHolder}>
-                                                <Text style={[Styles.table_info, { color: (item.isSelected) ? "#FFF" : "#000" }]}>{"Seat : " + item.seatingCapacity}</Text>
-                                            </View>
-                                            <View style={Styles.singleTextHolder}>
-                                                <Text style={[Styles.table_info, { color: (item.isSelected) ? "#FFF" : "#000" }]}>{(item.isIndoor == "0") ? "INDOOR" : "OUTDOOR"}</Text>
-                                            </View>
-                                        </View>
-                                    </TouchableOpacity>
-                                );
-                            }}
-
-                        />
-                    </View>
-
-                    <View style={Styles.note_Container}>
-                        <View style={Styles.note_holder}>
-                            <TextInput style={Styles.note_text} onChangeText={(text) => { updateNote(text); }} placeholder='Please added any spceial note..' />
+        <KeyboardAwareScrollView>
+            <View style={Styles.List_Container}>
+                <View style={Styles.List_holder}>
+                    <ScrollView>
+                        <View style={Styles.List_Titel_holder}>
+                            <Text style={Styles.tabelTitel}>Avalible Tables</Text>
                         </View>
-                    </View>
+                        <View style={Styles.List_Info_holder}>
+                            <FlatList
+                                data={tabelList}
+                                keyExtractor={(item, index) => index}
+                                numColumns={3}
+                                extraData={ItemSelected}
+                                renderItem={({ item }) => {
+                                    //console.log("datas "+JSON.stringify(item));
+                                    return (
+                                        <TouchableOpacity onPress={() => {
+                                            updateSelected(item);
+                                            tabelList.forEach(tabels => {
 
-                </ScrollView>
+                                                if (tabels.id == item.id) {
+                                                    tabels.isSelected = true;
+                                                } else {
+                                                    tabels.isSelected = false;
+                                                }
+                                            });
+                                        }}>
+                                            <View elevation={2} style={[Styles.singleTable, { backgroundColor: (item.isSelected) ? "red" : "#FFF" }]}>
+                                                <View style={Styles.singleTextHolder}>
+                                                    <Text style={[Styles.table_info, { color: (item.isSelected) ? "#FFF" : "#000" }]}>{"Name : " + item.tableName}</Text>
+                                                </View>
+                                                <View style={Styles.singleTextHolder}>
+                                                    <Text style={[Styles.table_info, { color: (item.isSelected) ? "#FFF" : "#000" }]}>{"Seat : " + item.seatingCapacity}</Text>
+                                                </View>
+                                                <View style={Styles.singleTextHolder}>
+                                                    <Text style={[Styles.table_info, { color: (item.isSelected) ? "#FFF" : "#000" }]}>{(item.isIndoor == "0") ? "INDOOR" : "OUTDOOR"}</Text>
+                                                </View>
+                                            </View>
+                                        </TouchableOpacity>
+                                    );
+                                }}
+
+                            />
+                        </View>
+                        {/* <KeyboardAwareScrollView> */}
+                        <View style={Styles.note_Container}>
+                            <View style={Styles.note_holder}>
+                                <TextInput onFocus={() => { updatBtnVisible(false); }} onBlur={()=>{updatBtnVisible(true);}} style={Styles.note_text} placeholderTextColor="#000" onChangeText={(text) => { updateNote(text); }} placeholder='Please added any spceial note..' />
+                            </View>
+                        </View>
+                        {/* </KeyboardAwareScrollView> */}
+
+                    </ScrollView>
 
 
+                </View>
             </View>
-        </View>
+        </KeyboardAwareScrollView>
+
     );
 }
 
@@ -255,17 +260,33 @@ const Tabel_Reservation_Screen = () => {
     const [show, setShow] = useState(false);
     const [modelTitel, setModelTitel] = useState("");
     const [modelMessage, setModelMessage] = useState("");
-    
+
+    const [btnShow, setBtnShow] = useState(true);
+
 
     function reserveTable() {
-        var dts = {
-            "tableId": selectTabel.id, //tableNo //tableName
-            "note": note,
-            "checkIn": checkIN,
-            "checkOut": checkOUT
-        }
 
-        console.log("tokens " + user.token);
+        //console.log("checks "+(note == "" || note == null));
+
+        var dts = null;
+
+        if (note == "" || note == null) {
+            //setNote("0");
+            dts = {
+                "tableId": selectTabel.id, //tableNo //tableName
+                "note": " ",
+                "checkIn": checkIN,
+                "checkOut": checkOUT
+            }
+        } else {
+            dts = {
+                "tableId": selectTabel.id, //tableNo //tableName
+                "note": note,
+                "checkIn": checkIN,
+                "checkOut": checkOUT
+            }
+        }
+        //console.log("dta " + JSON.stringify(dts));
 
         Funtion_Reservation_tabel(dts, user.token).then((response) => {
             //alert("resever "+JSON.stringify(responce.status));
@@ -274,6 +295,10 @@ const Tabel_Reservation_Screen = () => {
                 setModelTitel("SuccessFully");
                 setModelMessage("Table reservation successfully");
                 setShow(true);
+
+                setTableList([]);
+                setSelectTabel(null);
+                setNote("");
                 //redirct to home
                 Actions.authenticated();
             } else if (response.code == '401') {
@@ -298,31 +323,35 @@ const Tabel_Reservation_Screen = () => {
     }
 
     return (
+        // <KeyboardAvoidingView style={Styles.main} behavior="padding">
         <View style={Styles.main}>
             <CheckTabelList updateTabelList={setTableList} updateCheckin={setCheckIN} updateCheckout={setCheckOUT} updateModelVisible={setShow} updateModelTitel={setModelTitel} updateModelMessage={setModelMessage} />
 
-            {/* <ScrollView> */}
-                <TableListView tabelList={tabelsList} updateSelected={setSelectTabel} updateNote={setNote} />
-                {/* <RecentBookTabelList bookList={recentTbelBookList} /> */}
-            {/* </ScrollView> */}
+            <TableListView tabelList={tabelsList} updateSelected={setSelectTabel} updateNote={setNote} updatBtnVisible={setBtnShow} />
 
-            <View style={Styles.screenTitel}>
-                <View style={Styles.btnContainer}>
-                    <TouchableOpacity disabled={(tabelsList.length) != 0 ? false : true} onPress={() => { reserveTable(); }}>
-                        <View style={[Styles.btnBorder, { backgroundColor: (tabelsList.length) != 0 ? '#EB1F25' : "#f5f5f5", borderWidth: 0 }]}>
-                            <View style={Styles.btn_icon_holder}>
-                                {/* <Icon color="#4285F4" name="google" size={30} /> */}
-                            </View>
-                            <View style={Styles.btn_text_holder_login}>
-                                <Text style={Styles.brtn_text_content}>Reserve a table</Text>
-                            </View>
-                            <View style={Styles.btn_icon_holder}>
-                                {/* <Icon color="#000" name="right" size={30} /> */}
-                            </View>
+            {
+                (btnShow) ?
+                    <View style={Styles.screenTitel}>
+                        <View style={Styles.btnContainer}>
+                            <TouchableOpacity disabled={(tabelsList.length) != 0 ? false : true} onPress={() => { reserveTable(); }}>
+                                <View style={[Styles.btnBorder, { backgroundColor: (tabelsList.length) != 0 ? '#EB1F25' : "#f5f5f5", borderWidth: 0 }]}>
+                                    <View style={Styles.btn_icon_holder}>
+                                        {/* <Icon color="#4285F4" name="google" size={30} /> */}
+                                    </View>
+                                    <View style={Styles.btn_text_holder_login}>
+                                        <Text style={Styles.brtn_text_content}>Reserve a table</Text>
+                                    </View>
+                                    <View style={Styles.btn_icon_holder}>
+                                        {/* <Icon color="#000" name="right" size={30} /> */}
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
                         </View>
-                    </TouchableOpacity>
-                </View>
-            </View>
+                    </View>
+
+                    : null
+            }
+
             <AwesomeAlert
                 show={show}
                 showProgress={false}
@@ -343,6 +372,7 @@ const Tabel_Reservation_Screen = () => {
                 }}
             />
         </View>
+        // </KeyboardAvoidingView>
     )
 }
 
@@ -506,6 +536,7 @@ const Styles = StyleSheet.create({
         marginTop: hp('3%'),
         marginBottom: hp('3%'),
         position: 'absolute',
+        //position: 'relative',
         bottom: 0
     },
     btnContainer: {

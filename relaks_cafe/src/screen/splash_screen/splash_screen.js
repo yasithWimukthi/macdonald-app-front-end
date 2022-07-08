@@ -85,12 +85,14 @@ const SplashScreen = () => {
                         "lastName": dumy.lastName,
                         "loginType": dumy.loginType,
                         "email": dumy.email,
-                        "token": dumy.token
+                        "token": dumy.token,
+                        "mobile": dumy.mobile
                     }
                     console.log("store " + JSON.stringify(userObj));
                     dispatch(setUserInfo(userObj));
                     //Actions.resetPass();
                     Actions.authenticated();
+                    //Actions.MenuList({ cat_id: "1"});
                 } else {
                     console.log("local else data " + JSON.stringify(user));
                     console.log("auth screen");

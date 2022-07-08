@@ -9,7 +9,9 @@ import Icon4 from 'react-native-vector-icons/Fontisto';
 import { Container } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 
-function More_Tab_Screen() {
+function More_Tab_Screen({...props}) {
+   // alert("props "+JSON.stringify(props));
+    console.log("props "+JSON.stringify(props));
     return (
         <View style={Styles.main}>
             <View>

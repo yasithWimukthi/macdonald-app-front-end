@@ -9,13 +9,20 @@ class NotificationHandler {
     var parm = notification.data;
 
     if (parm.type == "tabel") {
-      PushNotification.cancelLocalNotifications({ id: '1995' });
+      //PushNotification.cancelLocalNotification({ id: "1995" });
+      PushNotification.cancelAllLocalNotifications({id: "1995"});
+    // console.log("after clear");
     } else {
       if (parm.status == "accept") {
-        PushNotification.cancelLocalNotifications({ id: '1995' });
+        //PushNotification.cancelLocalNotifications({ id: '1995' });
+        // PushNotification.cancelLocalNotification('1995');
+        // PushNotification.removeAllDeliveredNotifications();
+        PushNotification.cancelAllLocalNotifications({id: "1995"});
+        //console.log("after clear");
         Actions.OrderSt({ "orderStatus": "Confimed" });
       } else {
-        PushNotification.cancelLocalNotifications({ id: '1995' });
+        PushNotification.cancelAllLocalNotifications({id: "1995"});
+       // console.log("after clear");
         Actions.OrderSt({ "orderStatus": "Cancel" });
       }
     }
@@ -42,11 +49,17 @@ class NotificationHandler {
       PushNotification.invokeApp(notification);
       console.log("inside yes");
       //navigate to order confirm screen with status
-      PushNotification.cancelLocalNotifications({ id: '1995' });
+      // PushNotification.cancelLocalNotifications({ id: '1995' });
+      // PushNotification.cancelLocalNotification('1995');
+      // PushNotification.removeAllDeliveredNotifications();
+      PushNotification.cancelAllLocalNotifications({id: "1995"});
     } else {
       //hide notification
       console.log("inside no");
-      PushNotification.cancelLocalNotifications({ id: '1995' });
+      // PushNotification.cancelLocalNotifications({ id: '1995' });
+      PushNotification.cancelAllLocalNotifications({id: "1995"});
+      // PushNotification.removeAllDeliveredNotifications();
+      //PushNotification.clearLocalNotification("",1995);
     }
   }
 
