@@ -296,10 +296,12 @@ const AuthScreen = () => {
 
             if (response.data == "Your order has been accepted") {
                 // sucess
-                showAppPushNotification("Oder Accepted", response.data, "accept", "0", "order");
+                //showAppPushNotification("Oder Accepted", response.data, "accept", "0", "order");
+                showAppPushNotification("Oder Accepted", "your order is accepted successfully.", "accept", "0", "order");
             } else {
                 //cancel
-                showAppPushNotification("Oder Cancelled", response.data, "cancel", response.refId, "order");
+                //showAppPushNotification("Oder Cancelled", response.data, "cancel", response.refId, "order");
+                showAppPushNotification("Oder Cancelled", "Your order has been canceled, Thanks for connecting with relaks radio cafe.", "cancel", response.refId, "order");
                 RefundPayement(response.refId).then((response) => {
 
                     console.log("resposne refund " + JSON.stringify(response))
@@ -318,7 +320,8 @@ const AuthScreen = () => {
             console.log("socket is on " + SOCKETS.id);
             console.log('message: ' + response);
 
-            showAppPushNotification("Tabel Reservation Cancel", "your tabel reservation has been cancel", "accept", "0", "tabel");
+            //showAppPushNotification("Tabel Reservation Cancel", "your tabel reservation has been cancel", "accept", "0", "tabel");
+            showAppPushNotification("Tabel Reservation Canceled", "Your tabel reservation is canceled, Thanks for connecting with relaks redio cafe", "accept", "0", "tabel");
 
         });
     }, [tokens]);
@@ -337,7 +340,7 @@ const AuthScreen = () => {
           largeIcon: "ic_launcher", // (optional) default: "ic_launcher". Use "" for no large icon.
           largeIconUrl: "https://www.example.tld/picture.jpg", // (optional) default: undefined
           smallIcon: "ic_notification", // (optional) default: "ic_notification" with fallback for "ic_launcher". Use "" for default small icon.
-          bigText: "My big text that will be shown when notification is expanded.)", // (optional) default: "message" prop
+          bigText: message, // (optional) default: "message" prop
           subText: "Order Status", // (optional) default: none
           bigPictureUrl: "https://www.example.tld/picture.jpg", // (optional) default: undefined
           bigLargeIcon: "ic_launcher", // (optional) default: undefined

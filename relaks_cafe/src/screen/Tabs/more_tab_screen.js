@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes, Component, useEffect,useState } from 'react';
 import { View, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -9,9 +9,23 @@ import Icon4 from 'react-native-vector-icons/Fontisto';
 import { Container } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 
+import { useSelector, useDispatch } from 'react-redux';
+
 function More_Tab_Screen({...props}) {
    // alert("props "+JSON.stringify(props));
     console.log("props "+JSON.stringify(props));
+
+    const { items } = useSelector(state => state.userReducer);
+
+    const [visbile, setVisible] = useState((items.foodItems.length > 0) ? true : false);
+
+    const [totals, setTolats] = useState(items.totalPrice);
+
+    useEffect(() => {
+        setVisible((items.foodItems.length > 0) ? true : false);
+        setTolats(items.totalPrice);
+    });
+
     return (
         <View style={Styles.main}>
             <View>
@@ -163,6 +177,28 @@ function More_Tab_Screen({...props}) {
                 </View>
             </TouchableOpacity>
 
+            {
+                (visbile) ? <View style={Styles.cartTile}>
+                    <View style={Styles.cartTile_holder}>
+                        <View style={Styles.cartTile_info_holder}>
+                            <View style={Styles.cartTile_tesxts_holder}>
+                                <Text style={Styles.itemText}>{items.foodItems.length + " items"}</Text>
+                            </View>
+                            <View style={Styles.cartTile_tesxts_holder}>
+                                <Text style={Styles.totalText}>{"€ :" + totals}</Text>
+                            </View>
+                        </View>
+                        <TouchableOpacity  onPress={() => { Actions.Cart(); }}>
+                            <View style={Styles.cartTile_btn_holder}>
+                                <View style={Styles.btn_holder}>
+                                    <Text style={[Styles.itemText, { color: '#000', }]}>View Cart</Text>
+                                </View>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                </View> : null
+            }
+
         </View>
     );
 }
@@ -205,6 +241,61 @@ const Styles = StyleSheet.create({
         fontSize: 14,
         color: '#000',
         letterSpacing : 0.25,
+    },
+    cartTile: {
+        width: wp('100%'),
+        height: hp('10%'),
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'absolute',
+        bottom: hp('1%'),
+        // backgroundColor:'#f5f5f5'
+    },
+    cartTile_holder: {
+        width: wp('90%'),
+        height: hp('8%'),
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#a5a6a5',
+        borderRadius: 5,
+        flexDirection: 'row',
+    },
+    cartTile_info_holder: {
+        width: wp('60%'),
+        height: hp('8%'),
+        justifyContent: 'center',
+    },
+    cartTile_tesxts_holder: {
+        width: wp('50%'),
+        height: hp('3%'),
+        justifyContent: 'center',
+        marginLeft: 10,
+    },
+    cartTile_btn_holder: {
+        width: wp('30%'),
+        height: hp('8%'),
+        justifyContent: 'center',
+        //backgroundColor:'#EB1F25'
+    },
+    itemText: {
+        fontFamily: 'NexaTextDemo-Light',
+        fontSize: 14,
+        color: '#fff',
+        letterSpacing: 0.04,
+    },
+    totalText: {
+        fontFamily: 'NexaTextDemo-Bold',
+        fontSize: 14,
+        color: '#fff',
+        letterSpacing: 0.04,
+    },
+    btn_holder: {
+        width: wp('28%'),
+        height: hp('7%'),
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 5,
+        backgroundColor: 'red'
     },
 
 });

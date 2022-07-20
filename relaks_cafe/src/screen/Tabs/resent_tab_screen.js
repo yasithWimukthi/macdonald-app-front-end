@@ -8,6 +8,11 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { Funtion_Get_All_Orders, Funtion_Get_Tabels_Info } from '../../assert/networks/api_calls';
 
+import { NavigationContainer } from '@react-navigation/native';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+
+const Tab = createMaterialTopTabNavigator();
+
 const TitelComponet = () => {
     return (
         <ZigzagView
@@ -86,7 +91,9 @@ const BottomDescriptionTile = () => {
 }
 
 
-const OderListView = ({ orderList }) => {
+const OderListView = ({ navigation, route }) => {
+   // alert(JSON.stringify(orderList));
+    //console.log(JSON.stringify(route.params?.order));
     return (
         <View style={Styles.orderListContainer}>
             <View style={Styles.orderListHoler}>
@@ -95,7 +102,7 @@ const OderListView = ({ orderList }) => {
                 </View>
                 <ScrollView style={{ flex: 1 }}>
                     <FlatList
-                        data={orderList}
+                        data={route.params?.order}
                         keyExtractor={(item, index) => index}
                         renderItem={({ item }) => {
                             // console.log("single order id " + item.id);
@@ -149,7 +156,7 @@ const OderListView = ({ orderList }) => {
     )
 }
 
-const RecentBookTabelList = ({ bookList }) => {
+const RecentBookTabelList = ({ navigation, route }) => {
     return (
         <View style={Styles.orderListContainer}>
             <View style={Styles.orderListHoler}>
@@ -158,7 +165,7 @@ const RecentBookTabelList = ({ bookList }) => {
                 </View>
                 <ScrollView style={{ flex: 1 }}>
                     <FlatList
-                        data={bookList}
+                        data={route.params?.tabel}
                         keyExtractor={(item, index) => index}
                         style={{ marginBottom: 30, }}
                         renderItem={({ item }) => {
@@ -201,7 +208,29 @@ const RecentBookTabelList = ({ bookList }) => {
 }
 
 
+const TabViews = ({recentOderList,recentTbelBookList}) => {
+
+   // const OrdreList =  return();
+   // const TableList = <RecentBookTabelList bookList={recentTbelBookList} />
+    return (
+        <NavigationContainer style={Styles.main}>
+            <Tab.Navigator>
+                <Tab.Screen name="Order History"  component={OderListView} initialParams={{ order : recentOderList }} />
+                <Tab.Screen name="Reservation History" component={RecentBookTabelList} initialParams={{ tabel : recentTbelBookList }} />
+            </Tab.Navigator>
+        </NavigationContainer>
+    );
+}
+
+
+
 function Resent_Tab_Screen() {
+
+    const { items } = useSelector(state => state.userReducer);
+
+    const [visbile, setVisible] = useState((items.foodItems.length > 0) ? true : false);
+
+    const [totals, setTolats] = useState(items.totalPrice);
 
     const [recentOderList, setRecentOrderList] = useState([]);
     const [recentTbelBookList, setRecentTbelBookList] = useState([]);
@@ -209,6 +238,8 @@ function Resent_Tab_Screen() {
 
 
     useEffect(() => {
+        setVisible((items.foodItems.length > 0) ? true : false);
+        setTolats(items.totalPrice);
         getAllOrderList();
         getRecentTabelInfos();
         // }, [recentOderList]);
@@ -261,10 +292,10 @@ function Resent_Tab_Screen() {
 
     return (
         <View style={Styles.main}>
-            <ScrollView>
+            {/* <ScrollView> */}
                 {
                     (recentOderList.length > 0) ?
-                        <OderListView orderList={recentOderList} />
+                        <TabViews recentOderList={recentOderList} recentTbelBookList={recentTbelBookList} />
                         :
                         <View>
                             <View style={Styles.titel_holder}>
@@ -280,10 +311,32 @@ function Resent_Tab_Screen() {
                                 <BottomDescriptionTile />
                             </View>
                         </View>
+
                 }
 
-                <RecentBookTabelList bookList={recentTbelBookList} />
-            </ScrollView>
+                
+            {/* </ScrollView> */}
+            {
+                (visbile) ? <View style={Styles.cartTile}>
+                    <View style={Styles.cartTile_holder}>
+                        <View style={Styles.cartTile_info_holder}>
+                            <View style={Styles.cartTile_tesxts_holder}>
+                                <Text style={Styles.itemText}>{items.foodItems.length + " items"}</Text>
+                            </View>
+                            <View style={Styles.cartTile_tesxts_holder}>
+                                <Text style={Styles.totalText}>{"€ :" + totals}</Text>
+                            </View>
+                        </View>
+                        <TouchableOpacity  onPress={() => { Actions.Cart(); }}>
+                            <View style={Styles.cartTile_btn_holder}>
+                                <View style={Styles.btn_holder}>
+                                    <Text style={[Styles.itemText, { color: '#000', }]}>View Cart</Text>
+                                </View>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                </View> : null
+            }
         </View>
     );
 }
@@ -298,7 +351,7 @@ const Styles = StyleSheet.create({
     },
     titel_holder: {
         width: wp('100%'),
-        height: hp('25%'),
+        height: hp('21%'),
         alignItems: 'center',
         justifyContent: 'center'
     },
@@ -453,6 +506,61 @@ const Styles = StyleSheet.create({
         fontSize: 16,
         color: '#000',
         letterSpacing: 0.1,
+    },
+    cartTile: {
+        width: wp('100%'),
+        height: hp('10%'),
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'absolute',
+        bottom: hp('1%'),
+        // backgroundColor:'#f5f5f5'
+    },
+    cartTile_holder: {
+        width: wp('90%'),
+        height: hp('8%'),
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#a5a6a5',
+        borderRadius: 5,
+        flexDirection: 'row',
+    },
+    cartTile_info_holder: {
+        width: wp('60%'),
+        height: hp('8%'),
+        justifyContent: 'center',
+    },
+    cartTile_tesxts_holder: {
+        width: wp('50%'),
+        height: hp('3%'),
+        justifyContent: 'center',
+        marginLeft: 10,
+    },
+    cartTile_btn_holder: {
+        width: wp('30%'),
+        height: hp('8%'),
+        justifyContent: 'center',
+        //backgroundColor:'#EB1F25'
+    },
+    itemText: {
+        fontFamily: 'NexaTextDemo-Light',
+        fontSize: 14,
+        color: '#fff',
+        letterSpacing: 0.04,
+    },
+    totalText: {
+        fontFamily: 'NexaTextDemo-Bold',
+        fontSize: 14,
+        color: '#fff',
+        letterSpacing: 0.04,
+    },
+    btn_holder: {
+        width: wp('28%'),
+        height: hp('7%'),
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 5,
+        backgroundColor: 'red'
     },
 
 });

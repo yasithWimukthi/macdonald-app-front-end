@@ -24,7 +24,7 @@ import { Actions } from 'react-native-router-flux';
 import { useSelector, useDispatch } from 'react-redux';
 import { setCartItems } from '../../redux/actions';
 
-const Tab = createBottomTabNavigator();
+//const Tab = createBottomTabNavigator();
 
 const home_screen = () => {
 
@@ -41,102 +41,102 @@ const home_screen = () => {
     });
 
     return (
-        <NavigationContainer style={Styles.main}>
+        // <NavigationContainer style={Styles.main}>
 
-            <Tab.Navigator tabBarOptions={{ showLabel: false }}>
-                <Tab.Screen name="Home" component={Home_Tab_Screen} options={({ route }) => ({
-                    tabBarIcon: ({ focused }) => {
+        //     <Tab.Navigator tabBarOptions={{ showLabel: false }}>
+        //         <Tab.Screen name="Home" component={Home_Tab_Screen} options={({ route }) => ({
+        //             tabBarIcon: ({ focused }) => {
 
-                        return (
-                            <View style={Styles.bootmIconHolder}>
-                                {/* <Icon color="#000" name="home" size={20} /> */}
-                                <Image source={{ uri: (focused) ? 'bottombar' : 'home_inactive' }} style={Styles.app_logs} />
-                                <Text style={[Styles.tabBartext, { color: (focused) ? "#EB1F25" : "#757575" }]}>Home</Text>
-                            </View>
-                        );
-                    },
-                    tabBarActiveTintColor: 'tomato',
-                    tabBarInactiveTintColor: 'gray',
-                    headerShown: false
-                })}
-                />
-                <Tab.Screen name="Tabel" component={Tabel_Reservation_Screen} options={({ route }) => ({
-                    tabBarIcon: ({ focused }) => {
+        //                 return (
+        //                     <View style={Styles.bootmIconHolder}>
+        //                         {/* <Icon color="#000" name="home" size={20} /> */}
+        //                         <Image source={{ uri: (focused) ? 'bottombar' : 'home_inactive' }} style={Styles.app_logs} />
+        //                         <Text style={[Styles.tabBartext, { color: (focused) ? "#EB1F25" : "#757575" }]}>Home</Text>
+        //                     </View>
+        //                 );
+        //             },
+        //             tabBarActiveTintColor: 'tomato',
+        //             tabBarInactiveTintColor: 'gray',
+        //             headerShown: false
+        //         })}
+        //         />
+        //         <Tab.Screen name="Tabel" component={Tabel_Reservation_Screen} options={({ route }) => ({
+        //             tabBarIcon: ({ focused }) => {
 
-                        return (
-                            <View style={Styles.bootmIconHolder}>
-                                {/* <Icon color="#000" name="team" size={20} /> */}
-                                {/* <Image source={{ uri: (focused) ? 'bottombar' : 'home_inactive' }} style={Styles.app_logs} /> */}
-                                {
-                                    (focused) ? <Icon color="#EB1F25" name="team" size={20} /> : <Icon color="#757575" name="team" size={20} />
-                                }
-                                <Text style={[Styles.tabBartext, { color: (focused) ? "#EB1F25" : "#757575" }]}>Tabel</Text>
-                            </View>
-                        );
-                    },
-                    tabBarActiveTintColor: 'tomato',
-                    tabBarInactiveTintColor: 'gray',
-                    headerShown: false
-                })}
-                />
-                <Tab.Screen name="Order" component={Order_Tab_Screen} options={({ route }) => ({
-                    tabBarIcon: ({ focused }) => {
+        //                 return (
+        //                     <View style={Styles.bootmIconHolder}>
+        //                         {/* <Icon color="#000" name="team" size={20} /> */}
+        //                         {/* <Image source={{ uri: (focused) ? 'bottombar' : 'home_inactive' }} style={Styles.app_logs} /> */}
+        //                         {
+        //                             (focused) ? <Icon color="#EB1F25" name="team" size={20} /> : <Icon color="#757575" name="team" size={20} />
+        //                         }
+        //                         <Text style={[Styles.tabBartext, { color: (focused) ? "#EB1F25" : "#757575" }]}>Tabel</Text>
+        //                     </View>
+        //                 );
+        //             },
+        //             tabBarActiveTintColor: 'tomato',
+        //             tabBarInactiveTintColor: 'gray',
+        //             headerShown: false
+        //         })}
+        //         />
+        //         <Tab.Screen name="Order" component={Order_Tab_Screen} options={({ route }) => ({
+        //             tabBarIcon: ({ focused }) => {
 
-                        return (
-                            <View style={Styles.bootmIconHolder}>
-                                <Image source={{ uri: (focused) ? 'order_active' : 'order_inactive' }} style={Styles.app_logs} />
-                                <Text style={[Styles.tabBartext, { color: (focused) ? "#EB1F25" : "#757575" }]}>Order</Text>
-                            </View>
-                        );
-                    },
-                    tabBarActiveTintColor: 'tomato',
-                    tabBarInactiveTintColor: 'gray',
-                    headerShown: false
-                })} />
-                <Tab.Screen name="Deals" component={Deals_Tab_Screen} options={({ route }) => ({
-                    tabBarIcon: ({ focused }) => {
+        //                 return (
+        //                     <View style={Styles.bootmIconHolder}>
+        //                         <Image source={{ uri: (focused) ? 'order_active' : 'order_inactive' }} style={Styles.app_logs} />
+        //                         <Text style={[Styles.tabBartext, { color: (focused) ? "#EB1F25" : "#757575" }]}>Order</Text>
+        //                     </View>
+        //                 );
+        //             },
+        //             tabBarActiveTintColor: 'tomato',
+        //             tabBarInactiveTintColor: 'gray',
+        //             headerShown: false
+        //         })} />
+        //         <Tab.Screen name="Deals" component={Deals_Tab_Screen} options={({ route }) => ({
+        //             tabBarIcon: ({ focused }) => {
 
-                        return (
-                            <View style={Styles.bootmIconHolder}>
-                                <Image source={{ uri: (focused) ? 'deals_active' : 'deal_inactive' }} style={Styles.app_logs} />
-                                <Text style={[Styles.tabBartext, { color: (focused) ? "#EB1F25" : "#757575" }]}>Deals</Text>
-                            </View>
-                        );
-                    },
-                    tabBarActiveTintColor: 'tomato',
-                    tabBarInactiveTintColor: 'gray',
-                    headerShown: false
-                })} />
-                <Tab.Screen name="Recents" component={Resent_Tab_Screen} options={({ route }) => ({
-                    tabBarIcon: ({ focused }) => {
+        //                 return (
+        //                     <View style={Styles.bootmIconHolder}>
+        //                         <Image source={{ uri: (focused) ? 'deals_active' : 'deal_inactive' }} style={Styles.app_logs} />
+        //                         <Text style={[Styles.tabBartext, { color: (focused) ? "#EB1F25" : "#757575" }]}>Deals</Text>
+        //                     </View>
+        //                 );
+        //             },
+        //             tabBarActiveTintColor: 'tomato',
+        //             tabBarInactiveTintColor: 'gray',
+        //             headerShown: false
+        //         })} />
+        //         <Tab.Screen name="Recents" component={Resent_Tab_Screen} options={({ route }) => ({
+        //             tabBarIcon: ({ focused }) => {
 
-                        return (
-                            <View style={Styles.bootmIconHolder}>
-                                <Image source={{ uri: (focused) ? 'recent_active' : 'recent_inactive' }} style={Styles.app_logs} />
-                                <Text style={[Styles.tabBartext, { color: (focused) ? "#EB1F25" : "#757575" }]}>Recents</Text>
-                            </View>
-                        );
-                    },
-                    tabBarActiveTintColor: 'tomato',
-                    tabBarInactiveTintColor: 'gray',
-                    headerShown: false
-                })} />
-                <Tab.Screen name="More" component={More_Tab_Screen} options={({ route }) => ({
-                    tabBarIcon: ({ focused }) => {
+        //                 return (
+        //                     <View style={Styles.bootmIconHolder}>
+        //                         <Image source={{ uri: (focused) ? 'recent_active' : 'recent_inactive' }} style={Styles.app_logs} />
+        //                         <Text style={[Styles.tabBartext, { color: (focused) ? "#EB1F25" : "#757575" }]}>Recents</Text>
+        //                     </View>
+        //                 );
+        //             },
+        //             tabBarActiveTintColor: 'tomato',
+        //             tabBarInactiveTintColor: 'gray',
+        //             headerShown: false
+        //         })} />
+        //         <Tab.Screen name="More" component={More_Tab_Screen} options={({ route }) => ({
+        //             tabBarIcon: ({ focused }) => {
 
-                        return (
-                            <View style={Styles.bootmIconHolder}>
-                                <Image source={{ uri: (focused) ? 'more_active' : 'more_inactive' }} style={Styles.app_logs} />
-                                <Text style={[Styles.tabBartext, { color: (focused) ? "#EB1F25" : "#757575" }]} >More</Text>
-                            </View>
-                        );
-                    },
-                    tabBarActiveTintColor: 'tomato',
-                    tabBarInactiveTintColor: 'gray',
-                    headerShown: false
-                })} />
-            </Tab.Navigator>
-
+        //                 return (
+        //                     <View style={Styles.bootmIconHolder}>
+        //                         <Image source={{ uri: (focused) ? 'more_active' : 'more_inactive' }} style={Styles.app_logs} />
+        //                         <Text style={[Styles.tabBartext, { color: (focused) ? "#EB1F25" : "#757575" }]} >More</Text>
+        //                     </View>
+        //                 );
+        //             },
+        //             tabBarActiveTintColor: 'tomato',
+        //             tabBarInactiveTintColor: 'gray',
+        //             headerShown: false
+        //         })} />
+        //     </Tab.Navigator>
+        <View>
             {
                 (visbile) ? <View style={Styles.cartTile}>
                     <View style={Styles.cartTile_holder}>
@@ -159,8 +159,9 @@ const home_screen = () => {
                 </View> : null
             }
 
+        </View>
 
-        </NavigationContainer >
+        // </NavigationContainer >
 
     );
 }

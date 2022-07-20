@@ -136,10 +136,10 @@ const DealsTile = ({ dealList }) => {
                                 keyExtractor={(item, index) => index}
                                 renderItem={({ item }) => {
                                     return (
-                                        <TouchableOpacity onPress={() => { 
+                                        <TouchableOpacity onPress={() => {
                                             //addDealToCart(item); 
-                                            Actions.SingleDeal({dealObj:item});
-                                            }}>
+                                            Actions.SingleDeal({ dealObj: item });
+                                        }}>
                                             <View style={Styles.menuItemSingleTileConatiner}>
                                                 <View style={Styles.menuItemSingleTileHolder}>
                                                     <Image resizeMode='cover' style={{ width: '100%', height: '100%', borderRadius: wp('2%') }} source={{ uri: item.imgUrl }} />
@@ -231,8 +231,14 @@ const TrandingTile = ({ trandingList }) => {
 }
 
 
-function Home_Tab_Screen() {
+function Home_Tab_Screen({...props}) {
 
+
+    const { items } = useSelector(state => state.userReducer);
+
+    const [visbile, setVisible] = useState((items.foodItems.length > 0) ? true : false);
+
+    const [totals, setTolats] = useState(items.totalPrice);
 
     const [menuList, setMenuList] = useState([]);
     const [dealsList, setDealsList] = useState([]);
@@ -251,12 +257,17 @@ function Home_Tab_Screen() {
     ] = useState('');
 
     useEffect(() => {
+        //alert("props "+JSON.stringify(props));
+        Actions.refresh();
+        console.log("calling aginss");
+        setVisible((items.foodItems.length > 0) ? true : false);
+        setTolats(items.totalPrice);
 
         getMenuInfo();
         getDealsInfo();
         getTrandingInfo();
 
-    }, []);
+    },[]);
 
     const [show, setShow] = useState(false);
     const [modelTitel, setModelTitel] = useState("");
@@ -269,14 +280,14 @@ function Home_Tab_Screen() {
                 Funtion_Get_Home_Menu_List().then((response) => {
                     // alert("menu list " + JSON.stringify(response));
                     //console.log("menu list " + JSON.stringify(response));
-                    if(response.code == '200'){
+                    if (response.code == '200') {
                         setMenuList(response.responce.data);
-                    }else if (response.code == '406'){
+                    } else if (response.code == '406') {
                         setModelTitel("Error");
                         setModelMessage("Catogery Limit Invalid!");
                         setShow(true);
                         //show eorr
-                    }else if (response.code == '500'){
+                    } else if (response.code == '500') {
                         //server error
                         setModelTitel("Error");
                         setModelMessage("Something went wrong, try again later");
@@ -309,14 +320,14 @@ function Home_Tab_Screen() {
                 Funtion_Get_Home_Deals_List().then((response) => {
                     //alert("deals list " + JSON.stringify(response));
                     // console.log("deals list " + JSON.stringify(response));
-                    if(response.code == '200'){
+                    if (response.code == '200') {
                         setDealsList(response.responce.data);
-                    }else if (response.code == '406'){
+                    } else if (response.code == '406') {
                         setModelTitel("Error");
                         setModelMessage("Catogery Limit Invalid!");
                         setShow(true);
                         //show eorr
-                    }else if (response.code == '500'){
+                    } else if (response.code == '500') {
                         //server error
                         setModelTitel("Error");
                         setModelMessage("Something went wrong, try again later");
@@ -348,14 +359,14 @@ function Home_Tab_Screen() {
                 Funtion_Get_Home_Tranding_List().then((response) => {
                     //alert("tranding list " + JSON.stringify(response));
                     //console.log("tranding list " + JSON.stringify(response));
-                    if(response.code == '200'){
+                    if (response.code == '200') {
                         setTrandingList(response.responce.data);
-                    }else if (response.code == '406'){
+                    } else if (response.code == '406') {
                         setModelTitel("Error");
                         setModelMessage("Catogery Limit Invalid!");
                         setShow(true);
                         //show eorr
-                    }else if (response.code == '500'){
+                    } else if (response.code == '500') {
                         //server error
                         setModelTitel("Error");
                         setModelMessage("Something went wrong, try again later");
@@ -410,6 +421,28 @@ function Home_Tab_Screen() {
                     setShow(false);
                 }}
             />
+
+            {
+                (visbile) ? <View style={Styles.cartTile}>
+                    <View style={Styles.cartTile_holder}>
+                        <View style={Styles.cartTile_info_holder}>
+                            <View style={Styles.cartTile_tesxts_holder}>
+                                <Text style={Styles.itemText}>{items.foodItems.length + " items"}</Text>
+                            </View>
+                            <View style={Styles.cartTile_tesxts_holder}>
+                                <Text style={Styles.totalText}>{"€ :" + totals}</Text>
+                            </View>
+                        </View>
+                        <TouchableOpacity  onPress={() => { Actions.Cart(); }}>
+                            <View style={Styles.cartTile_btn_holder}>
+                                <View style={Styles.btn_holder}>
+                                    <Text style={[Styles.itemText, { color: '#000', }]}>View Cart</Text>
+                                </View>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                </View> : null
+            }
         </View>
 
     );
@@ -618,6 +651,61 @@ const Styles = StyleSheet.create({
         fontSize: 12,
         color: '#000',
         letterSpacing: 0.25,
+    },
+    cartTile: {
+        width: wp('100%'),
+        height: hp('10%'),
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'absolute',
+        bottom: hp('1%'),
+        // backgroundColor:'#f5f5f5'
+    },
+    cartTile_holder: {
+        width: wp('90%'),
+        height: hp('8%'),
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#a5a6a5',
+        borderRadius: 5,
+        flexDirection: 'row',
+    },
+    cartTile_info_holder: {
+        width: wp('60%'),
+        height: hp('8%'),
+        justifyContent: 'center',
+    },
+    cartTile_tesxts_holder: {
+        width: wp('50%'),
+        height: hp('3%'),
+        justifyContent: 'center',
+        marginLeft: 10,
+    },
+    cartTile_btn_holder: {
+        width: wp('30%'),
+        height: hp('8%'),
+        justifyContent: 'center',
+        //backgroundColor:'#EB1F25'
+    },
+    itemText: {
+        fontFamily: 'NexaTextDemo-Light',
+        fontSize: 14,
+        color: '#fff',
+        letterSpacing: 0.04,
+    },
+    totalText: {
+        fontFamily: 'NexaTextDemo-Bold',
+        fontSize: 14,
+        color: '#fff',
+        letterSpacing: 0.04,
+    },
+    btn_holder: {
+        width: wp('28%'),
+        height: hp('7%'),
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 5,
+        backgroundColor: 'red'
     },
 
 });

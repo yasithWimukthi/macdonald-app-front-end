@@ -122,7 +122,7 @@ const MenuList_Screen = ({ ...props }) => { //
                 
                 var tempList = response.responce.data;
                 var filteredItems = tempList.filter(item => item.portions.length != 0);
-               // console.log("temp list "+JSON.stringify(filteredItems));
+                console.log("temp list "+JSON.stringify(tempList));
                 var finalList = [];
                 filteredItems.forEach((itms)=>{
                     var status = true;

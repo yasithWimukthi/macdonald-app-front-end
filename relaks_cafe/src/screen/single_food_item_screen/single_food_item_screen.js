@@ -201,11 +201,11 @@ const Single_FoodInfo_Screen = ({ ...props }) => {
         } else {
             var updte_st = true;
             portionLit.forEach(element => {
-                if (element.id == seleted_po.id & element.dealType == "item") {
+                if (element.id == seleted_po.id & element.portionId == seleted_po.portionId & element.dealType == "item") {
                     element.quantity = element.quantity + seleted_po.quantity;
                     element.note = element.note != "" ? element.note + seleted_po.note : note;
                     updte_st = false;
-
+                    
                 } else {
 
                 }

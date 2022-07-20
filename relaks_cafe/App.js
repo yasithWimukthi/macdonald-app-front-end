@@ -62,7 +62,8 @@ import Reset_Password_Screen from './src/screen/reset_password_screen/reset_pass
 import Request_Reset_Password_Screen from './src/screen/request_password_reset_screen/request_password_reset_screen';
 import Add_ToFav_Location_Screen from './src/screen/Location_pickup_screen/add_toFav_location_screen';
 
-import { Stack, Router, Scene } from 'react-native-router-flux';
+
+import { Stack, Router, Scene, ActionConst } from 'react-native-router-flux';
 
 import app_logo from './src/assert/images/splash_app_logo.png';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -83,8 +84,66 @@ const SOKCET_SERVER_ADDRESS = "https://relaks-cafe.herokuapp.com";
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import Icon from 'react-native-vector-icons/AntDesign';
+
+
+//tab screen
+import Home_Tab_Screen from './src/screen/Tabs/home_tab_screen';
+//import Tabel_Reservation_Screen from './src/screen/Tabs/tabel_reservation_screen';
+import Deals_Tab_Screen from './src/screen/Tabs/deals_tab_screen';
+import Order_Tab_Screen from './src/screen/Tabs/order_tab_screen';
+import Resent_Tab_Screen from './src/screen/Tabs/resent_tab_screen';
+import More_Tab_Screen from './src/screen/Tabs/more_tab_screen';
+
+const TabIcon = ({ focused, title }) => {
+
+  var imageName = null;
+  var colors = null;
+
+  switch (title) {
+    case "Home":
+      imageName = (focused) ? 'bottombar' : 'home_inactive';
+      colors = null;
+      break;
+    case "Tabel":
+      imageName = (focused) ? 'team' : 'team';
+      colors = (focused) ? '#EB1F25' : '#757575';
+      break;
+    case "Order":
+      imageName = (focused) ? 'order_active' : 'order_inactive';
+      colors = null;
+      break;
+    case "Deals":
+      imageName = (focused) ? 'deals_active' : 'deal_inactive';
+      colors = null;
+      break;
+    case "Recents":
+      imageName = (focused) ? 'recent_active' : 'recent_inactive';
+      colors = null;
+      break;
+    case "More":
+      imageName = (focused) ? 'more_active' : 'more_inactive';
+      colors = null;
+      break;
+  }
+
+
+  return (
+    <View style={styles.bootmIconHolder}>
+      {
+        (title != "Tabel") ? <Image source={{ uri: imageName }} style={styles.app_logss} /> : <Icon color={colors} name={imageName} size={20} />
+      }
+      <Text style={[styles.tabBartext, { color: (focused) ? "#EB1F25" : "#757575" }]}>{title}</Text>
+    </View>
+
+  );
+}
+
+
+
+
 const App = () => {
- // const App: () => Node = () => {
+  // const App: () => Node = () => {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
@@ -142,10 +201,10 @@ const App = () => {
 
       if (response.data == "Your order has been accepted") {
         // sucess
-        showAppPushNotification("Oder Accepted", response.data, "accept", "0", "order");
+        showAppPushNotification("Oder Accepted", "your order is accepted successfully.", "accept", "0", "order");
       } else {
         //cancel
-        showAppPushNotification("Oder Cancelled", response.data, "cancel", response.refId, "order");
+        showAppPushNotification("Oder Cancelled", "Your order has been canceled, Thanks for connecting with relaks radio cafe.", "cancel", response.refId, "order");
         RefundPayement(response.refId).then((response) => {
 
           console.log("resposne refund " + JSON.stringify(response))
@@ -166,7 +225,7 @@ const App = () => {
       console.log("socket is on " + SOCKETS.id);
       console.log('message: ' + response);
 
-      showAppPushNotification("Tabel Reservation Cancel", "your tabel reservation has been cancel", "accept", "0", "tabel");
+      showAppPushNotification("Tabel Reservation Canceled", "Your tabel reservation is canceled, Thanks for connecting with relaks redio cafe", "accept", "0", "tabel");
 
     });
 
@@ -208,7 +267,6 @@ const App = () => {
     );
   }
 
-
   function showAppPushNotification(titel, message, status, ref, type) {
 
     console.log("calling push notification " + titel + " " + message);
@@ -222,7 +280,7 @@ const App = () => {
       largeIcon: "ic_launcher", // (optional) default: "ic_launcher". Use "" for no large icon.
       largeIconUrl: "https://www.example.tld/picture.jpg", // (optional) default: undefined
       smallIcon: "ic_notification", // (optional) default: "ic_notification" with fallback for "ic_launcher". Use "" for default small icon.
-      bigText: "My big text that will be shown when notification is expanded.)", // (optional) default: "message" prop
+      bigText: message, // (optional) default: "message" prop
       subText: "Order Status", // (optional) default: none
       bigPictureUrl: "https://www.example.tld/picture.jpg", // (optional) default: undefined
       bigLargeIcon: "ic_launcher", // (optional) default: undefined
@@ -265,11 +323,13 @@ const App = () => {
     });
   }
 
+  const refreshOnBack = () => { alert("calling"); console.log("on screen"); } //Actions.pop({ refresh: {} });
+
 
   return (
     <Provider store={Store}>
       <Router uriPrefix={'abcd.com'} >
-        <Stack key="root">
+        <Stack key="root" headerLayoutPreset="center">
           <Scene
             key="splash"
             type="replace"
@@ -287,6 +347,8 @@ const App = () => {
           <Scene
             key="authenticated"
             type="replace"
+            tabs={true}
+            showLabel={false}
             renderTitle={() => (
               <View style={styles.navBarStyles}>
                 <View style={styles.app_logs_holder}>
@@ -296,7 +358,7 @@ const App = () => {
             )}
             panHandlers={null}
           >
-            <Scene
+            {/* <Scene
               key="dashbord"
               title=""
               component={Home_Screen}
@@ -309,66 +371,127 @@ const App = () => {
               )}
               hideNavBar={true}
               initial
-            />
+            /> */}
+
+            <Scene key="homeTab" title="Home" icon={TabIcon} type='refresh' >
+              <Scene
+                key="HomeTab"
+                component={Home_Tab_Screen}
+                title="Home"
+                hideNavBar={true}
+              />
+
+              <Scene
+                key="MenuList"
+                component={SingleMenuItemScreen}
+                title=""
+                hideNavBar={true}
+              />
+
+              <Scene
+                key="FullMenu"
+                component={Menu_Screen}
+                title=""
+                // backButtonTextStyle = {{color:'#FFFFFF'}}
+                barButtonIconStyle={{ tintColor: '#EB1F25' }}
+                // titleStyle = {{color : '#ffffff',fontFamily : 'Roboto-Regular',}}
+                // navigationBarStyle = {{backgroundColor : '#5B0492'}}
+                backButtonTintColor='#EB1F25'
+                leftButtonStyle={{ color: '#EB1F25', tintColor: '#EB1F25' }}
+                hideNavBar={true}
+              />
+
+              <Scene
+                key="SingleFood"
+                component={Single_FoodInfo_Screen}
+                title=""
+                // backButtonTextStyle = {{color:'#FFFFFF'}}
+                barButtonIconStyle={{ tintColor: '#EB1F25' }}
+                // titleStyle = {{color : '#ffffff',fontFamily : 'Roboto-Regular',}}
+                // navigationBarStyle = {{backgroundColor : '#5B0492'}}
+                backButtonTintColor='#EB1F25'
+                leftButtonStyle={{ color: '#EB1F25', tintColor: '#EB1F25' }}
+                hideNavBar={true}
+              />
+
+              <Scene
+                key="SingleDeal"
+                component={Single_Deals_Info_Screen}
+                title=""
+                navigationBarStyle={{ backgroundColor: '#FFF' }}
+                barButtonIconStyle={{ tintColor: '#EB1F25' }}
+                backButtonTintColor='#EB1F25'
+                leftButtonStyle={{ color: '#EB1F25', tintColor: '#EB1F25' }}
+                hideNavBar={true}
+              />
+
+              <Scene
+                key="Tranding"
+                component={Single_Tranding_Screen}
+                title=""
+                // backButtonTextStyle = {{color:'#FFFFFF'}}
+                barButtonIconStyle={{ tintColor: '#EB1F25' }}
+                // titleStyle = {{color : '#ffffff',fontFamily : 'Roboto-Regular',}}
+                // navigationBarStyle = {{backgroundColor : '#5B0492'}}
+                backButtonTintColor='#EB1F25'
+                leftButtonStyle={{ color: '#EB1F25', tintColor: '#EB1F25' }}
+                hideNavBar={true}
+              />
+
+            </Scene>
+            <Scene key="tableTab" title="Tabel" icon={TabIcon}>
+              <Scene
+                key="TabelTab"
+                component={Tabel_Reservation_Screen}
+                title="Tabel"
+                hideNavBar={true}
+                activeTintColor="#EB1F25"
+                showLabel={false}
+              />
+            </Scene>
+            <Scene key="orderTab" title="Order" icon={TabIcon}>
+              <Scene
+                key="OrderTab"
+                component={Order_Tab_Screen}
+                title="Order"
+                hideNavBar={true}
+                activeTintColor="#EB1F25"
+                showLabel={false}
+              />
+            </Scene>
+            <Scene key="dealTab" title="Deals" icon={TabIcon}>
+              <Scene
+                key="DealsTab"
+                component={Deals_Tab_Screen}
+                title="Deals"
+                hideNavBar={true}
+                activeTintColor="#EB1F25"
+                showLabel={false}
+              />
+            </Scene>
+            <Scene key="recentsTab" title="Recents" icon={TabIcon} showLabel={false}>
+              <Scene
+                key="RecentsTab"
+                component={Resent_Tab_Screen}
+                title="Recents"
+                hideNavBar={true}
+                activeTintColor="#EB1F25"
+              />
+            </Scene>
+            <Scene key="moreTab" title="More" icon={TabIcon}>
+              <Scene
+                key="MoreTab"
+                component={More_Tab_Screen}
+                title="More"
+                hideNavBar={true}
+                activeTintColor="#EB1F25"
+                showLabel={false}
+              />
+
+
+
+            </Scene>
           </Scene>
-
-
-          <Scene
-            key="MenuList"
-            component={SingleMenuItemScreen}
-            title=""
-          //backButtonTextStyle = {{color:'#FFFFFF'}}
-          //barButtonIconStyle={{ tintColor: '#fff' }}
-          //titleStyle = {{color : '#ffffff',fontFamily : 'Roboto-Regular',}}
-          // navigationBarStyle = {{backgroundColor : '#5B0492'}}
-          //backButtonTintColor = '#fff'
-          //leftButtonStyle = {{color : '#fff',tintColor : '#fff'}}
-          //hideNavBar={true}
-          />
-
-          <Scene
-            key="SingleFood"
-            component={Single_FoodInfo_Screen}
-            title=""
-            // backButtonTextStyle = {{color:'#FFFFFF'}}
-            barButtonIconStyle={{ tintColor: '#EB1F25' }}
-            // titleStyle = {{color : '#ffffff',fontFamily : 'Roboto-Regular',}}
-            // navigationBarStyle = {{backgroundColor : '#5B0492'}}
-            backButtonTintColor='#EB1F25'
-            leftButtonStyle={{ color: '#EB1F25', tintColor: '#EB1F25' }}
-          // hideNavBar={true}
-          />
-
-          <Scene
-            key="SingleDeal"
-            component={Single_Deals_Info_Screen}
-            title=""
-            // backButtonTextStyle = {{color:'#FFFFFF'}}
-            // barButtonIconStyle={{ tintColor: '#fff' }}
-            // titleStyle = {{color : '#ffffff',fontFamily : 'Roboto-Regular',}}
-            navigationBarStyle={{ backgroundColor: '#FFF' }}
-            // backButtonTintColor = '#fff'
-            // leftButtonStyle = {{color : '#fff',tintColor : '#fff'}}
-            //hideNavBar={true}
-            barButtonIconStyle={{ tintColor: '#EB1F25' }}
-            // titleStyle = {{color : '#ffffff',fontFamily : 'Roboto-Regular',}}
-            // navigationBarStyle = {{backgroundColor : '#5B0492'}}
-            backButtonTintColor='#EB1F25'
-            leftButtonStyle={{ color: '#EB1F25', tintColor: '#EB1F25' }}
-          />
-
-          <Scene
-            key="Tranding"
-            component={Single_Tranding_Screen}
-            title=""
-            // backButtonTextStyle = {{color:'#FFFFFF'}}
-            barButtonIconStyle={{ tintColor: '#EB1F25' }}
-            // titleStyle = {{color : '#ffffff',fontFamily : 'Roboto-Regular',}}
-            // navigationBarStyle = {{backgroundColor : '#5B0492'}}
-            backButtonTintColor='#EB1F25'
-            leftButtonStyle={{ color: '#EB1F25', tintColor: '#EB1F25' }}
-          // hideNavBar={true}
-          />
 
           {/* </Scene> */}
 
@@ -433,6 +556,18 @@ const App = () => {
             hideNavBar={true}
           />
           <Scene
+            key="Personal"
+            component={Personal_Setting_Screen}
+            title=""
+            // backButtonTextStyle = {{color:'#FFFFFF'}}
+            barButtonIconStyle={{ tintColor: '#EB1F25' }}
+            // titleStyle = {{color : '#ffffff',fontFamily : 'Roboto-Regular',}}
+            // navigationBarStyle = {{backgroundColor : '#5B0492'}}
+            backButtonTintColor='#EB1F25'
+            leftButtonStyle={{ color: '#EB1F25', tintColor: '#EB1F25' }}
+            hideNavBar={true}
+          />
+          <Scene
             key="Sub"
             component={SubcriptionScreen}
             title=""
@@ -480,18 +615,7 @@ const App = () => {
             leftButtonStyle={{ color: '#EB1F25', tintColor: '#EB1F25' }}
             hideNavBar={true}
           />
-          <Scene
-            key="Personal"
-            component={Personal_Setting_Screen}
-            title=""
-            // backButtonTextStyle = {{color:'#FFFFFF'}}
-            barButtonIconStyle={{ tintColor: '#EB1F25' }}
-            // titleStyle = {{color : '#ffffff',fontFamily : 'Roboto-Regular',}}
-            // navigationBarStyle = {{backgroundColor : '#5B0492'}}
-            backButtonTintColor='#EB1F25'
-            leftButtonStyle={{ color: '#EB1F25', tintColor: '#EB1F25' }}
-            hideNavBar={true}
-          />
+
           <Scene
             key="Register"
             component={SignupFormScreen}
@@ -505,18 +629,7 @@ const App = () => {
           // hideNavBar={true}
 
           />
-          <Scene
-            key="FullMenu"
-            component={Menu_Screen}
-            title=""
-            // backButtonTextStyle = {{color:'#FFFFFF'}}
-            barButtonIconStyle={{ tintColor: '#EB1F25' }}
-            // titleStyle = {{color : '#ffffff',fontFamily : 'Roboto-Regular',}}
-            // navigationBarStyle = {{backgroundColor : '#5B0492'}}
-            backButtonTintColor='#EB1F25'
-            leftButtonStyle={{ color: '#EB1F25', tintColor: '#EB1F25' }}
-          // hideNavBar={true}
-          />
+
           <Scene
             key="Tabel"
             component={Tabel_Reservation_Screen}
@@ -681,11 +794,30 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   navBarStyles: {
-    width: wp('100%'),
-    height: hp('8%'),
+    width: "100%", //wp('100%')
+    height: hp('7.5%'),
     alignItems: 'center',
-    justifyContent: 'center'
-  }
+    justifyContent: 'center',
+  },
+  bootmIconHolder: {
+    width: wp('17%'),
+    height: hp('5%'),
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  app_logss: {
+    width: wp('5%'),
+    height: hp('3%'),
+    alignContent: 'center',
+    alignItems: 'center',
+    resizeMode: "contain",
+  },
+  tabBartext: {
+    fontFamily: 'NexaTextDemo-Light',
+    fontSize: 12,
+    color: '#757575',
+    letterSpacing: 0.04,
+  },
 });
 
 export default App;

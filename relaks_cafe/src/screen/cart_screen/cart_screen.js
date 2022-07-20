@@ -29,9 +29,9 @@ const Details_View = () => {
                         </View>
                     </TouchableOpacity>
                 </View>
-                <View style={Styles.desciption}>
+                {/* <View style={Styles.desciption}>
                     <Text style={Styles.subCartInfo}>Adults need around 2000 kcal per day, Equalent to {'\n'}B400KJ. </Text>
-                </View>
+                </View> */}
             </View>
         </View>
     );
@@ -80,7 +80,7 @@ const ItemTile = ({ portionList }) => {
                 var list = items.foodItems;
 
                 const tempArry = list.filter(item => item.dealType == "item");
-                const filteredItems = list.filter(item => item.id !== obj.id && item.dealType == "deal");
+                const filteredItems = list.filter(item => item.id !== obj.id  && item.dealType == "deal");
 
                 filteredItems.forEach(element => {
                     tempArry.push(element);
@@ -128,14 +128,26 @@ const ItemTile = ({ portionList }) => {
                 }
 
                 var list = items.foodItems;
-
+                console.log(" before filter lists "+JSON.stringify(list));
                 const tempArry = list.filter(item => item.dealType == "deal");
 
-                const filteredItems = list.filter(item => item.id !== obj.id && item.dealType == "item");
+                const filteredItems = list.filter(item => item.id !== obj.id  && item.dealType == "item"); //|| item.portionId !== obj.portionId
+
+                const sameItems = list.filter(item => item.id == obj.id  && item.dealType == "item");
+
+                console.log(" filter lists "+JSON.stringify(filteredItems));
 
                 filteredItems.forEach(element => {
                     tempArry.push(element);
                 });
+
+                sameItems.forEach(element => {
+
+                    if(element.portionId !== obj.portionId){
+                        tempArry.push(element);
+                    } 
+                });
+
 
                 list = tempArry;
 
@@ -204,8 +216,18 @@ const ItemTile = ({ portionList }) => {
             var list = items.foodItems;
             const tempArry = list.filter(item => item.dealType == "deal");
             const filteredItems = list.filter(item => item.id !== seleted_po.id && item.dealType == "item");
+            const samedItems = list.filter(item => item.id == seleted_po.id && item.dealType == "item");
             filteredItems.forEach(element => {
                 tempArry.push(element);
+            });
+
+            samedItems.forEach(element => {
+
+                console.log("element "+JSON.stringify(element));
+
+                if(element.portionId !== seleted_po.portionId){
+                    tempArry.push(element);
+                }
             });
 
             var total = 0;
@@ -251,6 +273,7 @@ const ItemTile = ({ portionList }) => {
                                                 <View style={Styles.item_single_Holder2}>
                                                     <View style={Styles.item_info_Holder}>
                                                         <Text style={Styles.productInfo}>{item.itemName}</Text>
+                                                        <Text style={Styles.productInfo_sub}>{item.potionName}</Text>
                                                     </View>
                                                     <View style={[Styles.item_info_Holder, { flexDirection: 'row', alignItems: 'flex-start',marginTop:hp('1.8%') }]}>
                                                         <TouchableOpacity onPress={() => { updatePortion(item); }}>
@@ -582,6 +605,13 @@ const Styles = StyleSheet.create({
     productInfo: {
         fontFamily: 'NexaTextDemo-Bold',
         fontSize: 16,
+        color: '#000',
+        marginLeft: 4,
+        letterSpacing: 0.04,
+    },
+    productInfo_sub: {
+        fontFamily: 'NexaTextDemo-Light',
+        fontSize: 14,
         color: '#000',
         marginLeft: 4,
         letterSpacing: 0.04,

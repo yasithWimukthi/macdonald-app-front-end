@@ -40,7 +40,7 @@ const CheckTabelList = ({ updateTabelList, updateCheckin, updateCheckout, update
         }
 
         Funtion_Check_Avalible_tabel(tims, user.token).then((response) => {
-           // console.log("response table" + JSON.stringify(response));
+            // console.log("response table" + JSON.stringify(response));
             if (response.code == '200') {
                 // setModelTitel("SuccessFully");
                 // setModelMessage("Table reservation successfully");
@@ -225,7 +225,7 @@ const TableListView = ({ tabelList, updateSelected, updateNote, updatBtnVisible 
                         {/* <KeyboardAwareScrollView> */}
                         <View style={Styles.note_Container}>
                             <View style={Styles.note_holder}>
-                                <TextInput onFocus={() => { updatBtnVisible(false); }} onBlur={()=>{updatBtnVisible(true);}} style={Styles.note_text} placeholderTextColor="#000" onChangeText={(text) => { updateNote(text); }} placeholder='Please added any spceial note..' />
+                                <TextInput onFocus={() => { updatBtnVisible(false); }} onBlur={() => { updatBtnVisible(true); }} style={Styles.note_text} placeholderTextColor="#000" onChangeText={(text) => { updateNote(text); }} placeholder='Please added any spceial note..' />
                             </View>
                         </View>
                         {/* </KeyboardAwareScrollView> */}
@@ -251,6 +251,12 @@ const Tabel_Reservation_Screen = () => {
 
     const { user } = useSelector(state => state.userReducer);
 
+    const { items } = useSelector(state => state.userReducer);
+
+    const [visbile, setVisible] = useState((items.foodItems.length > 0) ? true : false);
+
+    const [totals, setTolats] = useState(items.totalPrice);
+
     const [tabelsList, setTableList] = useState([]);
     const [selectTabel, setSelectTabel] = useState(null);
     const [checkIN, setCheckIN] = useState(offsetTime);
@@ -263,6 +269,11 @@ const Tabel_Reservation_Screen = () => {
 
     const [btnShow, setBtnShow] = useState(true);
 
+
+    useEffect(() => {
+        setVisible((items.foodItems.length > 0) ? true : false);
+        setTolats(items.totalPrice);
+    });
 
     function reserveTable() {
 
@@ -293,7 +304,7 @@ const Tabel_Reservation_Screen = () => {
             console.log("resever " + JSON.stringify(response));
             if (response.code == '200') {
                 setModelTitel("SuccessFully");
-                setModelMessage("Table reservation successfully");
+                setModelMessage("Your table reservation is submitted successfully. The reservation will be cancelled automatically within 15 mins.");
                 setShow(true);
 
                 setTableList([]);
@@ -349,7 +360,7 @@ const Tabel_Reservation_Screen = () => {
                         </View>
                     </View>
 
-                    : null
+                    : null               
             }
 
             <AwesomeAlert
@@ -371,6 +382,27 @@ const Tabel_Reservation_Screen = () => {
                     setShow(false);
                 }}
             />
+            {
+                (visbile && btnShow) ? <View style={Styles.cartTile}>
+                <View style={Styles.cartTile_holder}>
+                    <View style={Styles.cartTile_info_holder}>
+                        <View style={Styles.cartTile_tesxts_holder}>
+                            <Text style={Styles.itemText}>{items.foodItems.length + " items"}</Text>
+                        </View>
+                        <View style={Styles.cartTile_tesxts_holder}>
+                            <Text style={Styles.totalText}>{"€ :" + totals}</Text>
+                        </View>
+                    </View>
+                    <TouchableOpacity onPress={() => { Actions.Cart(); }}>
+                        <View style={Styles.cartTile_btn_holder}>
+                            <View style={Styles.btn_holder}>
+                                <Text style={[Styles.itemText, { color: '#000', }]}>View Cart</Text>
+                            </View>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+            </View> : null
+            }
         </View>
         // </KeyboardAvoidingView>
     )
@@ -655,7 +687,61 @@ const Styles = StyleSheet.create({
         color: '#000',
         letterSpacing: 0.1,
     },
-
+    cartTile: {
+        width: wp('100%'),
+        height: hp('10%'),
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'absolute',
+        bottom: hp('10%'),
+        // backgroundColor:'#f5f5f5'
+    },
+    cartTile_holder: {
+        width: wp('90%'),
+        height: hp('8%'),
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#a5a6a5',
+        borderRadius: 5,
+        flexDirection: 'row',
+    },
+    cartTile_info_holder: {
+        width: wp('60%'),
+        height: hp('8%'),
+        justifyContent: 'center',
+    },
+    cartTile_tesxts_holder: {
+        width: wp('50%'),
+        height: hp('3%'),
+        justifyContent: 'center',
+        marginLeft: 10,
+    },
+    cartTile_btn_holder: {
+        width: wp('30%'),
+        height: hp('8%'),
+        justifyContent: 'center',
+        //backgroundColor:'#EB1F25'
+    },
+    itemText: {
+        fontFamily: 'NexaTextDemo-Light',
+        fontSize: 14,
+        color: '#fff',
+        letterSpacing: 0.04,
+    },
+    totalText: {
+        fontFamily: 'NexaTextDemo-Bold',
+        fontSize: 14,
+        color: '#fff',
+        letterSpacing: 0.04,
+    },
+    btn_holder: {
+        width: wp('28%'),
+        height: hp('7%'),
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 5,
+        backgroundColor: 'red'
+    },
 
 });
 
