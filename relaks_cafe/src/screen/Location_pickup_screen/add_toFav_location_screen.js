@@ -1,5 +1,5 @@
-import React, { PropTypes, Component, useEffect, useState,  } from 'react';
-import { View, Image, StyleSheet, Text, TouchableOpacity, ScrollView, Button, FlatList, Alert, Linking, Platform } from 'react-native';
+import React, { PropTypes, Component, useEffect, useState, } from 'react';
+import { View, Image, StyleSheet, Text, TouchableOpacity, ScrollView, Button, FlatList, Alert, Linking, Platform, SafeAreaView } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Actions } from 'react-native-router-flux';
@@ -19,7 +19,7 @@ import * as RNPermissions from "react-native-permissions";
 import { checkMultiplePermission } from "../../services/requestPermission";
 import AwesomeAlert from 'react-native-awesome-alerts';
 
-const MapTile = ({favName}) => {
+const MapTile = ({ favName }) => {
 
     const { items, address, favaddress } = useSelector(state => state.userReducer);
     const dispatch = useDispatch();
@@ -32,7 +32,7 @@ const MapTile = ({favName}) => {
         //request permission
         //get current location
         checkLocationPermissions();
-        
+
     }, []);
 
     async function checkLocationPermissions() {
@@ -40,7 +40,7 @@ const MapTile = ({favName}) => {
         const FINE_LOCATION = Platform.OS === 'ios' ? [RNPermissions.PERMISSIONS.IOS.LOCATION_WHEN_IN_USE] : [RNPermissions.PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION];
         const COARSE_LOCATION = Platform.OS === 'ios' ? [RNPermissions.PERMISSIONS.IOS.LOCATION_ALWAYS] : [RNPermissions.PERMISSIONS.ANDROID.ACCESS_COARSE_LOCATION];
         RNPermissions.checkMultiple(FINE_LOCATION).then((result) => {
-           // alert("finlocation " + JSON.stringify(result));
+            // alert("finlocation " + JSON.stringify(result));
             console.log("finlocation " + JSON.stringify(result['android.permission.ACCESS_FINE_LOCATION']));
             if (Platform.OS === 'android') {
                 //android
@@ -150,7 +150,7 @@ const MapTile = ({favName}) => {
 
         var codes = latitute + "," + longitute;
 
-       // console.log("checks " + codes);
+        // console.log("checks " + codes);
 
         axios.request({
             method: "POST",
@@ -182,9 +182,9 @@ const MapTile = ({favName}) => {
 
             var fav_list = favaddress.favAdd;
 
-            console.log("ref list "+JSON.stringify(fav_list));
+            console.log("ref list " + JSON.stringify(fav_list));
 
-           // const tempFavArry = fav_list.filter(item => item.favName == "defult");
+            // const tempFavArry = fav_list.filter(item => item.favName == "defult");
 
             var favAddress = {
                 "favName": favName,
@@ -197,7 +197,7 @@ const MapTile = ({favName}) => {
             }
 
             var objs = {
-                "favAdd" : fav_list
+                "favAdd": fav_list
             }
 
             objs.favAdd.push(favAddress);
@@ -317,9 +317,9 @@ const SearchViewInputTile = ({ updateList, updateVisible, updatefavName }) => {
             // added newly added location
             var fav_list = favaddress.favAdd;
 
-            console.log("favsss "+JSON.stringify(favaddress));
+            console.log("favsss " + JSON.stringify(favaddress));
 
-          //  const tempFavArry = fav_list.filter(item => item.favName == "defult");
+            //  const tempFavArry = fav_list.filter(item => item.favName == "defult");
 
             var favAddress = {
                 "favName": locationNam,
@@ -331,11 +331,11 @@ const SearchViewInputTile = ({ updateList, updateVisible, updatefavName }) => {
                 }
             }
             var objs = {
-                "favAdd" : fav_list
+                "favAdd": fav_list
             }
 
             objs.favAdd.push(favAddress);
-           // fav_list.push(favAddress);
+            // fav_list.push(favAddress);
 
             dispatch(setCartItems(orderObj));
             dispatch(setAddressInfo(addressObj));
@@ -345,7 +345,7 @@ const SearchViewInputTile = ({ updateList, updateVisible, updatefavName }) => {
 
             setPlace("");
             setPlace(address1);
-            
+
 
             // alert("done, state update");
             //redirct to prevois screen
@@ -364,7 +364,7 @@ const SearchViewInputTile = ({ updateList, updateVisible, updatefavName }) => {
                         placeholder="Location Name"
                         placeholderTextColor="#000"
                         value={locationNam}
-                        onChangeText={(text) => { setLocationNam(text);  updatefavName(text); }}
+                        onChangeText={(text) => { setLocationNam(text); updatefavName(text); }}
 
                     />
                 </View>
@@ -386,7 +386,7 @@ const SearchViewInputTile = ({ updateList, updateVisible, updatefavName }) => {
                         data={placeList}
                         keyExtractor={(item, index) => index}
                         renderItem={({ item }) => {
-                           // console.log("data " + item.place_id);
+                            // console.log("data " + item.place_id);
                             return (
                                 <TouchableOpacity onPress={() => { getGeoCodeByPlaceId(item.place_id, item.structured_formatting.main_text, item.description) }}>
                                     <View style={Styles.resultInputContainer}>
@@ -439,7 +439,7 @@ const Add_ToFav_Location_Screen = () => {
     const [showResult, setShowResult] = useState(false);
     const [listResult, setListResult] = useState([]);
 
-    const[favNm, setFavNm] = useState("");
+    const [favNm, setFavNm] = useState("");
 
     const { favaddress } = useSelector(state => state.userReducer);
 
@@ -451,49 +451,51 @@ const Add_ToFav_Location_Screen = () => {
         //update redux store
         //save local fav list
 
-        if(favNm != null && favNm != ""){
+        if (favNm != null && favNm != "") {
             StoreFavAddressInfo(favaddress);
             //alert("successfully added to fav");
             setModelTitel("successfull");
             setModelMessage("successfully added to fav list");
             setShow(true);
-        }else{
+        } else {
             setModelTitel("Plase fill favourite name");
             setModelMessage("Before add to favorite, plase give a fav name.");
             setShow(true);
         }
 
-        
+
     }
 
     return (
-        <View style={Styles.main}>
-            <SearchViewInputTile updateList={setListResult} updateVisible={setShowResult} updatefavName={setFavNm} />
+        <SafeAreaView style={{ flex: 1 }}>
+            <View style={Styles.main}>
+                <SearchViewInputTile updateList={setListResult} updateVisible={setShowResult} updatefavName={setFavNm} />
 
-            <MapTile favName={favNm} />
+                <MapTile favName={favNm} />
 
-            <BtnAddFavView funtions={() => { addToFavLocations(); Actions.pop(); }} />
+                <BtnAddFavView funtions={() => { addToFavLocations(); Actions.pop(); }} />
 
-            <AwesomeAlert
-                show={show}
-                showProgress={false}
-                title={modelTitel}
-                message={modelMessage}
-                closeOnTouchOutside={true}
-                closeOnHardwareBackPress={false}
-                showCancelButton={false}
-                showConfirmButton={true}
-                cancelText="cancel"
-                confirmText="Ok"
-                confirmButtonColor="red" //#DD6B55
-                onCancelPressed={() => {
-                    setShow(false);
-                }}
-                onConfirmPressed={() => {
-                    setShow(false);
-                }} />
+                <AwesomeAlert
+                    show={show}
+                    showProgress={false}
+                    title={modelTitel}
+                    message={modelMessage}
+                    closeOnTouchOutside={true}
+                    closeOnHardwareBackPress={false}
+                    showCancelButton={false}
+                    showConfirmButton={true}
+                    cancelText="cancel"
+                    confirmText="Ok"
+                    confirmButtonColor="red" //#DD6B55
+                    onCancelPressed={() => {
+                        setShow(false);
+                    }}
+                    onConfirmPressed={() => {
+                        setShow(false);
+                    }} />
 
-        </View>
+            </View>
+        </SafeAreaView>
     );
 }
 

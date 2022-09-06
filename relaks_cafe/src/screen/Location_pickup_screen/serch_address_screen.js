@@ -1,5 +1,5 @@
 import React, { PropTypes, Component, useEffect, useState } from 'react';
-import { View, Image, StyleSheet, Text, TouchableOpacity, ScrollView, Button, FlatList, TextInput } from 'react-native';
+import { View, Image, StyleSheet, Text, TouchableOpacity, ScrollView, Button, FlatList, TextInput, SafeAreaView } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Actions } from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -98,8 +98,8 @@ const SearchViewInputTile = ({ updateList, updateVisible, showVisble, updateTite
             updateTitel("Address Selected");
             updateMessage("Address is updated!");
             showVisble(true);
-            setTimeout(() => { Actions.popTo("dashbord"); }, 1000);
-            
+            setTimeout(() => { Actions.reset("authenticated"); }, 1000);
+            //Actions.reset('authenticated');
 
         }).catch((error) => {
             console.log("error happen when get address locartion " + error);
@@ -164,6 +164,7 @@ const Search_Address_Screen = () => {
     const [modelMessage, setModelMessage] = useState("");
 
     return (
+        <SafeAreaView style={{ flex:1 }}>
         <View style={Styles.main}>
             <SearchViewInputTile updateList={setListResult} updateVisible={setShowResult} showVisble={setShow} updateMessage={setModelMessage} updateTitel={setModelTitel}  />
             {/* <AddressTile /> */}
@@ -188,6 +189,7 @@ const Search_Address_Screen = () => {
                 }} />
 
         </View>
+        </SafeAreaView>
     );
 }
 

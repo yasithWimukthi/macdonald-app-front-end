@@ -18,6 +18,7 @@
       android:roundIcon="@mipmap/logo"
       android:allowBackup="false"
       tools:replace="android:icon"
+      android:usesCleartextTraffic="true"
       android:theme="@style/AppTheme">
       <activity
         android:name=".MainActivity"
@@ -29,6 +30,13 @@
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+
+        <intent-filter android:label="relakscafe">
+          <action android:name="android.intent.action.VIEW" />
+          <category android:name="android.intent.category.DEFAULT" />
+          <category android:name="android.intent.category.BROWSABLE" />
+          <data android:scheme="https" android:host="api.relaksradiocafe.com" android:pathPrefix="/api/v1/auth/google/success"  />
         </intent-filter>
       </activity>
 

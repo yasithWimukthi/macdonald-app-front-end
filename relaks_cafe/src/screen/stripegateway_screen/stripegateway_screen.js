@@ -6,7 +6,11 @@ import {
     TouchableOpacity,
     Image,
     StatusBar,
+    SafeAreaView,
+    ActivityIndicator
 } from 'react-native';
+
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 import { CreditCardInput, LiteCreditCardInput } from "react-native-credit-card-input";
 
@@ -21,6 +25,8 @@ import { Actions } from 'react-native-router-flux';
 import AwesomeAlert from 'react-native-awesome-alerts';
 
 import GET_TOKEN from '../../assert/networks/dataAccess';
+
+const Payemnts_Icons = require('../../assert/images/pays.png');
 
 
 const CURRENCY = 'USD';
@@ -81,12 +87,17 @@ const StripeGateway = () => {
     const [modelTitel, setModelTitel] = useState("");
     const [modelMessage, setModelMessage] = useState("");
 
+    const [spinerVisible, setSpinerVisible] = useState(false);
+
     const onSubmit = async () => {
+
+        setSpinerVisible(true);
 
         if (CardInput.valid == false || typeof CardInput.valid == "undefined") {
             //alert('Invalid Credit Card');
             setModelTitel("Error");
             setModelMessage("Invalid Credit Card. Try again");
+            setSpinerVisible(false);
             setShow(true);
             return false;
         }
@@ -99,6 +110,7 @@ const StripeGateway = () => {
                 //alert("creditCardToken error");
                 setModelTitel("Error");
                 setModelMessage("Somthing went wrong. Try again");
+                setSpinerVisible(false);
                 setShow(true);
                 return;
             }
@@ -110,7 +122,7 @@ const StripeGateway = () => {
         const { error } = await subscribeUser(creditCardToken);
         // Handle any errors from your server
         if (error) {
-           // alert(error)
+            // alert(error)
         } else {
 
             let pament_data = await charges();
@@ -138,7 +150,7 @@ const StripeGateway = () => {
 
             var dummyData = [];
 
-            console.log("cart "+JSON.stringify(list));
+            console.log("cart " + JSON.stringify(list));
 
             list.forEach(element => {
 
@@ -172,9 +184,9 @@ const StripeGateway = () => {
             if (pament_data.status == 'succeeded') {
                 //alert("Payment Successfully");
 
-                console.log("tokens "+user.token);
+                console.log("tokens " + user.token);
 
-                Funtion_Place_Foods_Order(orderObj,user.token).then((response) => {
+                Funtion_Place_Foods_Order(orderObj, user.token).then((response) => {
                     //alert("order place Successfully " + JSON.stringify(response));
                     if (response.code == '201') {
                         var dts = {
@@ -193,11 +205,13 @@ const StripeGateway = () => {
                         dispatch(setCartItems(dts));
 
                         //Actions.authenticated();
-                       // Actions.OrderSt();
+                        // Actions.OrderSt();
+                        setSpinerVisible(false);
                         Actions.OrderSt({ "orderStatus": "Pending" });
                     } else if (response.code == '401') {
                         setModelTitel("Error");
                         setModelMessage("Authentication Fail, Plase login again");
+                        setSpinerVisible(false);
                         setShow(true);
                         //redirct to login page
                         //show eorr
@@ -205,21 +219,25 @@ const StripeGateway = () => {
                         //server error
                         setModelTitel("Error");
                         setModelMessage("Something went wrong, try again later");
+                        setSpinerVisible(false);
                         setShow(true);
-                    }else if(response.code == "502"){
+                    } else if (response.code == "502") {
                         setModelTitel("Error");
                         setModelMessage("Something went wrong, try again later");
+                        setSpinerVisible(false);
                         setShow(true);
                     }
                     //clear redux store
                 }).catch((error) => {
                     console.log("error happen place oder " + error);
+                    setSpinerVisible(false);
                 });
             }
             else {
                 //alert('Payment failed');
                 setModelTitel("Error");
                 setModelMessage("Payment Failed, try again later");
+                setSpinerVisible(false);
                 setShow(true);
             }
         }
@@ -259,51 +277,85 @@ const StripeGateway = () => {
     }
 
     return (
-        <View style={styles.container}>
-            <StatusBar barStyle="light-content" backgroundColor="#2471A3" />
-            <Image
-                source={{ uri: 'https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Stripe_logo%2C_revised_2016.png/1200px-Stripe_logo%2C_revised_2016.png' }}
-                style={styles.ImgStyle}
-            />
-            <CreditCardInput
-                inputContainerStyle={styles.inputContainerStyle}
-                inputStyle={styles.inputStyle}
-                labelStyle={styles.labelStyle}
-                validColor="#fff"
-                placeholderColor="#ccc"
-                onChange={_onChange} />
+        <SafeAreaView style={{ flex: 1 }}>
+            <View style={styles.container}>
+                <StatusBar barStyle="light-content" backgroundColor="#2471A3" />
+                
+                <View style={{ width : '100%', alignItems:'center' }}>
+                <Image
+                    //source={{ uri: 'https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Stripe_logo%2C_revised_2016.png/1200px-Stripe_logo%2C_revised_2016.png' }}
+                    source={Payemnts_Icons}
+                    style={styles.ImgStyle}
+                    resizeMode={'contain'}
+                />
+                </View>
+                <CreditCardInput
+                    inputContainerStyle={styles.inputContainerStyle}
+                    inputStyle={styles.inputStyle}
+                    labelStyle={styles.labelStyle}
+                    validColor="#fff"
+                    placeholderColor="#ccc"
+                    onChange={_onChange} />
 
-            <TouchableOpacity
-                onPress={onSubmit}
-                //onPress={()=>{alert("press");}}
-                style={styles.button}>
-                <Text
-                    style={styles.buttonText}>
-                    Pay Now
-                </Text>
-            </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={onSubmit}
+                    //onPress={()=>{alert("press");}}
+                    style={styles.button}>
+                    <Text
+                        style={styles.buttonText}>
+                        Pay Now
+                    </Text>
+                </TouchableOpacity>
 
-            <AwesomeAlert
-                show={show}
-                showProgress={false}
-                title={modelTitel}
-                message={modelMessage}
-                closeOnTouchOutside={true}
-                closeOnHardwareBackPress={false}
-                showCancelButton={true}
-                showConfirmButton={true}
-                cancelText="cancel"
-                confirmText="Ok"
-                confirmButtonColor="red" //#DD6B55
-                onCancelPressed={() => {
-                    setShow(false);
-                }}
-                onConfirmPressed={() => {
-                    setShow(false);
-                }}
-            />
+                <AwesomeAlert
+                    show={show}
+                    showProgress={false}
+                    title={modelTitel}
+                    message={modelMessage}
+                    closeOnTouchOutside={true}
+                    closeOnHardwareBackPress={false}
+                    showCancelButton={true}
+                    showConfirmButton={true}
+                    cancelText="cancel"
+                    confirmText="Ok"
+                    confirmButtonColor="red" //#DD6B55
+                    onCancelPressed={() => {
+                        setShow(false);
+                    }}
+                    onConfirmPressed={() => {
+                        setShow(false);
+                    }}
+                />
+                {(spinerVisible) ?
+                <View
+                    style={{
+                        flex: 1,
+                        position: "absolute",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        opacity: 0.8,
+                        width: wp("100%"),
+                        height: hp("100%"),
+                        backgroundColor: 'rgba(0,0,0,0.3)',
+                        //zIndex:1
+                    }}
+                >
 
-        </View>
+                    <View style={styles.activityindicator_view}>
+                        <ActivityIndicator animating size="large" color="#F5FCFF" />
+                        <Text
+                            style={{
+                                color: "#000000"
+                            }}
+                        >
+                            loading
+                        </Text>
+                    </View>
+                </View>
+                // <Feching_Loader/>
+                : null}
+            </View>
+        </SafeAreaView>
     );
 };
 
@@ -315,10 +367,11 @@ const styles = StyleSheet.create({
 
     },
     ImgStyle: {
-        width: '100%',
+        width: '92%',
         height: 200,
         resizeMode: 'contain',
         borderRadius: 8,
+        
     },
     button: {
         backgroundColor: '#EB1F25',
@@ -349,6 +402,15 @@ const styles = StyleSheet.create({
     labelStyle: {
         marginBottom: 5,
         fontSize: 12
+    },
+    activityindicator_view: {
+        position: "absolute",
+        alignItems: "center",
+        justifyContent: "center",
+        width: 100,
+        height: 100,
+        opacity: 1,
+        borderRadius: 20
     }
 
 });

@@ -54,6 +54,22 @@
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
+  
+//  NSString *userAgent = @"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36";
+//  NSDictionary *dictionary = [[NSDictionary alloc] initWithObjectsAndKeys:userAgent, @"UserAgent", nil];
+//  [[NSUserDefaults standardUserDefaults] registerDefaults:dictionary];
+  
+//    NSString *userAgent = @"Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148";
+//    NSDictionary *dictionary = [[NSDictionary alloc] initWithObjectsAndKeys:userAgent, @"UserAgent", nil];
+//    [[NSUserDefaults standardUserDefaults] registerDefaults:dictionary];
+  NSString *deviceType = [UIDevice currentDevice].model;
+  UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectZero];
+  NSString *oldAgent = [webView stringByEvaluatingJavaScriptFromString:@"navigator.userAgent"];
+  NSString *newAgent = [oldAgent stringByAppendingString:@" relaks_cafe - iOS - "];
+  newAgent = [newAgent stringByAppendingString:deviceType];
+  NSDictionary *dictionnary = [[NSDictionary alloc] initWithObjectsAndKeys:newAgent, @"UserAgent", nil];
+  [[NSUserDefaults standardUserDefaults] registerDefaults:dictionnary];
+  
   return YES;
 }
 
@@ -61,6 +77,8 @@
 {
 #if DEBUG
   return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index"];
+//  return [NSURL URLWithString:[[[[RCTBundleURLProvider sharedSettings]jsBundleURLForBundleRoot:@"index"
+//  fallbackResource:nil]absoluteString] stringByAppedingString:@"inlineSourceMap=true"]]
 #else
   return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 #endif

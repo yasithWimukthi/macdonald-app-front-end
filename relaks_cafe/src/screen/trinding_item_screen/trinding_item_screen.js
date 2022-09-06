@@ -1,5 +1,5 @@
 import React, { PropTypes, Component, useEffect, useState } from 'react';
-import { View, Image, StyleSheet, Text, TouchableOpacity, ScrollView, FlatList } from 'react-native';
+import { View, Image, StyleSheet, Text, TouchableOpacity, ScrollView, FlatList, ActivityIndicator } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -165,6 +165,8 @@ const Single_Tranding_Screen = ({ ...props }) => {
 
     const [totals, setTolats] = useState(items.totalPrice);
 
+    const [spinerVisible, setSpinerVisible] = useState(false);
+
     useEffect(() => {
         setVisible((items.foodItems.length > 0) ? true : false);
         setTolats(items.totalPrice);
@@ -172,7 +174,7 @@ const Single_Tranding_Screen = ({ ...props }) => {
 
 
     function getSingleFoodInfo(id) {
-
+        setSpinerVisible(true);
         Funtion_Single_Foods_Info(id).then((response) => {
 
             if (response.code == '200') {
@@ -187,15 +189,18 @@ const Single_Tranding_Screen = ({ ...props }) => {
                 setPortionList(dt.portions);
                 setItem(dt);
                 setItemImage(dt.imgUrl);
+                setSpinerVisible(false);
             } else if (response.code == '404') {
                 setModelTitel("Error");
                 setModelMessage("Food item not found. Try again");
+                setSpinerVisible(false);
                 setShow(true);
-                //redirct to login page
+                Actions.reset('authenticated');
                 //show eorr
             } else if (response.code == '401') {
                 setModelTitel("Error");
                 setModelMessage("Authentication Fail, Plase login again");
+                setSpinerVisible(false);
                 setShow(true);
                 //redirct to login page
                 //show eorr
@@ -203,10 +208,12 @@ const Single_Tranding_Screen = ({ ...props }) => {
                 //server error
                 setModelTitel("Error");
                 setModelMessage("Something went wrong, try again later");
+                setSpinerVisible(false);
                 setShow(true);
             }
         }).catch((error) => {
             console.log("error on data getting tranding screen " + error);
+            setSpinerVisible(false);
         });
     }
 
@@ -236,7 +243,7 @@ const Single_Tranding_Screen = ({ ...props }) => {
             portionLit.push(seleted_po);
         } else {
             portionLit.forEach(element => {
-                if (element.id == seleted_po.id & element.portionId == seleted_po.portionId &  element.dealType == "item") {
+                if (element.id == seleted_po.id & element.portionId == seleted_po.portionId & element.dealType == "item") {
                     element.quantity = element.quantity + seleted_po.quantity;
                     element.note = element.note != "" ? element.note + seleted_po.note : note
                 } else {
@@ -333,6 +340,34 @@ const Single_Tranding_Screen = ({ ...props }) => {
                 }}
             />
 
+            {(spinerVisible) ?
+                <View
+                    style={{
+                        flex: 1,
+                        position: "absolute",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        opacity: 0.8,
+                        width: wp("100%"),
+                        height: hp("100%"),
+                        backgroundColor: 'rgba(0,0,0,0.3)',
+                        //zIndex:1
+                    }}
+                >
+
+                    <View style={Styles.activityindicator_view}>
+                        <ActivityIndicator animating size="large" color="#F5FCFF" />
+                        <Text
+                            style={{
+                                color: "#000000"
+                            }}
+                        >
+                            loading
+                        </Text>
+                    </View>
+                </View>
+                // <Feching_Loader/>
+                : null}
 
         </View>
     );
@@ -423,7 +458,7 @@ const Styles = StyleSheet.create({
         width: wp('90%'),
         height: hp('18%'),
         justifyContent: 'center',
-        alignItems:'center'
+        alignItems: 'center'
     },
     Qty_Input_View: {
         marginTop: 10,
@@ -562,11 +597,20 @@ const Styles = StyleSheet.create({
         borderRadius: 5,
         backgroundColor: 'red'
     },
-    portionTexts : {
+    portionTexts: {
         fontFamily: 'NexaTextDemo-Light',
         fontSize: 14,
         color: '#000',
         letterSpacing: 0.04,
+    },
+    activityindicator_view: {
+        position: "absolute",
+        alignItems: "center",
+        justifyContent: "center",
+        width: 100,
+        height: 100,
+        opacity: 1,
+        borderRadius: 20
     }
 
 

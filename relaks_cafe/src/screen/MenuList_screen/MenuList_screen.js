@@ -1,5 +1,5 @@
 import React, { PropTypes, Component, useState, useEffect } from 'react';
-import { View, Image, StyleSheet, Text, TouchableOpacity, ScrollView, FlatList } from 'react-native';
+import { View, Image, StyleSheet, Text, TouchableOpacity, ScrollView, FlatList,ActivityIndicator } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/AntDesign';
 import ZigzagView from "react-native-zigzag-view"
@@ -108,6 +108,7 @@ const MenuList_Screen = ({ ...props }) => { //
 
     const [totals, setTolats] = useState(items.totalPrice);
 
+    const [spinerVisible, setSpinerVisible] = useState(false);
 
     useEffect(() => {
         getFoodList(props.cat_id);
@@ -117,6 +118,7 @@ const MenuList_Screen = ({ ...props }) => { //
     }, []);
 
     function getFoodList(ids) {
+        setSpinerVisible(true);
         Funtion_Get_Foods_List(ids).then((response) => {
             if (response.code == '200') {
                 
@@ -137,16 +139,19 @@ const MenuList_Screen = ({ ...props }) => { //
                         finalList.push(itms);
                     }
                 });
+                setSpinerVisible(false);
                 setFoodList(finalList);
             }else if (response.code == '404') {
                 setModelTitel("Error");
                 setModelMessage("Category not found. Try again");
+                setSpinerVisible(false);
                 setShow(true);
                 //redirct to login page
                 //show eorr
             } else if (response.code == '401') {
                 setModelTitel("Error");
                 setModelMessage("Authentication Fail, Plase login again");
+                setSpinerVisible(false);
                 setShow(true);
                 //redirct to login page
                 //show eorr
@@ -154,11 +159,13 @@ const MenuList_Screen = ({ ...props }) => { //
                 //server error
                 setModelTitel("Error");
                 setModelMessage("Something went wrong, try again later");
+                setSpinerVisible(false);
                 setShow(true);
             }
             
         }).catch((error) => {
             console.log("error on get food list by cat id " + error);
+            setSpinerVisible(false);
         });
     }
 
@@ -223,6 +230,34 @@ const MenuList_Screen = ({ ...props }) => { //
                     setShow(false);
                 }}
             />
+            {(spinerVisible) ?
+                <View
+                    style={{
+                        flex: 1,
+                        position: "absolute",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        opacity: 0.8,
+                        width: wp("100%"),
+                        height: hp("100%"),
+                        backgroundColor: 'rgba(0,0,0,0.3)',
+                        //zIndex:1
+                    }}
+                >
+
+                    <View style={Styles.activityindicator_view}>
+                        <ActivityIndicator animating size="large" color="#F5FCFF" />
+                        <Text
+                            style={{
+                                color: "#000000"
+                            }}
+                        >
+                            loading
+                        </Text>
+                    </View>
+                </View>
+                // <Feching_Loader/>
+                : null}
         </View>
     );
 }
@@ -400,6 +435,15 @@ const Styles = StyleSheet.create({
         letterSpacing: 0.04,
         textAlign:"center"
     },
+    activityindicator_view: {
+        position: "absolute",
+        alignItems: "center",
+        justifyContent: "center",
+        width: 100,
+        height: 100,
+        opacity: 1,
+        borderRadius: 20
+    }
 });
 
 export default MenuList_Screen;

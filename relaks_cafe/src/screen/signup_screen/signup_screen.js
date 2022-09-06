@@ -1,10 +1,11 @@
-import React, { PropTypes, Component } from 'react';
-import { View, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import React, { PropTypes, Component, useState } from 'react';
+import { View, Image, StyleSheet, Text, TouchableOpacity,ActivityIndicator } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Actions } from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/AntDesign';
+import {Funtion_FaceBook_Register, Funtion_Google_Register} from '../../assert/networks/api_calls';
 
-import {Funtion_FaceBook_Register} from '../../assert/networks/api_calls';
+import SafeAreaView from 'react-native-safe-area-view';
 
 const BtnEmailView = () => {
     return (
@@ -26,12 +27,15 @@ const BtnEmailView = () => {
     )
 }
 
-const BtnFaceBookView = () => {
+const BtnFaceBookView = ({setSpinerVisible}) => {
 
     function regFacebook (){
+        setSpinerVisible(true);
         Funtion_FaceBook_Register().then((response)=>{
-            alert("fb "+JSON.stringify(response));
+            setSpinerVisible(false);
+            Actions.social({"webViews" : response.responce});
         }).catch((error)=>{
+            setSpinerVisible(false);
             console.log("error happen when fb register "+error);
         })
     }
@@ -55,10 +59,26 @@ const BtnFaceBookView = () => {
     )
 }
 
-const BtnGoogleView = () => {
+const BtnGoogleView = ({setSpinerVisible}) => {
+
+    function registerGooogle(){
+        try {
+            setSpinerVisible(true);
+            Funtion_Google_Register().then((response)=>{
+                setSpinerVisible(false);
+                Actions.social({"webViews" : response.responce});
+            }).catch((err)=>{
+                setSpinerVisible(false);
+                console.log("error happen register google "+err);
+            });
+        } catch (error) {
+            console.log("error "+error);
+        }
+    }
+
     return (
         <View style={Styles.btnContainer}>
-            <TouchableOpacity onPress={()=>{alert("ypu press me")}}>
+            <TouchableOpacity onPress={()=>{ registerGooogle(); }}>
                 <View style={Styles.btnBorder}>
                     <View style={Styles.btn_icon_holder}>
                         <Icon color="#4285F4" name="google" size={30} />
@@ -98,7 +118,9 @@ const LineSpliter = () => {
 }
 
 
-const signupscreen = () => {
+const SignupScreen = () => {
+
+    const [spinerVisible, setSpinerVisible] = useState(false);
 
     return (
         <View style={Styles.main}>
@@ -115,14 +137,43 @@ const signupscreen = () => {
 
 
             <View style={Styles.screenTitel}>
-                <BtnFaceBookView/>
+                <BtnFaceBookView setSpinerVisible={setSpinerVisible}/>
             </View>
 
             
-            <BtnGoogleView/>
+            <BtnGoogleView setSpinerVisible={setSpinerVisible}/>
 
+            {(spinerVisible) ?
+                <View
+                    style={{
+                        flex: 1,
+                        position: "absolute",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        opacity: 0.8,
+                        width: wp("100%"),
+                        height: hp("100%"),
+                        backgroundColor: 'rgba(0,0,0,0.3)',
+                        //zIndex:1
+                    }}
+                >
+
+                    <View style={Styles.activityindicator_view}>
+                        <ActivityIndicator animating size="large" color="#F5FCFF" />
+                        <Text
+                            style={{
+                                color: "#000000"
+                            }}
+                        >
+                            loading
+                        </Text>
+                    </View>
+                </View>
+                // <Feching_Loader/>
+                : null}
 
         </View>
+        
     );
 
 }
@@ -217,10 +268,19 @@ const Styles = StyleSheet.create({
     screenTitel : {
         marginTop : hp('3%'),
         marginBottom : hp('3%'),
+    },
+    activityindicator_view: {
+        position: "absolute",
+        alignItems: "center",
+        justifyContent: "center",
+        width: 100,
+        height: 100,
+        opacity: 1,
+        borderRadius: 20
     }
 
 
 });
 
 
-export default signupscreen;
+export default SignupScreen;

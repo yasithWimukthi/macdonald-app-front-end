@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import GET_TOKEN from '../../assert/networks/dataAccess';
 
-let BASE_URL = "https://relaks-cafe.herokuapp.com/"; // https://cafe-app-352118.el.r.appspot.com/
+let BASE_URL = "http://cafeappapi-env.eba-5w53m5sm.eu-west-2.elasticbeanstalk.com/"; // https://cafe-app-352118.el.r.appspot.com/
 
 const TokenVal = GET_TOKEN;
 
@@ -56,8 +56,8 @@ const Funtion_FaceBook_Register = async () => {
         let responce_Values = await responce.text();
         console.log("fbs "+responce_Values);
         var data = {
-            "code" : "code",
-            "responce" : "responce_Values"
+            "code" : code,
+            "responce" : responce_Values
         }
         return data;
         
@@ -67,8 +67,25 @@ const Funtion_FaceBook_Register = async () => {
 }
 
 const Funtion_Google_Register = async () => {
+    console.log("calling api side");
     try {
-
+        //var url = BASE_URL + "api/v1/auth/google"; 
+        var url = "https://api.relaksradiocafe.com/api/v1/auth/google"; 
+        let responce = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        let code = responce.status;
+        //let responce_Values = await responce.json();
+        let responce_Values = await responce.text();
+        console.log("google "+responce_Values);
+        var data = {
+            "code" : code,
+            "responce" : responce_Values
+        }
+        return data;
     } catch (error) {
         console.log("error on funtion_google_register : " + error);
     }

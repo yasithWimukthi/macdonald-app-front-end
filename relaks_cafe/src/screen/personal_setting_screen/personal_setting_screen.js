@@ -1,5 +1,5 @@
 import React, { PropTypes, Component, useState } from 'react';
-import { View, Image, StyleSheet, Text, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Image, StyleSheet, Text, TextInput, TouchableOpacity, ScrollView, SafeAreaView } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/AntDesign';
 import { useSelector, useDispatch } from 'react-redux';
@@ -284,6 +284,7 @@ const Personal_Setting_Screen = () => {
     }
 
     return (
+        <SafeAreaView style={{ flex:1 }}>
         <View style={Styles.main}>
             <ScrollView>
                 <TitelView />
@@ -321,6 +322,7 @@ const Personal_Setting_Screen = () => {
                 }}
             />
         </View>
+        </SafeAreaView>
     );
 }
 

@@ -1,5 +1,5 @@
 import React, { PropTypes, Component, useState } from 'react';
-import { View, Image, StyleSheet, Text, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Image, StyleSheet, Text, TextInput, TouchableOpacity, ActivityIndicator, SafeAreaView } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/Feather';
 import { Actions } from 'react-native-router-flux';
@@ -170,6 +170,7 @@ const Reset_Password_Screen = () => {
     const [modelMessage, setModelMessage] = useState("");
 
     return (
+        <SafeAreaView style={{ flex:1 }}>
         <View style={Styles.main}>
             <TitelView />
 
@@ -196,6 +197,7 @@ const Reset_Password_Screen = () => {
             />
 
         </View>
+        </SafeAreaView>
     );
 }
 

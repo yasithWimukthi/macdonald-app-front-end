@@ -1,5 +1,5 @@
 import React, { PropTypes, Component, useEffect, useState } from 'react';
-import { View, Image, StyleSheet, Text, TouchableOpacity, ScrollView, Button, FlatList } from 'react-native';
+import { View, Image, StyleSheet, Text, TouchableOpacity, ScrollView, Button, FlatList, SafeAreaView } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Actions } from 'react-native-router-flux';
@@ -54,7 +54,7 @@ const ItemTile = ({ portionList }) => {
         //console.log("list " + JSON.stringify(items));
 
         if (editStatus == "Edit") {
-           // setQty(item.quantity);
+            // setQty(item.quantity);
             setEditStatus("Update");
             setEditEnable(!editEnable);
         } else {
@@ -80,7 +80,7 @@ const ItemTile = ({ portionList }) => {
                 var list = items.foodItems;
 
                 const tempArry = list.filter(item => item.dealType == "item");
-                const filteredItems = list.filter(item => item.id !== obj.id  && item.dealType == "deal");
+                const filteredItems = list.filter(item => item.id !== obj.id && item.dealType == "deal");
 
                 filteredItems.forEach(element => {
                     tempArry.push(element);
@@ -128,14 +128,14 @@ const ItemTile = ({ portionList }) => {
                 }
 
                 var list = items.foodItems;
-                console.log(" before filter lists "+JSON.stringify(list));
+                console.log(" before filter lists " + JSON.stringify(list));
                 const tempArry = list.filter(item => item.dealType == "deal");
 
-                const filteredItems = list.filter(item => item.id !== obj.id  && item.dealType == "item"); //|| item.portionId !== obj.portionId
+                const filteredItems = list.filter(item => item.id !== obj.id && item.dealType == "item"); //|| item.portionId !== obj.portionId
 
-                const sameItems = list.filter(item => item.id == obj.id  && item.dealType == "item");
+                const sameItems = list.filter(item => item.id == obj.id && item.dealType == "item");
 
-                console.log(" filter lists "+JSON.stringify(filteredItems));
+                console.log(" filter lists " + JSON.stringify(filteredItems));
 
                 filteredItems.forEach(element => {
                     tempArry.push(element);
@@ -143,9 +143,9 @@ const ItemTile = ({ portionList }) => {
 
                 sameItems.forEach(element => {
 
-                    if(element.portionId !== obj.portionId){
+                    if (element.portionId !== obj.portionId) {
                         tempArry.push(element);
-                    } 
+                    }
                 });
 
 
@@ -223,9 +223,9 @@ const ItemTile = ({ portionList }) => {
 
             samedItems.forEach(element => {
 
-                console.log("element "+JSON.stringify(element));
+                console.log("element " + JSON.stringify(element));
 
-                if(element.portionId !== seleted_po.portionId){
+                if (element.portionId !== seleted_po.portionId) {
                     tempArry.push(element);
                 }
             });
@@ -275,7 +275,7 @@ const ItemTile = ({ portionList }) => {
                                                         <Text style={Styles.productInfo}>{item.itemName}</Text>
                                                         <Text style={Styles.productInfo_sub}>{item.potionName}</Text>
                                                     </View>
-                                                    <View style={[Styles.item_info_Holder, { flexDirection: 'row', alignItems: 'flex-start',marginTop:hp('1.8%') }]}>
+                                                    <View style={[Styles.item_info_Holder, { flexDirection: 'row', alignItems: 'flex-start', marginTop: hp('1.8%') }]}>
                                                         <TouchableOpacity onPress={() => { updatePortion(item); }}>
                                                             <View style={Styles.button_Holder}>
                                                                 <Text style={{ color: '#000', }}>{editStatus}</Text>
@@ -374,11 +374,11 @@ const Cart_Screen = () => {
     const [modelTitel, setModelTitel] = useState("");
     const [modelMessage, setModelMessage] = useState("");
 
-    function checkInfos(){
-        console.log("userinfo "+JSON.stringify(user));
-        if(user.mobile != "" && user.mobile != null){
+    function checkInfos() {
+        console.log("userinfo " + JSON.stringify(user));
+        if (user.mobile != "" && user.mobile != null) {
             Actions.Pay();
-        }else{
+        } else {
             setModelTitel("Plase complete your profile");
             setModelMessage("Before place order, complete your profile for furture contacts.");
             setShow(true);
@@ -386,76 +386,78 @@ const Cart_Screen = () => {
     }
 
     return (
-        <View style={Styles.main}>
-            {/* <View style={{ marginTop: hp('5%') }}></View> */}
-            <Details_View />
-            <ItemTile portionList={items.foodItems} />
+        <SafeAreaView style={{ flex: 1 }}>
+            <View style={Styles.main}>
+                {/* <View style={{ marginTop: hp('5%') }}></View> */}
+                <Details_View />
+                <ItemTile portionList={items.foodItems} />
 
-            <View style={Styles.screenTitel}>
-                <ProcessCheckOutBtn funtions={() => { checkInfos(); }} totalPrice={items.totalPrice} />
+                <View style={Styles.screenTitel}>
+                    <ProcessCheckOutBtn funtions={() => { checkInfos(); }} totalPrice={items.totalPrice} />
+                </View>
+
+                <AwesomeAlert
+                    show={show}
+                    showProgress={false}
+                    title={modelTitel}
+                    message={modelMessage}
+                    closeOnTouchOutside={true}
+                    closeOnHardwareBackPress={false}
+                    showCancelButton={true}
+                    showConfirmButton={true}
+                    cancelText="cancel"
+                    confirmText="Ok"
+                    confirmButtonColor="red" //#DD6B55
+                    onCancelPressed={() => {
+                        setShow(false);
+                    }}
+                    onConfirmPressed={() => {
+                        setShow(false);
+                        Actions.Personal();
+                    }}
+                />
+                <AwesomeAlert
+                    show={showEdit}
+                    showProgress={false}
+                    title={modelTitel}
+                    message={modelMessage}
+                    closeOnTouchOutside={true}
+                    closeOnHardwareBackPress={false}
+                    showCancelButton={false}
+                    showConfirmButton={true}
+                    cancelText="cancel"
+                    confirmText="Ok"
+                    confirmButtonColor="red" //#DD6B55
+                    onCancelPressed={() => {
+                        setShow(false);
+                    }}
+                    onConfirmPressed={() => {
+                        setShow(false);
+                        Actions.Personal();
+                    }}
+                />
+                <AwesomeAlert
+                    show={showRemove}
+                    showProgress={false}
+                    title={modelTitel}
+                    message={modelMessage}
+                    closeOnTouchOutside={true}
+                    closeOnHardwareBackPress={false}
+                    showCancelButton={true}
+                    showConfirmButton={true}
+                    cancelText="cancel"
+                    confirmText="Ok"
+                    confirmButtonColor="red" //#DD6B55
+                    onCancelPressed={() => {
+                        setShow(false);
+                    }}
+                    onConfirmPressed={() => {
+                        setShow(false);
+                        Actions.Personal();
+                    }}
+                />
             </View>
-
-            <AwesomeAlert
-                show={show}
-                showProgress={false}
-                title={modelTitel}
-                message={modelMessage}
-                closeOnTouchOutside={true}
-                closeOnHardwareBackPress={false}
-                showCancelButton={true}
-                showConfirmButton={true}
-                cancelText="cancel"
-                confirmText="Ok"
-                confirmButtonColor="red" //#DD6B55
-                onCancelPressed={() => {
-                    setShow(false);
-                }}
-                onConfirmPressed={() => {
-                    setShow(false);
-                    Actions.Personal();
-                }}
-            />
-            <AwesomeAlert
-                show={showEdit}
-                showProgress={false}
-                title={modelTitel}
-                message={modelMessage}
-                closeOnTouchOutside={true}
-                closeOnHardwareBackPress={false}
-                showCancelButton={false}
-                showConfirmButton={true}
-                cancelText="cancel"
-                confirmText="Ok"
-                confirmButtonColor="red" //#DD6B55
-                onCancelPressed={() => {
-                    setShow(false);
-                }}
-                onConfirmPressed={() => {
-                    setShow(false);
-                    Actions.Personal();
-                }}
-            />
-            <AwesomeAlert
-                show={showRemove}
-                showProgress={false}
-                title={modelTitel}
-                message={modelMessage}
-                closeOnTouchOutside={true}
-                closeOnHardwareBackPress={false}
-                showCancelButton={true}
-                showConfirmButton={true}
-                cancelText="cancel"
-                confirmText="Ok"
-                confirmButtonColor="red" //#DD6B55
-                onCancelPressed={() => {
-                    setShow(false);
-                }}
-                onConfirmPressed={() => {
-                    setShow(false);
-                    Actions.Personal();
-                }}
-            />
-        </View>
+        </SafeAreaView>
     );
 }
 

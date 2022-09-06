@@ -1,5 +1,5 @@
 import React, { PropTypes, Component, useEffect, useState } from 'react';
-import { View, Image, StyleSheet, Text, TouchableOpacity, ScrollView, Button, FlatList } from 'react-native';
+import { View, Image, StyleSheet, Text, TouchableOpacity, ScrollView, Button, FlatList, SafeAreaView,Platform } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Actions } from 'react-native-router-flux';
@@ -56,7 +56,8 @@ const MapTile = () => {
 
     return (
         <MapView
-            provider={PROVIDER_GOOGLE}
+            //provider={PROVIDER_GOOGLE}
+            provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : null }
             style={{ flex: 1 }}
             initialRegion={{
                 latitude: latitude,
@@ -64,10 +65,10 @@ const MapTile = () => {
                 latitudeDelta: 5,
                 longitudeDelta: 5
             }}
-           // initialRegion={region}
+            // initialRegion={region}
             followUserLocation={true}
             showsUserLocation={true}
-           // onMapReady={_goToInitialLocation}
+        // onMapReady={_goToInitialLocation}
         >
             <Marker
                 coordinate={{
@@ -81,9 +82,11 @@ const MapTile = () => {
 
 const Current_Location_Pick_Screen = () => {
     return (
-        <View style={Styles.main}>
-            <MapTile />
-        </View>
+        <SafeAreaView style={{ flex: 1 }}>
+            <View style={Styles.main}>
+                <MapTile />
+            </View>
+        </SafeAreaView>
     )
 }
 

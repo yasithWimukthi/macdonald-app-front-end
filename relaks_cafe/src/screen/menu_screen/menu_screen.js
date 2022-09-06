@@ -1,5 +1,5 @@
 import React, { PropTypes, Component, useState, useEffect } from 'react';
-import { View, Image, StyleSheet, Text, TouchableOpacity, ScrollView, FlatList } from 'react-native';
+import { View, Image, StyleSheet, Text, TouchableOpacity, ScrollView, FlatList, ActivityIndicator } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/AntDesign';
 
@@ -27,7 +27,7 @@ const MenuTitel = () => {
     );
 }
 
-const MenuListTile = ({menuList}) => {
+const MenuListTile = ({ menuList }) => {
     return (
         <View style={{ marginTop: hp('5%') }}>
             <FlatList
@@ -35,7 +35,7 @@ const MenuListTile = ({menuList}) => {
                 keyExtractor={item => item.id}
                 renderItem={({ item }) => {
                     return (
-                        <TouchableOpacity onPress={() => { Actions.MenuList({cat_id : item.id});}}>
+                        <TouchableOpacity onPress={() => { Actions.MenuList({ cat_id: item.id }); }}>
                             <View style={Styles.menuTileConatiner}>
                                 <View style={Styles.menuTileHolder}>
                                     <View style={Styles.menuTileTextContainer}>
@@ -69,13 +69,15 @@ const Menu_Screen = () => {
     const [show, setShow] = useState(false);
     const [modelTitel, setModelTitel] = useState("");
     const [modelMessage, setModelMessage] = useState("");
-    
+
     const [visbile, setVisible] = useState((items.foodItems.length > 0) ? true : false);
 
     const [totals, setTolats] = useState(items.totalPrice);
 
+    const [spinerVisible, setSpinerVisible] = useState(false);
+
     // useEffect(() => {
-        
+
     // });
 
     useEffect(() => {
@@ -85,25 +87,30 @@ const Menu_Screen = () => {
     }, []);
 
     function getCatogeryInfo() {
+        setSpinerVisible(true);
         Funtion_Get_Home_Menu_List().then((response) => {
 
-            if(response.code == '200'){
+            if (response.code == '200') {
+                setSpinerVisible(false);
                 setCategoryList(response.responce.data);
-            }else if (response.code == '406'){
+            } else if (response.code == '406') {
                 setModelTitel("Error");
                 setModelMessage("Catogery Limit Invalid!");
+                setSpinerVisible(false);
                 setShow(true);
                 //show eorr
-            }else if (response.code == '500'){
+            } else if (response.code == '500') {
                 //server error
                 setModelTitel("Error");
                 setModelMessage("Something went wrong, try again later");
+                setSpinerVisible(false);
                 setShow(true);
             }
 
-           // setCategoryList(response.data);
+            // setCategoryList(response.data);
         }).catch((error) => {
             console.log("error happen when loading data to catogery list " + error);
+            setSpinerVisible(false);
         });
     }
 
@@ -112,7 +119,7 @@ const Menu_Screen = () => {
         <View style={Styles.main}>
             <MenuTitel />
             <ScrollView style={{ flex: 1 }}>
-                <MenuListTile menuList={catogeryList}/>
+                <MenuListTile menuList={catogeryList} />
             </ScrollView>
 
             {
@@ -129,7 +136,7 @@ const Menu_Screen = () => {
                         <TouchableOpacity onPress={() => { Actions.Cart(); }}>
                             <View style={Styles.cartTile_btn_holder}>
                                 <View style={Styles.btn_holder}>
-                                    <Text style={[Styles.itemText,{color: '#000',}]}>View Cart</Text>
+                                    <Text style={[Styles.itemText, { color: '#000', }]}>View Cart</Text>
                                 </View>
                             </View>
                         </TouchableOpacity>
@@ -156,6 +163,35 @@ const Menu_Screen = () => {
                     setShow(false);
                 }}
             />
+
+            {(spinerVisible) ?
+                <View
+                    style={{
+                        flex: 1,
+                        position: "absolute",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        opacity: 0.8,
+                        width: wp("100%"),
+                        height: hp("100%"),
+                        backgroundColor: 'rgba(0,0,0,0.3)',
+                        //zIndex:1
+                    }}
+                >
+
+                    <View style={Styles.activityindicator_view}>
+                        <ActivityIndicator animating size="large" color="#F5FCFF" />
+                        <Text
+                            style={{
+                                color: "#000000"
+                            }}
+                        >
+                            loading
+                        </Text>
+                    </View>
+                </View>
+                // <Feching_Loader/>
+                : null}
         </View>
     );
 }
@@ -285,6 +321,15 @@ const Styles = StyleSheet.create({
         borderRadius: 5,
         backgroundColor: 'red'
     },
+    activityindicator_view: {
+        position: "absolute",
+        alignItems: "center",
+        justifyContent: "center",
+        width: 100,
+        height: 100,
+        opacity: 1,
+        borderRadius: 20
+    }
 
 });
 

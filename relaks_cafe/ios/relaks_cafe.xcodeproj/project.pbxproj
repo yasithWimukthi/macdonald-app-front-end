@@ -13,6 +13,8 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		236625B19FDB47FBBD990749 /* NexaDemo-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 5E8C45297CBF49CA93C48975 /* NexaDemo-Light.otf */; };
 		3D7D31D0F364408FA4075612 /* NexaTextDemo-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = B45560F2BD144139AE924F3F /* NexaTextDemo-Bold.otf */; };
+		75D664CBCA5748CF199691FF /* libPods-relaks_cafe.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B76AF415D8A1DDB10AC1B40 /* libPods-relaks_cafe.a */; };
+		7B8F624E5863E5A55961132C /* libPods-relaks_cafe-relaks_cafeTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9F5C743CB0306CD9D40BEFC /* libPods-relaks_cafe-relaks_cafeTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		CD634782B6B1452AAA30B946 /* NexaTextDemo-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1F9C7C72692446CCA0DC3975 /* NexaTextDemo-Light.otf */; };
 		D5177EF36039433A80AF69EA /* NexaDemo-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 5B0C5B2972DC4046B5536629 /* NexaDemo-Bold.otf */; };
@@ -38,11 +40,18 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = relaks_cafe/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = relaks_cafe/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = relaks_cafe/main.m; sourceTree = "<group>"; };
+		1B4A46C9A86DA447B4E8756B /* Pods-relaks_cafe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-relaks_cafe.debug.xcconfig"; path = "Target Support Files/Pods-relaks_cafe/Pods-relaks_cafe.debug.xcconfig"; sourceTree = "<group>"; };
+		1B76AF415D8A1DDB10AC1B40 /* libPods-relaks_cafe.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-relaks_cafe.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F9C7C72692446CCA0DC3975 /* NexaTextDemo-Light.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NexaTextDemo-Light.otf"; path = "../src/assert/fonts/NexaTextDemo-Light.otf"; sourceTree = "<group>"; };
 		5B0C5B2972DC4046B5536629 /* NexaDemo-Bold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NexaDemo-Bold.otf"; path = "../src/assert/fonts/NexaDemo-Bold.otf"; sourceTree = "<group>"; };
 		5E8C45297CBF49CA93C48975 /* NexaDemo-Light.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NexaDemo-Light.otf"; path = "../src/assert/fonts/NexaDemo-Light.otf"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = relaks_cafe/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		9678877D28895E0E00394E1E /* relaks_cafe.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = relaks_cafe.entitlements; path = relaks_cafe/relaks_cafe.entitlements; sourceTree = "<group>"; };
+		9C9547BB863CBD62D9ABB184 /* Pods-relaks_cafe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-relaks_cafe.release.xcconfig"; path = "Target Support Files/Pods-relaks_cafe/Pods-relaks_cafe.release.xcconfig"; sourceTree = "<group>"; };
+		A9F5C743CB0306CD9D40BEFC /* libPods-relaks_cafe-relaks_cafeTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-relaks_cafe-relaks_cafeTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B45560F2BD144139AE924F3F /* NexaTextDemo-Bold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "NexaTextDemo-Bold.otf"; path = "../src/assert/fonts/NexaTextDemo-Bold.otf"; sourceTree = "<group>"; };
+		D123E448247BD382E7460B78 /* Pods-relaks_cafe-relaks_cafeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-relaks_cafe-relaks_cafeTests.debug.xcconfig"; path = "Target Support Files/Pods-relaks_cafe-relaks_cafeTests/Pods-relaks_cafe-relaks_cafeTests.debug.xcconfig"; sourceTree = "<group>"; };
+		D955AAE288CA9980E65E62B4 /* Pods-relaks_cafe-relaks_cafeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-relaks_cafe-relaks_cafeTests.release.xcconfig"; path = "Target Support Files/Pods-relaks_cafe-relaks_cafeTests/Pods-relaks_cafe-relaks_cafeTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -51,6 +60,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7B8F624E5863E5A55961132C /* libPods-relaks_cafe-relaks_cafeTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -58,6 +68,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				75D664CBCA5748CF199691FF /* libPods-relaks_cafe.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,6 +95,7 @@
 		13B07FAE1A68108700A75B9A /* relaks_cafe */ = {
 			isa = PBXGroup;
 			children = (
+				9678877D28895E0E00394E1E /* relaks_cafe.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -98,6 +110,8 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
+				1B76AF415D8A1DDB10AC1B40 /* libPods-relaks_cafe.a */,
+				A9F5C743CB0306CD9D40BEFC /* libPods-relaks_cafe-relaks_cafeTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -123,6 +137,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				9678877E288967C900394E1E /* fonts */,
 				13B07FAE1A68108700A75B9A /* relaks_cafe */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* relaks_cafeTests */,
@@ -145,9 +160,20 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		9678877E288967C900394E1E /* fonts */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = fonts;
+			sourceTree = "<group>";
+		};
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
+				1B4A46C9A86DA447B4E8756B /* Pods-relaks_cafe.debug.xcconfig */,
+				9C9547BB863CBD62D9ABB184 /* Pods-relaks_cafe.release.xcconfig */,
+				D123E448247BD382E7460B78 /* Pods-relaks_cafe-relaks_cafeTests.debug.xcconfig */,
+				D955AAE288CA9980E65E62B4 /* Pods-relaks_cafe-relaks_cafeTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -159,9 +185,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "relaks_cafeTests" */;
 			buildPhases = (
+				91E88A74086AAA3F893D886C /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
+				94FBBBA22826A76B83505ECC /* [CP] Embed Pods Frameworks */,
+				788230FF26396B6E7DFB2CB0 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -177,11 +206,14 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "relaks_cafe" */;
 			buildPhases = (
+				A165547A4FE3F4515C8600E7 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
+				201A2CCBA0A5FA3EF9BDC94D /* [CP] Embed Pods Frameworks */,
+				769F6D23F59ADE89F706A503 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -198,7 +230,7 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1210;
+				LastUpgradeCheck = 1400;
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
@@ -266,6 +298,118 @@
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nexport NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
+		201A2CCBA0A5FA3EF9BDC94D /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-relaks_cafe/Pods-relaks_cafe-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-relaks_cafe/Pods-relaks_cafe-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-relaks_cafe/Pods-relaks_cafe-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		769F6D23F59ADE89F706A503 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-relaks_cafe/Pods-relaks_cafe-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-relaks_cafe/Pods-relaks_cafe-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-relaks_cafe/Pods-relaks_cafe-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		788230FF26396B6E7DFB2CB0 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-relaks_cafe-relaks_cafeTests/Pods-relaks_cafe-relaks_cafeTests-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-relaks_cafe-relaks_cafeTests/Pods-relaks_cafe-relaks_cafeTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-relaks_cafe-relaks_cafeTests/Pods-relaks_cafe-relaks_cafeTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		91E88A74086AAA3F893D886C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-relaks_cafe-relaks_cafeTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		94FBBBA22826A76B83505ECC /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-relaks_cafe-relaks_cafeTests/Pods-relaks_cafe-relaks_cafeTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-relaks_cafe-relaks_cafeTests/Pods-relaks_cafe-relaks_cafeTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-relaks_cafe-relaks_cafeTests/Pods-relaks_cafe-relaks_cafeTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A165547A4FE3F4515C8600E7 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-relaks_cafe-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -318,14 +462,17 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D123E448247BD382E7460B78 /* Pods-relaks_cafe-relaks_cafeTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = relaks_cafeTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -344,11 +491,14 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D955AAE288CA9980E65E62B4 /* Pods-relaks_cafe-relaks_cafeTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = relaks_cafeTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -367,13 +517,16 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1B4A46C9A86DA447B4E8756B /* Pods-relaks_cafe.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = relaks_cafe/relaks_cafe.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = RN9FC68B2X;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = relaks_cafe/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -386,20 +539,27 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.relakas.foods.--PRODUCT-NAME-rfc1034identifier-";
 				PRODUCT_NAME = relaks_cafe;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9C9547BB863CBD62D9ABB184 /* Pods-relaks_cafe.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = relaks_cafe/relaks_cafe.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = RN9FC68B2X;
 				INFOPLIST_FILE = relaks_cafe/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -412,7 +572,11 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.relakas.foods.--PRODUCT-NAME-rfc1034identifier-";
 				PRODUCT_NAME = relaks_cafe;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
@@ -466,7 +630,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
 					"$(inherited)",
@@ -530,7 +694,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
 					"$(inherited)",

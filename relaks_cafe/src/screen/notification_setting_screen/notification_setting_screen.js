@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { View, Image, StyleSheet, Text,TouchableOpacity} from 'react-native';
+import { View, Image, StyleSheet, Text,TouchableOpacity, SafeAreaView} from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/AntDesign';
 
@@ -56,11 +56,13 @@ const BootomBtn = () => {
 
 const notificationSetting = () =>{
     return(
+        <SafeAreaView style={{ flex:1 }}>
         <View style={Styles.main}>
             <TitelTikeView />
             <ConditionView/>
             <BootomBtn/>
         </View>
+        </SafeAreaView>
     );
 }
 

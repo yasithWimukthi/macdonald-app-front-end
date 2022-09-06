@@ -1,5 +1,5 @@
 import React, { PropTypes, Component, useEffect, useState } from 'react';
-import { View, Image, StyleSheet, Text, TouchableOpacity, ScrollView, Button, FlatList, TextInput } from 'react-native';
+import { View, Image, StyleSheet, Text, TouchableOpacity, ScrollView, Button, FlatList, TextInput, SafeAreaView } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Actions } from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -138,13 +138,15 @@ const Location_Pickup_Screen = () => {
     // const tempFavArry = fav_list.filter(item => item.favName == "defult");
 
     return (
-        <View style={Styles.main}>
-            <SearchTileView />
-            <CurrentLocationTileView />
-            <FavLocationTileView />
-            <FavListView favList={fav_list} />
+        <SafeAreaView style={{ flex: 1 }}>
+            <View style={Styles.main}>
+                <SearchTileView />
+                <CurrentLocationTileView />
+                <FavLocationTileView />
+                <FavListView favList={fav_list} />
 
-        </View>
+            </View>
+        </SafeAreaView>
     );
 }
 

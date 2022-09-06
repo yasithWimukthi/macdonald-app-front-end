@@ -1,5 +1,5 @@
 import React, { PropTypes, Component, useState } from 'react';
-import { View, Image, StyleSheet, Text, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Image, StyleSheet, Text, TextInput, TouchableOpacity, ActivityIndicator, SafeAreaView } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/Feather';
 import { Actions } from 'react-native-router-flux';
@@ -23,11 +23,13 @@ const TitelView = () => {
     );
 }
 
-const FormViews = ({ updateShow, updateTitel, updateMessage, }) => {
+const FormViews = ({ updateShow, updateTitel, updateMessage, setSpinerVisible }) => {
 
     const { user } = useSelector(state => state.userReducer);
 
     const [emailAddress, setEmailAddress] = useState("");
+
+
 
     function validForm() {
         if (emailAddress != null || emailAddress != "") {
@@ -45,31 +47,35 @@ const FormViews = ({ updateShow, updateTitel, updateMessage, }) => {
         NetInfo.fetch().then(state => {
 
             if (state.isConnected) {
-
+                setSpinerVisible(true);
                 Funtion_Request_ForgetPasword(emailAddress).then((respose) => {
 
                     if (respose.code == '200') {
                         updateTitel("Successfull");
                         updateMessage("Plase check your email");
+                        setSpinerVisible(false);
                         updateShow(true);
-
+                        
                         setTimeout(() => { Actions.auth(); }, 1000);
 
                     } else {
                         updateTitel("Error");
                         updateMessage("Unable to send your request, try again");
+                        setSpinerVisible(false);
                         updateShow(true);
                     }
                 }).catch((error) => {
                     console.log("error happen when reqest reset password " + error);
                     updateTitel("Error");
                     updateMessage("Something went wrong, try again");
+                    setSpinerVisible(false);
                     updateShow(true);
                 });
 
             } else {
                 updateTitel("Error");
                 updateMessage("Please connect your device to internet");
+                setSpinerVisible(false);
                 updateShow(true);
             }
         });
@@ -121,34 +127,64 @@ const Request_Reset_Password_Screen = () => {
     const [showOk, setShowOk] = useState(false);
     const [modelTitel, setModelTitel] = useState("");
     const [modelMessage, setModelMessage] = useState("");
-
+    const [spinerVisible, setSpinerVisible] = useState(false);
     return (
-        <View style={Styles.main}>
-            <TitelView />
+        <SafeAreaView style={{ flex: 1 }}>
+            <View style={Styles.main}>
+                <TitelView />
 
-            <FormViews updateShow={setShowOk} updateTitel={setModelTitel} updateMessage={setModelMessage} />
+                <FormViews setSpinerVisible={setSpinerVisible} updateShow={setShowOk} updateTitel={setModelTitel} updateMessage={setModelMessage} />
 
-            <AwesomeAlert
-                show={showOk}
-                showProgress={false}
-                title={modelTitel}
-                message={modelMessage}
-                closeOnTouchOutside={true}
-                closeOnHardwareBackPress={false}
-                showCancelButton={false}
-                showConfirmButton={true}
-                cancelText="cancel"
-                confirmText="Ok"
-                confirmButtonColor="red" //#DD6B55
-                onCancelPressed={() => {
-                    showOk(false);
-                }}
-                onConfirmPressed={() => {
-                    showOk(false);
-                }}
-            />
+                <AwesomeAlert
+                    show={showOk}
+                    showProgress={false}
+                    title={modelTitel}
+                    message={modelMessage}
+                    closeOnTouchOutside={true}
+                    closeOnHardwareBackPress={false}
+                    showCancelButton={false}
+                    showConfirmButton={true}
+                    cancelText="cancel"
+                    confirmText="Ok"
+                    confirmButtonColor="red" //#DD6B55
+                    onCancelPressed={() => {
+                        showOk(false);
+                    }}
+                    onConfirmPressed={() => {
+                        showOk(false);
+                    }}
+                />
 
-        </View>
+                {(spinerVisible) ?
+                    <View
+                        style={{
+                            flex: 1,
+                            position: "absolute",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            opacity: 0.8,
+                            width: wp("100%"),
+                            height: hp("100%"),
+                            backgroundColor: 'rgba(0,0,0,0.3)',
+                            //zIndex:1
+                        }}
+                    >
+
+                        <View style={Styles.activityindicator_view}>
+                            <ActivityIndicator animating size="large" color="#F5FCFF" />
+                            <Text
+                                style={{
+                                    color: "#000000"
+                                }}
+                            >
+                                loading
+                            </Text>
+                        </View>
+                    </View>
+                    // <Feching_Loader/>
+                    : null}
+            </View>
+        </SafeAreaView>
     );
 }
 
@@ -285,6 +321,15 @@ const Styles = StyleSheet.create({
         fontSize: 18,
         color: '#000'
     },
+    activityindicator_view: {
+        position: "absolute",
+        alignItems: "center",
+        justifyContent: "center",
+        width: 100,
+        height: 100,
+        opacity: 1,
+        borderRadius: 20
+    }
 });
 
 export default Request_Reset_Password_Screen;

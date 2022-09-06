@@ -1,5 +1,5 @@
 import React, { PropTypes, Component, useState } from 'react';
-import { View, Image, StyleSheet, Text, TextInput, TouchableOpacity, ScrollView, } from 'react-native';
+import { View, Image, StyleSheet, Text, TextInput, TouchableOpacity, ScrollView, SafeAreaView, ActivityIndicator } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Actions } from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -233,6 +233,7 @@ const signup_form_screen = () => {
     const [showRE, setShowRE] = useState(false);
     const [modelTitel, setModelTitel] = useState("");
     const [modelMessage, setModelMessage] = useState("");
+    const [spinerVisible, setSpinerVisible] = useState(false);
 
     function registerUser() {
         var user = {
@@ -249,6 +250,7 @@ const signup_form_screen = () => {
         NetInfo.fetch().then(state => {
 
             if (state.isConnected) {
+                setSpinerVisible(true);
                 Funtion_Register(user).then((response) => {
                     // alert("response " + JSON.stringify(response));
                     console.log("response " + JSON.stringify(response));
@@ -262,7 +264,7 @@ const signup_form_screen = () => {
                             "loginType": dts.data.loginType,
                             "email": dts.data.email,
                             "token": "",
-                            "mobile" : user_Contact
+                            "mobile": user_Contact
                         }
 
                         //setTokens(dts.token);
@@ -274,6 +276,7 @@ const signup_form_screen = () => {
                         //sucessfully created
                         setModelTitel("Successfully");
                         setModelMessage("user registered sucess!");
+                        setSpinerVisible(false);
                         setShow(true);
                         Actions.auth();
 
@@ -281,26 +284,30 @@ const signup_form_screen = () => {
                         // alredy on user
                         setModelTitel("Error");
                         setModelMessage("Alredy used this email or mobile number, try again");
+                        setSpinerVisible(false);
                         setShow(true);
                         ///alert("Alredy used this email, try again");
                     } else if (response.code == '400') {
                         // alert("Form Validation error");
                         var dts = response.responce;
 
-                        var str = dts.errors;  
+                        var str = dts.errors;
                         str = str.replace(/[^A-z 0-9-]/g, '');
 
                         setModelTitel("Error");
                         //setModelMessage("Form Validation error");
                         setModelMessage(str);
+                        setSpinerVisible(false);
                         setShow(true);
                         // request body validation
                     } else if (response.code == '500') {
                         setModelTitel("Error");
                         setModelMessage("Something went wrong, try again later");
+                        setSpinerVisible(false);
                         setShow(true);
                     }
                 }).catch((error) => {
+                    setSpinerVisible(false);
                     console.log("error " + JSON.stringify(error));
                 });
 
@@ -309,6 +316,7 @@ const signup_form_screen = () => {
                 //show error alert for not connect to internet
                 setModelTitel("Error");
                 setModelMessage("Please check your device connection");
+                setSpinerVisible(false);
                 setShow(true);
             }
         });
@@ -342,7 +350,7 @@ const signup_form_screen = () => {
                                     }
                                 } else {
                                     //show alert for error user postal code
-                                   // alert("fill user postal code");
+                                    // alert("fill user postal code");
                                     setModelTitel("Error");
                                     setModelMessage("Please enter postal code");
                                     setShowRE(true);
@@ -356,7 +364,7 @@ const signup_form_screen = () => {
                             }
                         } else {
                             //show alert for error user repass
-                           // alert("fill user re enter password");
+                            // alert("fill user re enter password");
                             setModelTitel("Error");
                             setModelMessage("Please re-enter password");
                             setShowRE(true);
@@ -392,56 +400,86 @@ const signup_form_screen = () => {
     }
 
     return (
-        <View style={Styles.main}>
-            <ScrollView>
-                <TitelView />
-                <FirstFormContent fname={user_Fname} updateFname={setUserFname} lname={user_Lname} updateLname={setUserLname} mail={user_Email} updateEmail={setUserEmail} pass={user_Password} updatePass={setUserPassword} repass={user_RePassword} updateRePass={setUserRePassword} postal_code={user_PostalCode} updatePostalCode={setUserPostalCode} mobile={user_Contact} updateMobile={setUserContact} />
-                <PerferContent />
+        <SafeAreaView style={{ flex: 1 }}>
+            <View style={Styles.main}>
+                <ScrollView>
+                    <TitelView />
+                    <FirstFormContent fname={user_Fname} updateFname={setUserFname} lname={user_Lname} updateLname={setUserLname} mail={user_Email} updateEmail={setUserEmail} pass={user_Password} updatePass={setUserPassword} repass={user_RePassword} updateRePass={setUserRePassword} postal_code={user_PostalCode} updatePostalCode={setUserPostalCode} mobile={user_Contact} updateMobile={setUserContact} />
+                    <PerferContent />
 
-                <TermsAndCondition driving_condtion={driving} updateDrivingCondtion={setDriving} age_condition={age} updateAgeCondtion={setAge} />
+                    <TermsAndCondition driving_condtion={driving} updateDrivingCondtion={setDriving} age_condition={age} updateAgeCondtion={setAge} />
 
-                <BtnLoginView onpress_funtion={() => { validateForm(); }} />
+                    <BtnLoginView onpress_funtion={() => { validateForm(); }} />
 
-            </ScrollView>
-            <AwesomeAlert
-                show={show}
-                showProgress={false}
-                title={modelTitel}
-                message={modelMessage}
-                closeOnTouchOutside={true}
-                closeOnHardwareBackPress={false}
-                showCancelButton={true}
-                showConfirmButton={true}
-                cancelText="cancel"
-                confirmText="Ok"
-                confirmButtonColor="red" //#DD6B55
-                onCancelPressed={() => {
-                    setShow(false);
-                }}
-                onConfirmPressed={() => {
-                    setShow(false);
-                }}
-            />
-            <AwesomeAlert
-                show={showRE}
-                showProgress={false}
-                title={modelTitel}
-                message={modelMessage}
-                closeOnTouchOutside={true}
-                closeOnHardwareBackPress={false}
-                showCancelButton={false}
-                showConfirmButton={true}
-                cancelText="cancel"
-                confirmText="Ok"
-                confirmButtonColor="red" //#DD6B55
-                onCancelPressed={() => {
-                    setShowRE(false);
-                }}
-                onConfirmPressed={() => {
-                    setShowRE(false);
-                }}
-            />
-        </View>
+                </ScrollView>
+                <AwesomeAlert
+                    show={show}
+                    showProgress={false}
+                    title={modelTitel}
+                    message={modelMessage}
+                    closeOnTouchOutside={true}
+                    closeOnHardwareBackPress={false}
+                    showCancelButton={true}
+                    showConfirmButton={true}
+                    cancelText="cancel"
+                    confirmText="Ok"
+                    confirmButtonColor="red" //#DD6B55
+                    onCancelPressed={() => {
+                        setShow(false);
+                    }}
+                    onConfirmPressed={() => {
+                        setShow(false);
+                    }}
+                />
+                <AwesomeAlert
+                    show={showRE}
+                    showProgress={false}
+                    title={modelTitel}
+                    message={modelMessage}
+                    closeOnTouchOutside={true}
+                    closeOnHardwareBackPress={false}
+                    showCancelButton={false}
+                    showConfirmButton={true}
+                    cancelText="cancel"
+                    confirmText="Ok"
+                    confirmButtonColor="red" //#DD6B55
+                    onCancelPressed={() => {
+                        setShowRE(false);
+                    }}
+                    onConfirmPressed={() => {
+                        setShowRE(false);
+                    }}
+                />
+                {(spinerVisible) ?
+                <View
+                    style={{
+                        flex: 1,
+                        position: "absolute",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        opacity: 0.8,
+                        width: wp("100%"),
+                        height: hp("100%"),
+                        backgroundColor: 'rgba(0,0,0,0.3)',
+                        //zIndex:1
+                    }}
+                >
+
+                    <View style={Styles.activityindicator_view}>
+                        <ActivityIndicator animating size="large" color="#F5FCFF" />
+                        <Text
+                            style={{
+                                color: "#000000"
+                            }}
+                        >
+                            loading
+                        </Text>
+                    </View>
+                </View>
+                // <Feching_Loader/>
+                : null}
+            </View>
+        </SafeAreaView>
     );
 }
 
@@ -651,6 +689,15 @@ const Styles = StyleSheet.create({
         color: '#EB1F25',
         textDecorationLine: 'underline'
     },
+    activityindicator_view: {
+        position: "absolute",
+        alignItems: "center",
+        justifyContent: "center",
+        width: 100,
+        height: 100,
+        opacity: 1,
+        borderRadius: 20
+    }
 
 });
 

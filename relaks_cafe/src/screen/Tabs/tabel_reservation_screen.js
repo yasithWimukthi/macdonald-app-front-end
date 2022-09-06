@@ -1,5 +1,5 @@
 import React, { PropTypes, Component, useEffect, useState } from 'react';
-import { View, Image, StyleSheet, Text, TouchableOpacity, ScrollView, FlatList, Platform, TextInput } from 'react-native';
+import { View, Image, StyleSheet, Text, TouchableOpacity, ScrollView, FlatList, Platform, TextInput, ActivityIndicator } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ZigzagView from "react-native-zigzag-view"
@@ -16,7 +16,7 @@ import AwesomeAlert from 'react-native-awesome-alerts';
 import { useSelector, useDispatch } from 'react-redux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
-const CheckTabelList = ({ updateTabelList, updateCheckin, updateCheckout, updateModelVisible, updateModelTitel, updateModelMessage }) => {
+const CheckTabelList = ({ updateTabelList, updateCheckin, updateCheckout, updateModelVisible, updateModelTitel, updateModelMessage, setSpinerVisible }) => {
 
     var tempdate = new Date();
     var timeZoneFromDB = +5.30;
@@ -38,7 +38,7 @@ const CheckTabelList = ({ updateTabelList, updateCheckin, updateCheckout, update
             "checkIn": checkindate.toISOString(),
             "checkOut": checkoutdate.toISOString()
         }
-
+        setSpinerVisible(true);
         Funtion_Check_Avalible_tabel(tims, user.token).then((response) => {
             // console.log("response table" + JSON.stringify(response));
             if (response.code == '200') {
@@ -49,9 +49,10 @@ const CheckTabelList = ({ updateTabelList, updateCheckin, updateCheckout, update
                 if (dt.data.availableTableIds.length == '0') {
                     updateModelTitel("Sorry");
                     updateModelMessage("All of table are fully booked, try another time slot");
+                    setSpinerVisible(false);
                     updateModelVisible(true);
                 } else {
-
+                    setSpinerVisible(false);
                     var lists = [];
                     dt.data.availableTableIds.forEach(tabels => {
                         var teblObj = {
@@ -71,6 +72,7 @@ const CheckTabelList = ({ updateTabelList, updateCheckin, updateCheckout, update
             } else if (response.code == '401') {
                 updateModelTitel("Error");
                 updateModelMessage("Authentication Fail, Plase login again");
+                setSpinerVisible(false);
                 updateModelVisible(true);
                 //redirct to login page
                 //show eorr
@@ -78,6 +80,7 @@ const CheckTabelList = ({ updateTabelList, updateCheckin, updateCheckout, update
                 //server error
                 updateModelTitel("Error");
                 updateModelMessage("Something went wrong, try again later");
+                setSpinerVisible(false);
                 updateModelVisible(true);
             }
 
@@ -91,6 +94,7 @@ const CheckTabelList = ({ updateTabelList, updateCheckin, updateCheckout, update
 
         }).catch((error) => {
             console.log("error happen on avlaibe data fetching " + error);
+            setSpinerVisible(false);
         });
     }
 
@@ -269,6 +273,8 @@ const Tabel_Reservation_Screen = () => {
 
     const [btnShow, setBtnShow] = useState(true);
 
+    const [spinerVisible, setSpinerVisible] = useState(false);
+
 
     useEffect(() => {
         setVisible((items.foodItems.length > 0) ? true : false);
@@ -298,13 +304,14 @@ const Tabel_Reservation_Screen = () => {
             }
         }
         //console.log("dta " + JSON.stringify(dts));
-
+        setSpinerVisible(true);
         Funtion_Reservation_tabel(dts, user.token).then((response) => {
             //alert("resever "+JSON.stringify(responce.status));
             console.log("resever " + JSON.stringify(response));
             if (response.code == '200') {
                 setModelTitel("SuccessFully");
                 setModelMessage("Your table reservation is submitted successfully. The reservation will be cancelled automatically within 15 mins.");
+                setSpinerVisible(false);
                 setShow(true);
 
                 setTableList([]);
@@ -315,6 +322,7 @@ const Tabel_Reservation_Screen = () => {
             } else if (response.code == '401') {
                 setModelTitel("Error");
                 setModelMessage("Authentication Fail, Plase login again");
+                setSpinerVisible(false);
                 setShow(true);
                 //redirct to login page
                 //show eorr
@@ -322,13 +330,16 @@ const Tabel_Reservation_Screen = () => {
                 //server error
                 setModelTitel("Error");
                 setModelMessage("Something went wrong, try again later");
+                setSpinerVisible(false);
                 setShow(true);
             } else {
                 setModelTitel("Error");
                 setModelMessage("Something went wrong, try again later");
+                setSpinerVisible(false);
                 setShow(true);
             }
         }).catch((error) => {
+            setSpinerVisible(false);
             console.log("error happen on reseve tables" + error);
         });
     }
@@ -336,7 +347,7 @@ const Tabel_Reservation_Screen = () => {
     return (
         // <KeyboardAvoidingView style={Styles.main} behavior="padding">
         <View style={Styles.main}>
-            <CheckTabelList updateTabelList={setTableList} updateCheckin={setCheckIN} updateCheckout={setCheckOUT} updateModelVisible={setShow} updateModelTitel={setModelTitel} updateModelMessage={setModelMessage} />
+            <CheckTabelList setSpinerVisible={setSpinerVisible} updateTabelList={setTableList} updateCheckin={setCheckIN} updateCheckout={setCheckOUT} updateModelVisible={setShow} updateModelTitel={setModelTitel} updateModelMessage={setModelMessage} />
 
             <TableListView tabelList={tabelsList} updateSelected={setSelectTabel} updateNote={setNote} updatBtnVisible={setBtnShow} />
 
@@ -403,6 +414,35 @@ const Tabel_Reservation_Screen = () => {
                 </View>
             </View> : null
             }
+
+{(spinerVisible) ?
+                <View
+                    style={{
+                        flex: 1,
+                        position: "absolute",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        opacity: 0.8,
+                        width: wp("100%"),
+                        height: hp("100%"),
+                        backgroundColor: 'rgba(0,0,0,0.3)',
+                        //zIndex:1
+                    }}
+                >
+
+                    <View style={Styles.activityindicator_view}>
+                        <ActivityIndicator animating size="large" color="#F5FCFF" />
+                        <Text
+                            style={{
+                                color: "#000000"
+                            }}
+                        >
+                            loading
+                        </Text>
+                    </View>
+                </View>
+                // <Feching_Loader/>
+                : null}
         </View>
         // </KeyboardAvoidingView>
     )
@@ -742,6 +782,15 @@ const Styles = StyleSheet.create({
         borderRadius: 5,
         backgroundColor: 'red'
     },
+    activityindicator_view: {
+        position: "absolute",
+        alignItems: "center",
+        justifyContent: "center",
+        width: 100,
+        height: 100,
+        opacity: 1,
+        borderRadius: 20
+    }
 
 });
 

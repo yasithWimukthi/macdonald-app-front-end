@@ -1,7 +1,8 @@
 import React, { PropTypes, Component } from 'react';
-import { View, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { View, Image, StyleSheet, Text, TouchableOpacity, SafeAreaView } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/AntDesign';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { Actions } from 'react-native-router-flux';
 
@@ -53,8 +54,11 @@ const ProfileTitel = ({ username }) => {
         dispatch(setFavAddressInfo(favaddress));
         dispatch(setUserInfo(users));
 
-        Actions.auth();
-        
+        AsyncStorage.clear();
+
+        //Actions.auth();
+        Actions.reset('auth');
+
     }
 
 
@@ -124,7 +128,7 @@ const PrivanceyTile = () => {
 
 const PaymentTile = () => {
     return (
-        <TouchableOpacity onPress={() => { Actions.privancy(); }}>
+        <TouchableOpacity disabled onPress={() => { Actions.privancy(); }}>
             <View style={Styles.TileConatiner}>
                 <View style={Styles.TileHolder}>
                     <View style={Styles.TileIconHolder}>
@@ -181,15 +185,17 @@ const profile_screen = () => {
     const { user } = useSelector(state => state.userReducer);
 
     return (
-        <View style={Styles.main}>
-            <ProfileTitel username={user.firstName + " " + user.lastName} />
-            <PersonalSettingTile />
-            <PrivanceyTile />
-            <PaymentTile />
-            <CommunicationTile />
-            <DeleteAccountTile />
+        <SafeAreaView style={{ flex: 1 }}>
+            <View style={Styles.main}>
+                <ProfileTitel username={user.firstName + " " + user.lastName} />
+                <PersonalSettingTile />
+                <PrivanceyTile />
+                <PaymentTile />
+                <CommunicationTile />
+                <DeleteAccountTile />
 
-        </View>
+            </View>
+        </SafeAreaView>
     );
 }
 

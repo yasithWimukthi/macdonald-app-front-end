@@ -1,5 +1,5 @@
 import React, { PropTypes, Component, useState, useEffect } from 'react';
-import { View, Image, StyleSheet, Text, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Image, StyleSheet, Text, TextInput, TouchableOpacity, ActivityIndicator, Linking, Platform } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icons from 'react-native-vector-icons/Feather';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -7,23 +7,29 @@ import { Actions } from 'react-native-router-flux';
 
 //import {Funtion_Auth,Funtion_FaceBook_Register} from '../../assert/networks/api_calls';
 import NetInfo from "@react-native-community/netinfo";
-import { Funtion_Auth } from '../../assert/networks/api_calls';
-import SweetAlert from 'react-native-sweet-alert';
+import { Funtion_Auth, Funtion_FaceBook_Register, Funtion_Google_Register } from '../../assert/networks/api_calls';
 import AwesomeAlert from 'react-native-awesome-alerts';
-import Spinner from 'react-native-spinkit';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { setUserInfo } from '../../redux/actions';
 
 import { StoreUserInfo } from '../../assert/storeage/data_store';
 
-const SOKCET_SERVER_ADDRESS = "https://relaks-cafe.herokuapp.com";
+const SOKCET_SERVER_ADDRESS = "http://cafeappapi-env.eba-5w53m5sm.eu-west-2.elasticbeanstalk.com";
 import GET_TOKEN from '../../assert/networks/dataAccess';
 
-import PushNotification,{Importance} from 'react-native-push-notification';
+import PushNotification, { Importance } from 'react-native-push-notification';
 import { io, Socket } from 'socket.io-client';
 
 import RefundPayement from '../../componet/refundPayemnt';
+
+import SafeAreaView from 'react-native-safe-area-view';
+import { body } from 'koa/lib/response';
+
+//import Feching_Loader from '../../componet/FetchLoader';
+
+import { InAppBrowser } from 'react-native-inappbrowser-reborn'
+
 
 const RulesTexts = () => {
     return (
@@ -83,10 +89,34 @@ const FormView = ({ username, passwords, updateUserName, updatePassowrd }) => {
 }
 
 
-const BtnFaceBookView = ({ facebook_onpress }) => {
+const BtnFaceBookView = ({ setSpinerVisible }) => {
+
+    function facebookLogin() {
+        NetInfo.fetch().then(state => {
+
+            if (state.isConnected) {
+                // var response = Funtion_FaceBook_Register();
+                //social
+                setSpinerVisible(true);
+                Funtion_FaceBook_Register().then((response) => {
+                    //check fetching
+                    setSpinerVisible(false);
+                    var htmlView = response.responce;
+                    Actions.social({ "webViews": htmlView });
+                }).catch((err) => {
+                    setSpinerVisible(false);
+                    console.log("error happen when facebook register" + err);
+                });
+
+            } else {
+                //show error alert for not connect to internet
+            }
+        });
+    }
+
     return (
         <View style={Styles.btnContainer}>
-            <TouchableOpacity onPress={facebook_onpress}>
+            <TouchableOpacity onPress={() => { facebookLogin(); }}>
                 <View style={Styles.btnBorder}>
                     <View style={Styles.btn_icon_holder}>
                         <Icon color="#4267B2" name="facebook-square" size={30} />
@@ -103,10 +133,113 @@ const BtnFaceBookView = ({ facebook_onpress }) => {
     )
 }
 
-const BtnGoogleView = () => {
+const BtnGoogleView = ({ setSpinerVisible }) => {
+
+    function googleLogin() {
+        //alert("calling");
+        // console.log("calling google");
+        NetInfo.fetch().then(state => {
+            if (state.isConnected) {
+                // var response = Funtion_FaceBook_Register();
+                //social
+                //Actions.social();
+                setSpinerVisible(true);
+                Funtion_Google_Register().then((response) => {
+                    //check fetching
+                    setSpinerVisible(false);
+                    var htmlView = response.responce;
+                    Actions.social({ "webViews": htmlView });
+                }).catch((err) => {
+                    setSpinerVisible(false);
+                    console.log("error happen when google register" + err);
+                });
+
+            } else {
+                //show error alert for not connect to internet
+            }
+        });
+    }
+
+    const handleOpenURL = async ({ url }) => {
+        //const { nativeEvent } = syntheticEvent;
+        console.log("end " + url);
+    };
+
+    const getDeepLink = (path = '') => {
+        const scheme = 'https';
+        const prefix =
+            Platform.OS === 'android' ? `${scheme}://api.relaksradiocafe.com` : `${scheme}://`;
+        console.log("paths " + path);
+        return prefix + path;
+    };
+
+    useEffect(() => {
+        // Your code here
+        Linking.addEventListener('url', handleOpenURL);
+    }, []);
+
+    const sleep = (timeout = 100) =>
+        new Promise(resolve => setTimeout(resolve, timeout));
+
+    async function callingVies() {
+
+        // try {
+        //     const loginUrl = 'https://api.relaksradiocafe.com/api/v1/auth/google';
+        //     var dpLink = getDeepLink('/api/v1/auth/google/success');
+        //     const url = `${loginUrl}?redirect_url=${encodeURIComponent(dpLink)}`;
+        //     const result = await InAppBrowser.openAuth(loginUrl, dpLink, {
+        //         // iOS Properties
+        //         ephemeralWebSession: false,
+        //         // Android Properties
+        //         showTitle: false,
+        //         enableUrlBarHiding: true,
+        //         enableDefaultShare: false,
+        //       });
+        //       await sleep(800);
+        //       console.log("response "+JSON.stringify(result));
+        // } catch (error) {
+        //     console.log("error "+error);
+        // }
+        const loginUrl = 'https://api.relaksradiocafe.com/api/v1/auth/google';
+        //const redirectUrl = 'relaks_cafe://auth'
+        const urlInApp = `${loginUrl}`;
+        try {
+            if (await InAppBrowser.isAvailable()) {
+                const result = await InAppBrowser.openAuth(urlInApp);
+                console.log(result);
+
+            } else {
+                alert('Not supported :/');
+            }
+        } catch (error) {
+            console.error(error);
+            alert('Something’s wrong with the app :(');
+        }
+    }
+
     return (
         <View style={Styles.btnContainer}>
-            <TouchableOpacity onPress={() => { alert("you press me") }}>
+            <TouchableOpacity onPress={() => {
+                //Linking.openURL('https://api.relaksradiocafe.com/api/v1/auth/google'); 
+                //googleLogin();
+                callingVies();
+                // var dpLink = getDeepLink('/api/v1/auth/google/success');
+                // InAppBrowser.openAuth(`https://api.relaksradiocafe.com/api/v1/auth/google?redirect_uri=${dpLink}`,dpLink, {
+                //     // iOS Properties
+                //     ephemeralWebSession: false,
+                //     // Android Properties
+                //     showTitle: false,
+                //     enableUrlBarHiding: true,
+                //     enableDefaultShare: false
+                // }).then((response) => {
+                //     console.log("response " + JSON.stringify(response));
+                //     InAppBrowser.closeAuth();
+                // }).catch((err)=>{
+                //     console.log("error happe google auth "+err);
+                // })
+                // ;
+
+            }}>
                 <View style={Styles.btnBorder}>
                     <View style={Styles.btn_icon_holder}>
                         <Icon color="#4285F4" name="google" size={30} />
@@ -161,7 +294,7 @@ const AuthScreen = () => {
     const [spinerSize, setSpinerSize] = useState(100);
     const [spinerVisible, setSpinerVisible] = useState(false);
 
-    const [tokens ,setTokens] = useState(""); //GET_TOKEN
+    const [tokens, setTokens] = useState(""); //GET_TOKEN
 
 
     function login() {
@@ -173,26 +306,13 @@ const AuthScreen = () => {
 
         NetInfo.fetch().then(state => {
             if (state.isConnected) {
+                setSpinerVisible(true);
                 Funtion_Auth(users).then((response) => {
-                    setSpinerVisible(true);
                     console.log("response " + JSON.stringify(response));
 
                     if (response.code == '200') {
                         //sucessfully created
                         var dts = response.responce;
-                        // var us = null;
-                        // if(user.mobile != "" && user.mobile != null){
-                        //      us = {
-                        //         "ids": "0",
-                        //         "firstName": dts.data.firstName,
-                        //         "lastName": dts.data.lastName,
-                        //         "loginType": dts.data.loginType,
-                        //         "email": uName,
-                        //         "token": dts.token,
-                        //         "mobile" : user.mobile
-                        //     }
-                        // }else{  
-                        // }
                         var us = {
                             "ids": "0",
                             "firstName": dts.data.firstName,
@@ -200,7 +320,7 @@ const AuthScreen = () => {
                             "loginType": dts.data.loginType,
                             "email": uName,
                             "token": dts.token,
-                            "mobile" : dts.data.mobile,
+                            "mobile": dts.data.mobile,
                         }
 
                         setTokens(dts.token);
@@ -211,8 +331,9 @@ const AuthScreen = () => {
 
                         setModelTitel("Successfully");
                         setModelMessage("user auth sucess!");
-                        setShowOk(true);
                         setSpinerVisible(false);
+                        setShowOk(true);
+
 
                         setTimeout(() => { Actions.authenticated(); }, 1000);
                         //need to set bear token to state and save in local
@@ -222,25 +343,30 @@ const AuthScreen = () => {
                         // alredy on user
                         setModelTitel("Error");
                         setModelMessage("Form Validation error!");
-                        setShow(true);
                         setSpinerVisible(false);
+                        setShow(true);
+
                     } else if (response.code == '401') {
                         setModelTitel("Error");
                         setModelMessage("Invalid Email Or Password!");
-                        setShow(true);
                         setSpinerVisible(false);
+                        setShow(true);
+
                     } else if (response.code == '500') {
                         setModelTitel("Error");
                         setModelMessage("Something went wrong, try again later");
+                        spinerVisible(false);
                         setShow(true);
+
                     }
 
                 }).catch((error) => {
                     console.log("error " + JSON.stringify(error));
+                    spinerVisible(false);
                 });
 
             } else {
-               // alert("net not conntectd");
+                // alert("net not conntectd");
                 //show error alert for not connect to internet
                 setModelTitel("Error");
                 setModelMessage("Please check your device internet connection");
@@ -263,17 +389,9 @@ const AuthScreen = () => {
         }
     }
 
-    function facebookLogin() {
-        NetInfo.fetch().then(state => {
 
-            if (state.isConnected) {
-                // var response = Funtion_FaceBook_Register();
 
-            } else {
-                //show error alert for not connect to internet
-            }
-        });
-    }
+
 
 
     useEffect(() => {
@@ -327,63 +445,64 @@ const AuthScreen = () => {
     }, [tokens]);
 
 
-    function showAppPushNotification(titel,message,status,ref,type) {
+    function showAppPushNotification(titel, message, status, ref, type) {
 
-        console.log("calling push notification "+titel+" "+message);
-    
+        console.log("calling push notification " + titel + " " + message);
+
         PushNotification.localNotification({
-          /* Android Only Properties */
-          channelId: "1995", // (required) channelId, if the channel doesn't exist, notification will not trigger.
-          ticker: "Relaks Notification Ticker", // (optional)
-          showWhen: true, // (optional) default: true
-          autoCancel: true, // (optional) default: true
-          largeIcon: "ic_launcher", // (optional) default: "ic_launcher". Use "" for no large icon.
-          largeIconUrl: "https://www.example.tld/picture.jpg", // (optional) default: undefined
-          smallIcon: "ic_notification", // (optional) default: "ic_notification" with fallback for "ic_launcher". Use "" for default small icon.
-          bigText: message, // (optional) default: "message" prop
-          subText: "Order Status", // (optional) default: none
-          bigPictureUrl: "https://www.example.tld/picture.jpg", // (optional) default: undefined
-          bigLargeIcon: "ic_launcher", // (optional) default: undefined
-          bigLargeIconUrl: "https://www.example.tld/bigicon.jpg", // (optional) default: undefined
-          color: "red", // (optional) default: system default
-          vibrate: false, // (optional) default: true
-          vibration: 0, // vibration length in milliseconds, ignored if vibrate=false, default: 1000
-          priority: "default", // (optional) set notification priority, default: high
-          visibility: "private", // (optional) set notification visibility, default: private
-          ignoreInForeground: false,// (optional) If this notification is duplicative of a Launcher shortcut, sets the id of the shortcut, in case the Launcher wants to hide the shortcut, default undefined
-          onlyAlertOnce: true, // (optional) alert will open only once with sound and notify, default: false
-    
-          when: null, // (optional) Add a timestamp (Unix timestamp value in milliseconds) pertaining to the notification (usually the time the event occurred). For apps targeting Build.VERSION_CODES.N and above, this time is not shown anymore by default and must be opted into by using `showWhen`, default: null.
-          usesChronometer: false, // (optional) Show the `when` field as a stopwatch. Instead of presenting `when` as a timestamp, the notification will show an automatically updating display of the minutes and seconds since when. Useful when showing an elapsed time (like an ongoing phone call), default: false.
-          timeoutAfter: null, // (optional) Specifies a duration in milliseconds after which this notification should be canceled, if it is not already canceled, default: null
-    
-          actions: ["Yes", "No"], // (Android only) See the doc for notification actions to know more
-          invokeApp: true, // (optional) This enable click on actions to bring back the application to foreground or stay in background, default: true
-    
-          /* iOS only properties */
-          category: "Relakas", // (optional) default: empty string
-          subtitle: "My Order", // (optional) smaller title below notification title
-    
-          /* iOS and Android properties */
-          id: 0, // (optional) Valid unique 32 bit integer specified as string. default: Autogenerated Unique ID
-          title: titel, // (optional)
-          message: message, // (required)
-          picture: "https://www.example.tld/picture.jpg", // (optional) Display an picture with the notification, alias of `bigPictureUrl` for Android. default: undefined
-          userInfo: {}, // (optional) default: {} (using null throws a JSON value '<null>' error)
-          playSound: true, // (optional) default: true
-          soundName: "default", // (optional) Sound to play when the notification is shown. Value of 'default' plays the default sound. It can be set to a custom sound such as 'android.resource://com.xyz/raw/my_sound'. It will look for the 'my_sound' audio file in 'res/raw' directory and play it. default: 'default' (default sound is played)
-          //number: 10, // (optional) Valid 32 bit integer specified as string. default: none (Cannot be zero)
-          repeatType: "day", // (optional) Repeating interval. Check 'Repeating Notifications' section for more info. 
-          repeatTime: 1,
-          data : {
-            "status" : status,
-            "ref" : ref,
-            "type" : type
-          }
+            /* Android Only Properties */
+            channelId: "1995", // (required) channelId, if the channel doesn't exist, notification will not trigger.
+            ticker: "Relaks Notification Ticker", // (optional)
+            showWhen: true, // (optional) default: true
+            autoCancel: true, // (optional) default: true
+            largeIcon: "ic_launcher", // (optional) default: "ic_launcher". Use "" for no large icon.
+            largeIconUrl: "https://www.example.tld/picture.jpg", // (optional) default: undefined
+            smallIcon: "ic_notification", // (optional) default: "ic_notification" with fallback for "ic_launcher". Use "" for default small icon.
+            bigText: message, // (optional) default: "message" prop
+            subText: "Order Status", // (optional) default: none
+            bigPictureUrl: "https://www.example.tld/picture.jpg", // (optional) default: undefined
+            bigLargeIcon: "ic_launcher", // (optional) default: undefined
+            bigLargeIconUrl: "https://www.example.tld/bigicon.jpg", // (optional) default: undefined
+            color: "red", // (optional) default: system default
+            vibrate: false, // (optional) default: true
+            vibration: 0, // vibration length in milliseconds, ignored if vibrate=false, default: 1000
+            priority: "default", // (optional) set notification priority, default: high
+            visibility: "private", // (optional) set notification visibility, default: private
+            ignoreInForeground: false,// (optional) If this notification is duplicative of a Launcher shortcut, sets the id of the shortcut, in case the Launcher wants to hide the shortcut, default undefined
+            onlyAlertOnce: true, // (optional) alert will open only once with sound and notify, default: false
+
+            when: null, // (optional) Add a timestamp (Unix timestamp value in milliseconds) pertaining to the notification (usually the time the event occurred). For apps targeting Build.VERSION_CODES.N and above, this time is not shown anymore by default and must be opted into by using `showWhen`, default: null.
+            usesChronometer: false, // (optional) Show the `when` field as a stopwatch. Instead of presenting `when` as a timestamp, the notification will show an automatically updating display of the minutes and seconds since when. Useful when showing an elapsed time (like an ongoing phone call), default: false.
+            timeoutAfter: null, // (optional) Specifies a duration in milliseconds after which this notification should be canceled, if it is not already canceled, default: null
+
+            actions: ["Yes", "No"], // (Android only) See the doc for notification actions to know more
+            invokeApp: true, // (optional) This enable click on actions to bring back the application to foreground or stay in background, default: true
+
+            /* iOS only properties */
+            category: "Relakas", // (optional) default: empty string
+            subtitle: "My Order", // (optional) smaller title below notification title
+
+            /* iOS and Android properties */
+            id: 0, // (optional) Valid unique 32 bit integer specified as string. default: Autogenerated Unique ID
+            title: titel, // (optional)
+            message: message, // (required)
+            picture: "https://www.example.tld/picture.jpg", // (optional) Display an picture with the notification, alias of `bigPictureUrl` for Android. default: undefined
+            userInfo: {}, // (optional) default: {} (using null throws a JSON value '<null>' error)
+            playSound: true, // (optional) default: true
+            soundName: "default", // (optional) Sound to play when the notification is shown. Value of 'default' plays the default sound. It can be set to a custom sound such as 'android.resource://com.xyz/raw/my_sound'. It will look for the 'my_sound' audio file in 'res/raw' directory and play it. default: 'default' (default sound is played)
+            //number: 10, // (optional) Valid 32 bit integer specified as string. default: none (Cannot be zero)
+            repeatType: "day", // (optional) Repeating interval. Check 'Repeating Notifications' section for more info. 
+            repeatTime: 1,
+            data: {
+                "status": status,
+                "ref": ref,
+                "type": type
+            }
         });
-      }
+    }
 
     return (
+
         <View style={Styles.main}>
             <View style={[Styles.screenTitel, { marginTop: hp('1%'), marginBottom: hp('1.5%') }]}>
                 <RulesTexts />
@@ -393,11 +512,20 @@ const AuthScreen = () => {
                 <FormView username={uName} passwords={uPass} updateUserName={setUName} updatePassowrd={setUPass} />
             </View>
 
+
+
             <View style={Styles.screenTitel}>
-                <BtnFaceBookView facebook_onpress={() => { facebookLogin(); }} />
+                <BtnFaceBookView setSpinerVisible={setSpinerVisible} />
             </View>
 
-            <BtnGoogleView />
+            <View>
+                <BtnGoogleView setSpinerVisible={setSpinerVisible} />
+            </View>
+
+            <View style={[Styles.screenTitel, { height: hp('4%') }]}>
+
+            </View>
+
             <View style={[Styles.screenTitel, { position: 'absolute', bottom: 0 }]}>
                 <BtnLoginView funtions={() => { validationForm(); }} />
             </View>
@@ -440,7 +568,7 @@ const AuthScreen = () => {
                     setShowOk(false);
                 }}
             />
-
+            {/* <Feching_Loader/> */}
             {(spinerVisible) ?
                 <View
                     style={{
@@ -451,7 +579,8 @@ const AuthScreen = () => {
                         opacity: 0.8,
                         width: wp("100%"),
                         height: hp("100%"),
-                        backgroundColor: "#000000"
+                        backgroundColor: 'rgba(0,0,0,0.3)',
+                        //zIndex:1
                     }}
                 >
 
@@ -466,9 +595,11 @@ const AuthScreen = () => {
                         </Text>
                     </View>
                 </View>
+                // <Feching_Loader/>
                 : null}
 
         </View>
+
     );
 }
 
@@ -480,7 +611,8 @@ const Styles = StyleSheet.create({
         backgroundColor: "#FFFFFF",
         //flexDirection: 'row',
         alignContent: 'center',
-        //alignItems: 'center'
+        //alignItems: 'center',
+        height: hp("100%"),
     },
     defulat_text: {
         fontFamily: 'NexaTextDemo-Light',
