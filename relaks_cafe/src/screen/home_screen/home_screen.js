@@ -2,10 +2,11 @@ import React, { PropTypes, Component, useState, useEffect } from 'react';
 import { View, Image, StyleSheet, Text, TextInput, TouchableOpacity, ScrollView, } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
-
 import { Actions } from 'react-native-router-flux';
 
 import { useSelector, useDispatch } from 'react-redux';
+
+import {FONT_BOLD,FONT_LIGHT} from '../../assert/key/key';
 
 //const Tab = createBottomTabNavigator();
 
@@ -15,12 +16,15 @@ const home_screen = () => {
 
     const [visbile, setVisible] = useState((items.foodItems.length > 0) ? true : false);
 
-    const [totals, setTolats] = useState(items.totalPrice);
+    //const [totals, setTolats] = useState(0);
+    const [totals, setTolats] = useState((items.length > 0) ? items.totalPrice : 0);
+
 
     useEffect(()=>{
        // alert("calling");
+       console.log("items infos "+JSON.stringify(items));
         setVisible((items.foodItems.length > 0) ? true : false);
-        setTolats(items.totalPrice);
+        setTolats((items.totalPrice));
     });
 
     return (
@@ -78,7 +82,7 @@ const Styles = StyleSheet.create({
         resizeMode: "contain",
     },
     tabBartext: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT,// 'NexaTextDemo-Light',
         fontSize: 12,
         color: '#757575',
         letterSpacing: 0.04,
@@ -118,13 +122,13 @@ const Styles = StyleSheet.create({
         justifyContent: 'center',
     },
     itemText: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 14,
         color: '#fff',
         letterSpacing: 0.04,
     },
     totalText: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD,// 'NexaTextDemo-Bold',
         fontSize: 14,
         color: '#fff',
         letterSpacing: 0.04,

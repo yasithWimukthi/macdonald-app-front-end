@@ -11,6 +11,8 @@ import { Actions } from 'react-native-router-flux';
 
 import { useSelector, useDispatch } from 'react-redux';
 
+import { FONT_BOLD, FONT_LIGHT } from '../../assert/key/key';
+
 function More_Tab_Screen({...props}) {
    // alert("props "+JSON.stringify(props));
     console.log("props "+JSON.stringify(props));
@@ -237,7 +239,7 @@ const Styles = StyleSheet.create({
         justifyContent: 'center'
     },
     titelUI : {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 14,
         color: '#000',
         letterSpacing : 0.25,
@@ -278,13 +280,13 @@ const Styles = StyleSheet.create({
         //backgroundColor:'#EB1F25'
     },
     itemText: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 14,
         color: '#fff',
         letterSpacing: 0.04,
     },
     totalText: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 14,
         color: '#fff',
         letterSpacing: 0.04,

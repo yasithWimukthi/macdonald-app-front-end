@@ -2,6 +2,8 @@ import React, { PropTypes, Component } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, SafeAreaView } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
+import { FONT_BOLD,FONT_LIGHT } from '../../assert/key/key';
+
 const subcriptionScreen = () => {
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -60,19 +62,19 @@ const Styles = StyleSheet.create({
         flexDirection: 'row'
     },
     TitelText: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 18,
         color: '#000',
         letterSpacing: 0.04,
     },
     subTextText: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT , // 'NexaTextDemo-Light',
         fontSize: 12,
         color: '#000',
         letterSpacing: 0.04,
     },
     subTextHyperText: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 12,
         color: 'blue',
         letterSpacing: 0.04,

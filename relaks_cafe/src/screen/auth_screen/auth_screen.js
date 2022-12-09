@@ -28,7 +28,9 @@ import { body } from 'koa/lib/response';
 
 //import Feching_Loader from '../../componet/FetchLoader';
 
-import { InAppBrowser } from 'react-native-inappbrowser-reborn'
+import { InAppBrowser } from 'react-native-inappbrowser-reborn';
+
+import {FONT_BOLD,FONT_LIGHT} from '../../assert/key/key';
 
 
 const RulesTexts = () => {
@@ -39,7 +41,10 @@ const RulesTexts = () => {
                 <View style={Styles.textRow}>
                     <Text style={Styles.hiyperlink_text}>Terms & Conditions </Text>
                     <Text style={Styles.defulat_text}>and </Text>
-                    <Text style={Styles.hiyperlink_text}>Privacy Policy</Text>
+                    <TouchableOpacity onPress={() => { InAppBrowser.open('http://relaksradiocafe.com/privacy-policy-2'); }}>
+                        <Text style={Styles.hiyperlink_text}>Privacy Policy</Text>
+                    </TouchableOpacity>
+
                 </View>
             </View>
         </View>
@@ -133,43 +138,92 @@ const BtnFaceBookView = ({ setSpinerVisible }) => {
     )
 }
 
-const BtnGoogleView = ({ setSpinerVisible }) => {
+const BtnGoogleView = ({ setSpinerVisible, setTokens, setModelTitel, setModelMessage, setShowOk, setShow }) => {
 
-    function googleLogin() {
-        //alert("calling");
-        // console.log("calling google");
-        NetInfo.fetch().then(state => {
-            if (state.isConnected) {
-                // var response = Funtion_FaceBook_Register();
-                //social
-                //Actions.social();
-                setSpinerVisible(true);
-                Funtion_Google_Register().then((response) => {
-                    //check fetching
-                    setSpinerVisible(false);
-                    var htmlView = response.responce;
-                    Actions.social({ "webViews": htmlView });
-                }).catch((err) => {
-                    setSpinerVisible(false);
-                    console.log("error happen when google register" + err);
-                });
 
-            } else {
-                //show error alert for not connect to internet
-            }
-        });
-    }
+    const { user } = useSelector(state => state.userReducer);
+    const dispatch = useDispatch();
 
     const handleOpenURL = async ({ url }) => {
-        //const { nativeEvent } = syntheticEvent;
         console.log("end " + url);
+
+        var datas = url;
+        var dts = datas.split('?');
+        var temp_url_pram = dts[1].split('&');
+        console.log("splite " + JSON.stringify(temp_url_pram[1]));
+        //alert("token  " + JSON.stringify(temp_url_pram[1]));
+
+        var message = temp_url_pram[0].split('=');
+        console.log("message " + message[1]);
+
+        var token = temp_url_pram[1].split('=');
+        console.log("token " + token[1]);
+
+        var loginType = temp_url_pram[2].split('=');
+        console.log("loginType " + loginType[1]);
+
+        var firstName = temp_url_pram[3].split('=');
+        console.log("firstName " + firstName[1]);
+
+        var lastName = temp_url_pram[4].split('=');
+        console.log("lastName " + lastName[1]);
+
+        var email = temp_url_pram[5].split('=');
+        console.log("email " + email[1]);
+
+        var mobile = temp_url_pram[6].split('=');
+        console.log("mobile " + mobile[1]);
+
+        var role = temp_url_pram[7].split('=');
+        console.log("role " + role[1]);
+
+
+        console.log(" number "+(mobile[1] != undefined || mobile[1] != null ) ? " " : mobile[1]);
+
+        if (message[1] == 'success') {
+
+            var us = {
+                "ids": "0",
+                "firstName": firstName[1],
+                "lastName": lastName[1],
+                "loginType": loginType[1],
+                "email": email[1],
+                "token": token[1],
+                "mobile": (mobile[1] != undefined || mobile[1] != null ) ? " " : mobile[1],
+            }
+
+            setTokens(token[1]);
+
+            dispatch(setUserInfo(us));
+
+            StoreUserInfo(us);
+
+            setModelTitel("Successfully");
+            setModelMessage("user google auth sucess!");
+            setSpinerVisible(false);
+            setShowOk(true);
+
+
+            setTimeout(() => { Actions.authenticated(); }, 1000);
+
+
+        } else {
+            setModelTitel("Error");
+            setModelMessage("Something went wrong, try again later");
+            setSpinerVisible(false);
+            setShow(true);
+
+        }
+
+
+
     };
 
     const getDeepLink = (path = '') => {
-        const scheme = 'https';
+        const scheme = 'relakscafe';
         const prefix =
-            Platform.OS === 'android' ? `${scheme}://api.relaksradiocafe.com` : `${scheme}://`;
-        console.log("paths " + path);
+            Platform.OS === 'android' ? `${scheme}://googleauth/` : `${scheme}://`;
+        console.log("paths " + prefix + path);
         return prefix + path;
     };
 
@@ -183,37 +237,126 @@ const BtnGoogleView = ({ setSpinerVisible }) => {
 
     async function callingVies() {
 
-        // try {
-        //     const loginUrl = 'https://api.relaksradiocafe.com/api/v1/auth/google';
-        //     var dpLink = getDeepLink('/api/v1/auth/google/success');
-        //     const url = `${loginUrl}?redirect_url=${encodeURIComponent(dpLink)}`;
-        //     const result = await InAppBrowser.openAuth(loginUrl, dpLink, {
-        //         // iOS Properties
-        //         ephemeralWebSession: false,
-        //         // Android Properties
-        //         showTitle: false,
-        //         enableUrlBarHiding: true,
-        //         enableDefaultShare: false,
-        //       });
-        //       await sleep(800);
-        //       console.log("response "+JSON.stringify(result));
-        // } catch (error) {
-        //     console.log("error "+error);
-        // }
-        const loginUrl = 'https://api.relaksradiocafe.com/api/v1/auth/google';
-        //const redirectUrl = 'relaks_cafe://auth'
-        const urlInApp = `${loginUrl}`;
+        const browserConfig = {
+            // iOS Properties
+            dismissButtonStyle: 'cancel',
+            preferredBarTintColor: '#453AA4',
+            preferredControlTintColor: 'white',
+            readerMode: false,
+            animated: true,
+            modalPresentationStyle: 'overFullScreen',
+            modalTransitionStyle: 'partialCurl',
+            modalEnabled: true,
+            // Android Properties
+            showTitle: false,
+            toolbarColor: '#f2f2f2',
+            secondaryToolbarColor: 'white',
+            enableUrlBarHiding: true,
+            enableDefaultShare: false,
+            forceCloseOnRedirection: false,
+            // Specify full animation resource identifier(package:anim/name)
+            // or only resource name(in case of animation bundled with app).
+            animations: {
+                startEnter: 'slide_in_right',
+                startExit: 'slide_out_left',
+                endEnter: 'slide_in_left',
+                endExit: 'slide_out_right',
+            },
+            waitForRedirectDelay: true ? 1000 : 0,
+        };
+
+        const loginUrl = 'https://api.relaksradiocafe.com/api/v1/auth/google/'; //https://chootyputha.github.io/webpages_checks/
+        const redirectUrl = getDeepLink();
+        const urlInApp = `${loginUrl}?redirect_url=${encodeURIComponent(redirectUrl)}`;
+        console.log("url " + urlInApp);
         try {
             if (await InAppBrowser.isAvailable()) {
-                const result = await InAppBrowser.openAuth(urlInApp);
+                const result = await InAppBrowser.openAuth(urlInApp, redirectUrl, browserConfig);
+                if (result.type == 'success') {
+                    var datas = result.url;
+                    var dts = datas.split('?');
+                    var temp_url_pram = dts[1].split('&');
+                    console.log("splite " + JSON.stringify(dts));
+
+                    var message = temp_url_pram[0].split('=');
+                    console.log("message " + message[1]);
+
+                    var token = temp_url_pram[1].split('=');
+                    console.log("token " + token[1]);
+
+                    var loginType = temp_url_pram[2].split('=');
+                    console.log("loginType " + loginType[1]);
+
+                    var firstName = temp_url_pram[3].split('=');
+                    console.log("firstName " + firstName[1]);
+
+                    var lastName = temp_url_pram[4].split('=');
+                    console.log("lastName " + lastName[1]);
+
+                    var email = temp_url_pram[5].split('=');
+                    console.log("email " + email[1]);
+
+                    var mobile = temp_url_pram[6].split('=');
+                    console.log("mobile " + mobile[1]);
+
+                    var role = temp_url_pram[7].split('=');
+                    console.log("role " + role[1]);
+
+
+                    var us = {
+                        "ids": "0",
+                        "firstName": firstName[1],
+                        "lastName": lastName[1],
+                        "loginType": loginType[1],
+                        "email": email[1],
+                        "token": token[1],
+                        "mobile": (mobile[1] != undefined || mobile[1] != null ) ? " " : mobile[1],
+                    }
+
+                    setTokens(token[1]);
+
+                    dispatch(setUserInfo(us));
+
+                    StoreUserInfo(us);
+
+                    setModelTitel("Successfully");
+                    setModelMessage("user google auth sucess!");
+                    setSpinerVisible(false);
+                    setShowOk(true);
+
+
+                    setTimeout(() => { Actions.authenticated(); }, 1000);
+
+                } else {
+                    setSpinerVisible(false);
+                    if (Platform.OS === 'android') {
+                        //setModelTitel("Error");
+                        //setModelMessage("Something went wrong, try again later ssss");
+                        //setShow(false);
+                    } else {
+                        setModelTitel("Error");
+                        setModelMessage("Something went wrong, try again later ssss");
+                        setShow(true);
+                    }
+
+                }
                 console.log(result);
 
             } else {
-                alert('Not supported :/');
+                //alert('Not supported :/');
+                setModelTitel("Error");
+                setModelMessage("Something went wrong, try again later");
+                setSpinerVisible(false);
+                setShow(true);
+                console.log('Not supported :/');
             }
         } catch (error) {
             console.error(error);
-            alert('Something’s wrong with the app :(');
+            // alert('Something’s wrong with the app :(');
+            // setModelTitel("Error");
+            // setModelMessage("Something went wrong, try again later");
+            // spinerVisible(false);
+            // setShow(true);
         }
     }
 
@@ -223,21 +366,6 @@ const BtnGoogleView = ({ setSpinerVisible }) => {
                 //Linking.openURL('https://api.relaksradiocafe.com/api/v1/auth/google'); 
                 //googleLogin();
                 callingVies();
-                // var dpLink = getDeepLink('/api/v1/auth/google/success');
-                // InAppBrowser.openAuth(`https://api.relaksradiocafe.com/api/v1/auth/google?redirect_uri=${dpLink}`,dpLink, {
-                //     // iOS Properties
-                //     ephemeralWebSession: false,
-                //     // Android Properties
-                //     showTitle: false,
-                //     enableUrlBarHiding: true,
-                //     enableDefaultShare: false
-                // }).then((response) => {
-                //     console.log("response " + JSON.stringify(response));
-                //     InAppBrowser.closeAuth();
-                // }).catch((err)=>{
-                //     console.log("error happe google auth "+err);
-                // })
-                // ;
 
             }}>
                 <View style={Styles.btnBorder}>
@@ -355,14 +483,14 @@ const AuthScreen = () => {
                     } else if (response.code == '500') {
                         setModelTitel("Error");
                         setModelMessage("Something went wrong, try again later");
-                        spinerVisible(false);
+                        setSpinerVisible(false);
                         setShow(true);
 
                     }
 
                 }).catch((error) => {
                     console.log("error " + JSON.stringify(error));
-                    spinerVisible(false);
+                    setSpinerVisible(false);
                 });
 
             } else {
@@ -519,7 +647,7 @@ const AuthScreen = () => {
             </View>
 
             <View>
-                <BtnGoogleView setSpinerVisible={setSpinerVisible} />
+                <BtnGoogleView setSpinerVisible={setSpinerVisible} setTokens={setTokens} setModelMessage={setModelMessage} setModelTitel={setModelTitel} setShowOk={setShowOk} setShow={setShow} />
             </View>
 
             <View style={[Styles.screenTitel, { height: hp('4%') }]}>
@@ -615,7 +743,7 @@ const Styles = StyleSheet.create({
         height: hp("100%"),
     },
     defulat_text: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT,//'NexaTextDemo-Light',
         fontSize: 14,
         color: '#000',
         letterSpacing: 0.3,
@@ -627,7 +755,7 @@ const Styles = StyleSheet.create({
         justifyContent: 'center',
     },
     hiyperlink_text: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, //'NexaTextDemo-Light',
         fontSize: 14,
         color: '#EB1F25',
         textDecorationLine: 'underline'
@@ -682,7 +810,7 @@ const Styles = StyleSheet.create({
         height: 40,
         borderBottomColor: '#000',
         borderBottomWidth: 1,
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT,//'NexaTextDemo-Light',
         color: '#000'
     },
     icon: {
@@ -734,7 +862,7 @@ const Styles = StyleSheet.create({
         alignItems: 'center'
     },
     brtn_text_content: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, //'NexaTextDemo-Bold',
         fontSize: 16,
         color: '#000'
     },

@@ -11,6 +11,8 @@ import { setAddressInfo, setCartItems } from '../../redux/actions';
 
 import AwesomeAlert from 'react-native-awesome-alerts';
 
+import {FONT_BOLD,FONT_LIGHT} from '../../assert/key/key';
+
 const AddressTile = () => {
     return (
         <View style={Styles.resultInputContainer}>
@@ -47,7 +49,7 @@ const SearchViewInputTile = ({ updateList, updateVisible, showVisble, updateTite
             url: `https://maps.googleapis.com/maps/api/place/autocomplete/json?key=${PlaceAPI}&input=${place}`,
         }).then((response) => {
 
-            //console.log("data from place api " + JSON.stringify(response.data.status));
+            console.log("data from place api " + JSON.stringify(response.data.status));
             updateList(response.data.predictions);
             setPlaceList(response.data.predictions);
 
@@ -222,7 +224,7 @@ const Styles = StyleSheet.create({
         borderColor: '#f5f5f5'
     },
     serachTextInput: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD ,//'NexaTextDemo-Bold',
         fontSize: 15,
         color: '#000',
         letterSpacing: 0.04,
@@ -268,14 +270,14 @@ const Styles = StyleSheet.create({
         alignItems: 'center'
     },
     resultTextBold: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD,// 'NexaTextDemo-Bold',
         fontSize: 15,
         color: '#000',
         letterSpacing: 0.04,
         marginLeft: 5,
     },
     resultTextLight: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 14,
         color: '#000',
         letterSpacing: 0.04,

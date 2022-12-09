@@ -1,6 +1,8 @@
 import React, { PropTypes, Component,useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
+import {FONT_BOLD,FONT_LIGHT} from '../assert/key/key';
+
 const ToggleBtn = ({
     navigation,
     selectionMode,
@@ -51,12 +53,12 @@ const Styles = StyleSheet.create({
         alignItems: 'center',
     },
     optionText1 : {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 15,
         letterSpacing: 0.25,
     },
     optionText2 : {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, //'NexaTextDemo-Light',
         fontSize: 15,
         letterSpacing: 0.25,
     }

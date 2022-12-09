@@ -11,6 +11,8 @@ import { Funtion_Get_All_Orders, Funtion_Get_Tabels_Info } from '../../assert/ne
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
+import {FONT_BOLD,FONT_LIGHT} from '../../assert/key/key';
+
 const Tab = createMaterialTopTabNavigator();
 
 const TitelComponet = () => {
@@ -372,19 +374,19 @@ const Styles = StyleSheet.create({
         justifyContent: 'center'
     },
     titel_heder: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 20,
         color: '#000',
         letterSpacing: 0.25,
     },
     titel_description: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 14,
         color: '#000',
         letterSpacing: 0.25,
     },
     titel_description_hed: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 16,
         color: '#000',
         letterSpacing: 0.25,
@@ -421,13 +423,13 @@ const Styles = StyleSheet.create({
         bottom: 0
     },
     titel_botttom_description: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 12,
         color: '#000',
         letterSpacing: 0.1,
     },
     titel_botttom_titel: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD,// 'NexaTextDemo-Bold',
         fontSize: 13,
         color: '#000',
         letterSpacing: 0.25,
@@ -496,13 +498,13 @@ const Styles = StyleSheet.create({
         marginTop: 2,
     },
     orderInfoText: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 13,
         color: '#000',
         letterSpacing: 0.1,
     },
     orderInfoTextBold: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 16,
         color: '#000',
         letterSpacing: 0.1,
@@ -543,13 +545,13 @@ const Styles = StyleSheet.create({
         //backgroundColor:'#EB1F25'
     },
     itemText: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 14,
         color: '#fff',
         letterSpacing: 0.04,
     },
     totalText: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 14,
         color: '#fff',
         letterSpacing: 0.04,

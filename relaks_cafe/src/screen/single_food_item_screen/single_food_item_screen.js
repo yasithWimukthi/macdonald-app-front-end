@@ -14,6 +14,8 @@ import { Actions } from 'react-native-router-flux';
 
 import BottomBarView from '../../componet/bootmTabBar';
 
+import {FONT_BOLD,FONT_LIGHT} from '../../assert/key/key';
+
 const FoodName = ({ foodName }) => {
     return (
         <View style={Styles.foodName_Container}>
@@ -89,7 +91,7 @@ const QtyInfoView = ({ qty, updateQty, updateNote }) => {
     return (
         <View style={Styles.Qty_Container}>
             <View style={Styles.Qty_Holder}>
-                <View style={[Styles.Qty_Input_View, { flexDirection: 'row' }]}>
+                <View style={[Styles.Qty_Input_View, { flexDirection: 'row', }]}>
                     <View style={Styles.Qty_Input_holder}>
                         <View style={Styles.Qty_single_tite}>
                             <TouchableOpacity onPress={() => {
@@ -111,9 +113,6 @@ const QtyInfoView = ({ qty, updateQty, updateNote }) => {
                             </TouchableOpacity>
                         </View>
                     </View>
-                    {/* <View style={Styles.Qty_Input_holder2}>
-
-                    </View> */}
                 </View>
                 <View style={[Styles.Qty_Input_View, { borderWidth: 1, borderColor: '#f5f5f5' }]}>
                     <TextInput style={Styles.qty_input_text} placeholder="Special Note.." onChangeText={(value) => { updateNote(value); }} multiline={true} />
@@ -254,9 +253,9 @@ const Single_FoodInfo_Screen = ({ ...props }) => {
                     <BtnAddToCartView funtions={() => { AddToCart(); }} protionCount={protionlist.length} />
                 </View>
 
-                <View style={{ height: hp('4%') }}>
+                {/* <View style={{ height: hp('4%') }}>
 
-                </View>
+                </View> */}
             </ScrollView>
             {/* <BottomBarView/> */}
             {
@@ -315,22 +314,23 @@ const Styles = StyleSheet.create({
     },
     foodName_Container: {
         width: wp('100%'),
-        height: hp('20%'),
+        height: hp('12%'),
         alignItems: 'center',
         justifyContent: 'center',
+       // backgroundColor : 'green'
     },
     foodName_Holder: {
         width: wp('90%'),
-        height: hp('18%'),
+        height: hp('11%'),
         justifyContent: 'center',
     },
     foodName_view: {
         width: wp('90%'),
-        height: hp('15%'),
+        height: hp('10%'),
         justifyContent: 'center',
     },
     foodName_text: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 28,
         color: '#000',
         letterSpacing: 0.04,
@@ -363,32 +363,33 @@ const Styles = StyleSheet.create({
         alignItems: 'center',
     },
     single_portion_text: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 14,
         color: '#000',
         letterSpacing: 0.04,
     },
     Image_Container: {
         width: wp('100%'),
-        height: hp('35%'),
+        height: hp('28%'),
         alignItems: 'center',
         justifyContent: 'center',
     },
     Image_Holder: {
         width: wp('90%'),
-        height: hp('32%'),
+        height: hp('27%'),
         justifyContent: 'center',
         flexDirection: 'row'
     },
     Qty_Container: {
         width: wp('100%'),
-        height: hp('20%'),
+        height: hp('14%'),
         alignItems: 'center',
         justifyContent: 'center',
+       //backgroundColor:'blue'
     },
     Qty_Holder: {
         width: wp('90%'),
-        height: hp('18%'),
+        height: hp('13%'),
         justifyContent: 'center',
         alignItems: 'center'
     },
@@ -399,7 +400,7 @@ const Styles = StyleSheet.create({
         justifyContent: 'center',
     },
     qty_input_text: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 14,
         color: '#000',
         letterSpacing: 0.04,
@@ -424,7 +425,7 @@ const Styles = StyleSheet.create({
         margin: 3
     },
     qty_text: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 18,
         color: '#000',
         letterSpacing: 0.04,
@@ -435,7 +436,9 @@ const Styles = StyleSheet.create({
         height: hp('8%'),
         // backgroundColor:'pink',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        //backgroundColor: 'yellow',
+        
     },
     btnBorder: {
         width: wp("90%"),
@@ -465,13 +468,13 @@ const Styles = StyleSheet.create({
         alignItems: 'center'
     },
     brtn_text_content: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 16,
         color: '#000'
     },
     screenTitel: {
-        marginTop: hp('3%'),
-        marginBottom: hp('3%'),
+        marginTop: hp('9%'),
+        marginBottom: hp('1%'),
         //position: 'absolute',
         //bottom: 0
     },
@@ -481,7 +484,7 @@ const Styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         position: 'absolute',
-        bottom: 0,
+        bottom: hp('7%'),
         // backgroundColor:'#f5f5f5'
     },
     cartTile_holder: {
@@ -510,13 +513,13 @@ const Styles = StyleSheet.create({
         justifyContent: 'center',
     },
     itemText: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 14,
         color: '#fff',
         letterSpacing: 0.04,
     },
     totalText: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 14,
         color: '#fff',
         letterSpacing: 0.04,
@@ -530,7 +533,7 @@ const Styles = StyleSheet.create({
         backgroundColor: 'red'
     },
     portionTexts : {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 14,
         color: '#000',
         letterSpacing: 0.04,

@@ -77,6 +77,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Icon from 'react-native-vector-icons/AntDesign';
 
+import {FONT_BOLD,FONT_LIGHT} from './src/assert/key/key';
+
 
 //tab screen
 import Home_Tab_Screen from './src/screen/Tabs/home_tab_screen';
@@ -315,7 +317,7 @@ const App = () => {
 
   return (
     <Provider store={Store}>
-      <Router uriPrefix={'abcd.com'} >
+      <Router uriPrefix={'https://api.relaksradiocafe.com'} >
         <Stack key="root" headerLayoutPreset="center">
           <Scene
             key="splash"
@@ -326,6 +328,7 @@ const App = () => {
           />
           <Scene
             key="auth"
+            path={"/api/v1/auth/google/success"}
             type="replace"
             component={AuthenticationScreen}
             hideNavBar={true}
@@ -831,7 +834,7 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
   },
   tabBartext: {
-    fontFamily: 'NexaTextDemo-Light',
+    fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
     fontSize: 12,
     color: '#757575',
     letterSpacing: 0.04,

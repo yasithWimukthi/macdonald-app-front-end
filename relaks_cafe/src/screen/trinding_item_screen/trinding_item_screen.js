@@ -15,6 +15,8 @@ import { Actions } from 'react-native-router-flux';
 
 import { StoreOderInfo } from '../../assert/storeage/data_store';
 
+import { FONT_BOLD, FONT_LIGHT } from '../../assert/key/key';
+
 const FoodName = ({ foodName }) => {
     return (
         <View style={Styles.foodName_Container}>
@@ -383,22 +385,22 @@ const Styles = StyleSheet.create({
     },
     foodName_Container: {
         width: wp('100%'),
-        height: hp('20%'),
+        height: hp('12%'),
         alignItems: 'center',
         justifyContent: 'center',
     },
     foodName_Holder: {
         width: wp('90%'),
-        height: hp('18%'),
+        height: hp('11%'),
         justifyContent: 'center',
     },
     foodName_view: {
         width: wp('90%'),
-        height: hp('15%'),
+        height: hp('10%'),
         justifyContent: 'center',
     },
     foodName_text: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 28,
         color: '#000',
         letterSpacing: 0.04,
@@ -431,32 +433,32 @@ const Styles = StyleSheet.create({
         alignItems: 'center',
     },
     single_portion_text: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 14,
         color: '#000',
         letterSpacing: 0.04,
     },
     Image_Container: {
         width: wp('100%'),
-        height: hp('35%'),
+        height: hp('28%'),
         alignItems: 'center',
         justifyContent: 'center',
     },
     Image_Holder: {
         width: wp('90%'),
-        height: hp('32%'),
+        height: hp('27%'),
         justifyContent: 'center',
         flexDirection: 'row'
     },
     Qty_Container: {
         width: wp('100%'),
-        height: hp('20%'),
+        height: hp('14%'),
         alignItems: 'center',
         justifyContent: 'center',
     },
     Qty_Holder: {
         width: wp('90%'),
-        height: hp('18%'),
+        height: hp('13%'),
         justifyContent: 'center',
         alignItems: 'center'
     },
@@ -467,7 +469,7 @@ const Styles = StyleSheet.create({
         justifyContent: 'center',
     },
     qty_input_text: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 14,
         color: '#000',
         letterSpacing: 0.04,
@@ -492,7 +494,7 @@ const Styles = StyleSheet.create({
         margin: 3
     },
     qty_text: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 18,
         color: '#000',
         letterSpacing: 0.04,
@@ -533,13 +535,13 @@ const Styles = StyleSheet.create({
         alignItems: 'center'
     },
     brtn_text_content: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 16,
         color: '#000'
     },
     screenTitel: {
-        marginTop: hp('3%'),
-        marginBottom: hp('3%'),
+        marginTop: hp('9%'),
+        marginBottom: hp('1%'),
         //position: 'absolute',
         //bottom: 0
     },
@@ -549,7 +551,7 @@ const Styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         position: 'absolute',
-        bottom: 0,
+        bottom: hp('7%'),
         // backgroundColor:'#f5f5f5'
     },
     cartTile_holder: {
@@ -578,13 +580,13 @@ const Styles = StyleSheet.create({
         justifyContent: 'center',
     },
     itemText: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 14,
         color: '#fff',
         letterSpacing: 0.04,
     },
     totalText: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 14,
         color: '#fff',
         letterSpacing: 0.04,
@@ -598,7 +600,7 @@ const Styles = StyleSheet.create({
         backgroundColor: 'red'
     },
     portionTexts: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 14,
         color: '#000',
         letterSpacing: 0.04,

@@ -4,6 +4,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import Icon from 'react-native-vector-icons/AntDesign';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
+import {FONT_BOLD,FONT_LIGHT} from '../../assert/key/key';
 
 
 const Tabel_Titel = () => {
@@ -224,7 +225,7 @@ const Styles = StyleSheet.create({
         justifyContent: 'center'
     },
     textTitel: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT,// 'NexaTextDemo-Light',
         fontSize: 18,
         color: '#000',
     },
@@ -338,17 +339,17 @@ const Styles = StyleSheet.create({
         alignItems: 'center'
     },
     brtn_text_content: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 18,
         color: '#000'
     },
     table_text_content: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 14,
         color: '#000'
     },
     defulatTextInput:{
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT,// 'NexaTextDemo-Light',
         color: '#000'
     },
 

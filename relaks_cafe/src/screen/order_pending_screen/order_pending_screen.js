@@ -3,6 +3,7 @@ import { View, Image, StyleSheet, Text, TouchableOpacity, TextInput, SafeAreaVie
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/AntDesign';
 import ProcessImage from '../../assert/images/process_image.jpg'
+import {FONT_BOLD,FONT_LIGHT} from '../../assert/key/key';
 
 const OderDatilsTile = ({ orderState }) => {
     return (
@@ -79,7 +80,7 @@ const Styles = StyleSheet.create({
         resizeMode: 'contain',
     },
     textStyles: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 21,
         color: '#000',
         letterSpacing: 0.2,

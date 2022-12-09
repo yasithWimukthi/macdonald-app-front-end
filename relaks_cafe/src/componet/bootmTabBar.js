@@ -9,12 +9,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { Actions } from 'react-native-router-flux';
 
-import Home_Tab_Screen from '../screen/Tabs/home_tab_screen';
-import Tabel_Reservation_Screen from '../screen/Tabs/tabel_reservation_screen';
-import Order_Tab_Screen from '../screen/Tabs/order_tab_screen';
-import Resent_Tab_Screen from '../screen/Tabs/resent_tab_screen';
-import Deals_Tab_Screen from '../screen/Tabs/deals_tab_screen';
-import More_Tab_Screen from '../screen/Tabs/more_tab_screen';
+import {FONT_BOLD,FONT_LIGHT} from '../assert/key/key';
+
 
 const Tab = createBottomTabNavigator();
 
@@ -36,13 +32,8 @@ const BottomBarView = ({ navigation }) => {
             setTableSelect(false);
             setDelasSelect(false);
             setRecentSelect(false);
-            //Actions.authenticated('dashbord', {screen: 'dashbord',route: { screen: 'Home' }});
+
             Actions.dashbord({goto:'Home'});
-           // Actions.push('dashbord', {screen: 'dashbord',params: { screen: 'Home' }});
-            // navigation.navigate('dashbord', {
-            //     screen: 'dashbord',
-            //     params: { screen: 'Home' },
-            // });
         } else if (name == "order") {
             setHomeSelect(false);
             setOrderSelect(!orderSelect);
@@ -50,8 +41,7 @@ const BottomBarView = ({ navigation }) => {
             setTableSelect(false);
             setDelasSelect(false);
             setRecentSelect(false);
-            //navigation.navigate('dashbord', {screen: 'dashbord',params: { screen: 'Order' }});
-            //Actions.authenticated('dashbord', {screen: 'dashbord',route: { screen: 'Order' }});
+
             Actions.dashbord({goto:'Order'});
         } else if (name == "tabel") {
             setHomeSelect(false);
@@ -60,13 +50,9 @@ const BottomBarView = ({ navigation }) => {
             setTableSelect(!tabelSelect);
             setDelasSelect(false);
             setRecentSelect(false);
-            // navigation.navigate('dashbord', {
-            //     screen: 'dashbord',
-            //     params: { screen: 'Tabel' },
-            // });
-            //Actions.authenticated('dashbord', {screen: 'dashbord',route: { screen: 'Tabel' }});
+
             Actions["Order-IcagZ6kZaW2uxkp1CM3V2"]();
-            //Actions.authenticated({goto:'Tabel'});
+
         } else if (name == "deals") {
             setHomeSelect(false);
             setOrderSelect(false);
@@ -74,11 +60,7 @@ const BottomBarView = ({ navigation }) => {
             setTableSelect(false);
             setDelasSelect(!dealsSelect);
             setRecentSelect(false);
-            // navigation.navigate('dashbord', {
-            //     screen: 'dashbord',
-            //     params: { screen: 'Deals' },
-            // });
-            //Actions.authenticated('dashbord', {screen: 'dashbord',route: { screen: 'Deals' }});
+
             Actions.dashbord({goto:'Deals'});
         } else if (name == "recent") {
             setHomeSelect(false);
@@ -87,11 +69,6 @@ const BottomBarView = ({ navigation }) => {
             setTableSelect(false);
             setDelasSelect(false);
             setRecentSelect(!recentSelect);
-            // navigation.navigate('dashbord', {
-            //     screen: 'dashbord',
-            //     params: { screen: 'Recents' },
-            // });
-            //Actions.authenticated('dashbord', {screen: 'dashbord',route: { screen: 'Recents' }});
             
             Actions.dashbord({goto:'Recents'});
         } else if (name == "more") {
@@ -101,14 +78,9 @@ const BottomBarView = ({ navigation }) => {
             setTableSelect(false);
             setDelasSelect(false);
             setRecentSelect(false);
-            // navigation.navigate('dashbord', {
-            //     screen: 'dashbord',
-            //     params: { screen: 'More' },
-            // });
-           // Actions.authenticated('dashbord', {screen: 'dashbord',route: { screen: 'More' }});
+
             Actions.dashbord({goto:'More'});
-            //Actions.More();
-            //Actions["More-_qmaDhEd11ifswPz5W7F0"]();
+
         }
     }
 
@@ -189,7 +161,7 @@ const Styles = StyleSheet.create({
         resizeMode: "contain",
     },
     tabBartext: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT,//'NexaTextDemo-Light',
         fontSize: 12,
         color: '#757575',
         letterSpacing: 0.04,
@@ -229,13 +201,13 @@ const Styles = StyleSheet.create({
         justifyContent: 'center',
     },
     itemText: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT,//  'NexaTextDemo-Light',
         fontSize: 14,
         color: '#fff',
         letterSpacing: 0.04,
     },
     totalText: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD,// 'NexaTextDemo-Bold',
         fontSize: 14,
         color: '#fff',
         letterSpacing: 0.04,

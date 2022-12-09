@@ -19,6 +19,8 @@ import * as RNPermissions from "react-native-permissions";
 import { checkMultiplePermission } from "../../services/requestPermission";
 import AwesomeAlert from 'react-native-awesome-alerts';
 
+import {FONT_BOLD, FONT_LIGHT } from '../../assert/key/key';
+
 const MapTile = ({ favName }) => {
 
     const { items, address, favaddress } = useSelector(state => state.userReducer);
@@ -547,7 +549,7 @@ const Styles = StyleSheet.create({
         borderColor: '#f5f5f5'
     },
     serachTextInput: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD ,// 'NexaTextDemo-Bold',
         fontSize: 15,
         color: '#000',
         letterSpacing: 0.04,
@@ -593,14 +595,14 @@ const Styles = StyleSheet.create({
         alignItems: 'center'
     },
     resultTextBold: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 15,
         color: '#000',
         letterSpacing: 0.04,
         marginLeft: 5,
     },
     resultTextLight: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT , // 'NexaTextDemo-Light',
         fontSize: 14,
         color: '#000',
         letterSpacing: 0.04,
@@ -657,7 +659,7 @@ const Styles = StyleSheet.create({
         alignItems: 'center'
     },
     brtn_text_content: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 16,
         color: '#000'
     },

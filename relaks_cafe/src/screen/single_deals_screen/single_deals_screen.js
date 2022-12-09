@@ -11,6 +11,8 @@ import {StoreOderInfo} from '../../assert/storeage/data_store';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import { Actions } from 'react-native-router-flux';
 
+import {FONT_BOLD,FONT_LIGHT} from '../../assert/key/key';
+
 const DealName = ({ dealName }) => {
     return (
         <View style={Styles.foodName_Container}>
@@ -228,22 +230,22 @@ const Styles = StyleSheet.create({
     },
     foodName_Container: {
         width: wp('100%'),
-        height: hp('20%'),
+        height: hp('15%'),
         alignItems: 'center',
         justifyContent: 'center',
     },
     foodName_Holder: {
         width: wp('90%'),
-        height: hp('18%'),
+        height: hp('13%'),
         justifyContent: 'center',
     },
     foodName_view: {
         width: wp('90%'),
-        height: hp('15%'),
+        height: hp('12%'),
         justifyContent: 'center',
     },
     foodName_text: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 28,
         color: '#000',
         letterSpacing: 0.04,
@@ -276,7 +278,7 @@ const Styles = StyleSheet.create({
         alignItems: 'center',
     },
     single_portion_text: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 14,
         color: '#000',
         letterSpacing: 0.04,
@@ -311,7 +313,7 @@ const Styles = StyleSheet.create({
         justifyContent: 'center',
     },
     qty_input_text: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 14,
         color: '#000',
         letterSpacing: 0.04,
@@ -336,7 +338,7 @@ const Styles = StyleSheet.create({
         margin: 3
     },
     qty_text: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD,// 'NexaTextDemo-Bold',
         fontSize: 18,
         color: '#000',
         letterSpacing: 0.04,
@@ -377,7 +379,7 @@ const Styles = StyleSheet.create({
         alignItems: 'center'
     },
     brtn_text_content: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 16,
         color: '#000'
     },
@@ -421,7 +423,7 @@ const Styles = StyleSheet.create({
         alignItems: 'center'
     },
     MenuTextBold: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 18,
         color: '#000',
         letterSpacing: 0.25,
@@ -461,13 +463,13 @@ const Styles = StyleSheet.create({
         justifyContent: 'center',
     },
     itemText: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 14,
         color: '#fff',
         letterSpacing: 0.04,
     },
     totalText: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 14,
         color: '#fff',
         letterSpacing: 0.04,

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, useWindowDimensions, DeviceEventEmitter, } from 'react-native';
 
 import {
@@ -22,7 +22,8 @@ import {
 
 import { PanGestureHandler, TapGestureHandler, State } from 'react-native-gesture-handler';
 
-import Animated, { useAnimatedGestureHandler, useAnimatedStyle, useSharedValue, withSpring, withTiming, } from 'react-native-reanimated';
+import Animated, { useAnimatedGestureHandler, useAnimatedStyle, withSpring, withTiming, useSharedValue } from 'react-native-reanimated';
+//import {useSharedValue} from 'react-native-reanimated/src/Animated';
 
 const FAB = props => {
     const [opened, setOpened] = useState(false);
@@ -33,7 +34,7 @@ const FAB = props => {
         * when the user rotates the screen too!
 
     */
-    const { width } = useWindowDimensions();
+    const { width, height } = useWindowDimensions();
 
     /*
         * Destructure the children prop for the SubButton(s)  
@@ -45,19 +46,18 @@ const FAB = props => {
         * for keeping track of the button when dragging it.
     */
 
-    const fabPositionX = useSharedValue(0);
-    const fabPositionY = useSharedValue(0);
-    const fabRotation = useSharedValue(FAB_ROTATION_CLOSE);
-    const fabPlusTranslateY = useSharedValue(FAB_PLUS_TRANSLATE_Y_CLOSE);
-
+    const fabPositionX = useSharedValue(0); //useSharedValue(0);
+    const fabPositionY = useSharedValue(0); //useSharedValue(0);
+    const fabRotation = useSharedValue(FAB_ROTATION_CLOSE); //useSharedValue(FAB_ROTATION_CLOSE);
+    const fabPlusTranslateY = useSharedValue(FAB_PLUS_TRANSLATE_Y_CLOSE); //useSharedValue(FAB_PLUS_TRANSLATE_Y_CLOSE);
 
     /**
         * The opacity and Y position of the children container for the
         * SubButton(s). We use this to show a sliding fade in/out animation when
         * the user taps the FAB button
     */
-    const childrenYPosition = useSharedValue(FAB_CHILDREN_POSITION_Y_CLOSE);
-    const childrenOpacity = useSharedValue(FAB_CHILDREN_OPACITY_CLOSE);
+    const childrenYPosition = useSharedValue(FAB_CHILDREN_POSITION_Y_CLOSE); //useSharedValue(FAB_CHILDREN_POSITION_Y_CLOSE);
+    const childrenOpacity = useSharedValue(FAB_CHILDREN_OPACITY_CLOSE); //useSharedValue(FAB_CHILDREN_OPACITY_CLOSE);
 
     /**
         * Handles the release of the tap on the FAB.
@@ -99,13 +99,24 @@ const FAB = props => {
         },
         onEnd: _ => {
             if (fabPositionX.value > -width / 2) {
+                console.log("y  "+fabPositionY.value);
                 fabPositionX.value = withSpring(FAB_STARTING_POSITION);
                 fabPositionY.value = withSpring(FAB_STARTING_POSITION);
-            } else {
+                
+            }else if (fabPositionY.value > -height / 2){
+                console.log('heifht '+height);
+                console.log("calculate "+(-height + (FAB_WIDTH + FAB_MARGIN * 6.7)));
+                fabPositionX.value = withSpring(FAB_STARTING_POSITION);
+                fabPositionY.value = withSpring(-height + (FAB_WIDTH + FAB_MARGIN * 6.7));
+            } else  {
+                console.log("y  "+fabPositionY.value);
+                
                 fabPositionX.value = withSpring(-width + FAB_WIDTH + FAB_MARGIN * 2);
                 fabPositionY.value = withSpring(FAB_STARTING_POSITION);
+                
             }
         },
+        
     });
 
     /**
@@ -227,12 +238,12 @@ const FAB = props => {
     return (
         <PanGestureHandler onHandlerStateChange={_onPanHandlerStateChange}>
             <Animated.View style={[styles.rootStyles, animatedRootStyles]}>
-                {opened && (
+                {/* {opened && (
                     <Animated.View
                         style={[styles.childrenStyles, animatedChildrenStyles]}>
                         {children}
                     </Animated.View>
-                )}
+                )} */}
                 <TapGestureHandler onHandlerStateChange={_onTapHandlerStateChange}>
                     <Animated.View style={[styles.fabButtonStyles, animatedFABStyles]}>
                         <Animated.Text style={[styles.plus, animatedPlusText]}>
@@ -253,6 +264,8 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: FAB_MARGIN,
         right: FAB_MARGIN,
+        zIndex : 5,
+        elevation: 5,
     },
     fabButtonStyles: {
         alignItems: 'center',

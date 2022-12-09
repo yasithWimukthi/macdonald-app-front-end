@@ -9,6 +9,8 @@ import { Actions } from 'react-native-router-flux';
 import { useSelector, useDispatch } from 'react-redux';
 import { setCartItems, setAddressInfo, setFavAddressInfo, setUserInfo } from '../../redux/actions';
 
+import { FONT_BOLD,FONT_LIGHT } from '../../assert/key/key';
+
 const ProfileTitel = ({ username }) => {
 
     const dispatch = useDispatch();
@@ -147,8 +149,9 @@ const PaymentTile = () => {
 }
 
 const CommunicationTile = () => {
+    //Actions.writeUs();
     return (
-        <TouchableOpacity onPress={() => { Actions.writeUs(); }}>
+        <TouchableOpacity onPress={() => {  }}> 
             <View style={Styles.TileConatiner}>
                 <View style={Styles.TileHolder}>
                     <View style={Styles.TileIconHolder}>
@@ -172,7 +175,7 @@ const DeleteAccountTile = () => {
             <View style={Styles.DeleteHolder}>
 
                 <View style={Styles.DeleteTextHolder}>
-                    <Text style={Styles.DeleteTexts}>Delete account</Text>
+                    {/* <Text style={Styles.DeleteTexts}>Delete account</Text> */}
                 </View>
 
             </View>
@@ -241,19 +244,19 @@ const Styles = StyleSheet.create({
         alignItems: 'flex-end'
     },
     TitelBoldTexts: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 21,
         color: '#000',
         letterSpacing: 0.04,
     },
     TitelSubTexts: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 14,
         color: '#000',
         letterSpacing: 0.04,
     },
     TitelSubUnderTexts: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 14,
         color: '#EB1F25',
         letterSpacing: 0.04,
@@ -286,7 +289,7 @@ const Styles = StyleSheet.create({
         justifyContent: 'center',
     },
     TitelTexts: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 14,
         color: '#000',
         letterSpacing: 0.04,
@@ -311,7 +314,7 @@ const Styles = StyleSheet.create({
         alignItems: 'center'
     },
     DeleteTexts: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 13,
         color: '#EB1F25',
         letterSpacing: 0.04,

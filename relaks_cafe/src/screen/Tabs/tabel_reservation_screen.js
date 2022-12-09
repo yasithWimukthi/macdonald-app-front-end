@@ -16,6 +16,11 @@ import AwesomeAlert from 'react-native-awesome-alerts';
 import { useSelector, useDispatch } from 'react-redux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
+// import FAB from '../../componet/FAB/FAB';
+// import SUBBUTTON from '../../componet/FAB/SubButton';
+
+import { FONT_BOLD, FONT_LIGHT } from '../../assert/key/key';
+
 const CheckTabelList = ({ updateTabelList, updateCheckin, updateCheckout, updateModelVisible, updateModelTitel, updateModelMessage, setSpinerVisible }) => {
 
     var tempdate = new Date();
@@ -168,6 +173,9 @@ const CheckTabelList = ({ updateTabelList, updateCheckin, updateCheckout, update
                     </View>
                 </View>
             </View>
+            {/* <FAB>
+               
+            </FAB> */}
         </View>
     );
 }
@@ -371,7 +379,7 @@ const Tabel_Reservation_Screen = () => {
                         </View>
                     </View>
 
-                    : null               
+                    : null
             }
 
             <AwesomeAlert
@@ -394,28 +402,30 @@ const Tabel_Reservation_Screen = () => {
                 }}
             />
             {
-                (visbile && btnShow) ? <View style={Styles.cartTile}>
-                <View style={Styles.cartTile_holder}>
-                    <View style={Styles.cartTile_info_holder}>
-                        <View style={Styles.cartTile_tesxts_holder}>
-                            <Text style={Styles.itemText}>{items.foodItems.length + " items"}</Text>
-                        </View>
-                        <View style={Styles.cartTile_tesxts_holder}>
-                            <Text style={Styles.totalText}>{"€ :" + totals}</Text>
-                        </View>
-                    </View>
-                    <TouchableOpacity onPress={() => { Actions.Cart(); }}>
-                        <View style={Styles.cartTile_btn_holder}>
-                            <View style={Styles.btn_holder}>
-                                <Text style={[Styles.itemText, { color: '#000', }]}>View Cart</Text>
+                (visbile && btnShow) ? 
+                <View style={Styles.cartTile}>
+                    <View style={Styles.cartTile_holder}>
+                        <View style={Styles.cartTile_info_holder}>
+                            <View style={Styles.cartTile_tesxts_holder}>
+                                <Text style={Styles.itemText}>{items.foodItems.length + " items"}</Text>
+                            </View>
+                            <View style={Styles.cartTile_tesxts_holder}>
+                                <Text style={Styles.totalText}>{"€ :" + totals}</Text>
                             </View>
                         </View>
-                    </TouchableOpacity>
-                </View>
-            </View> : null
+                        <TouchableOpacity onPress={() => { Actions.Cart(); }}>
+                            <View style={Styles.cartTile_btn_holder}>
+                                <View style={Styles.btn_holder}>
+                                    <Text style={[Styles.itemText, { color: '#000', }]}>View Cart</Text>
+                                </View>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                </View> 
+                : null
             }
 
-{(spinerVisible) ?
+            {(spinerVisible) ?
                 <View
                     style={{
                         flex: 1,
@@ -517,14 +527,14 @@ const Styles = StyleSheet.create({
         // backgroundColor:'pink'
     },
     timeLabel: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 14,
         color: '#000',
         letterSpacing: 0.04,
         marginLeft: 10,
     },
     timeLabelCont: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 12,
         color: '#000',
         letterSpacing: 0.04,
@@ -543,7 +553,7 @@ const Styles = StyleSheet.create({
         // backgroundColor:'pink'
     },
     BtnLabel: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 16,
         color: '#000',
         letterSpacing: 0.04,
@@ -586,7 +596,7 @@ const Styles = StyleSheet.create({
         margin: 4,
     },
     tabelTitel: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 18,
         color: '#000',
         letterSpacing: 0.04,
@@ -598,7 +608,7 @@ const Styles = StyleSheet.create({
         justifyContent: 'center',
     },
     table_info: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 14,
         color: '#000',
         letterSpacing: 0.04,
@@ -647,7 +657,7 @@ const Styles = StyleSheet.create({
         alignItems: 'center'
     },
     brtn_text_content: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 16,
         color: '#000'
     },
@@ -668,7 +678,7 @@ const Styles = StyleSheet.create({
         justifyContent: 'center',
     },
     note_text: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 14,
         color: '#000'
     },
@@ -716,13 +726,13 @@ const Styles = StyleSheet.create({
         marginTop: 2,
     },
     orderInfoText: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 13,
         color: '#000',
         letterSpacing: 0.1,
     },
     orderInfoTextBold: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD,// 'NexaTextDemo-Bold',
         fontSize: 16,
         color: '#000',
         letterSpacing: 0.1,
@@ -763,13 +773,13 @@ const Styles = StyleSheet.create({
         //backgroundColor:'#EB1F25'
     },
     itemText: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 14,
         color: '#fff',
         letterSpacing: 0.04,
     },
     totalText: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 14,
         color: '#fff',
         letterSpacing: 0.04,

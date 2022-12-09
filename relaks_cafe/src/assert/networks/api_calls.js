@@ -121,11 +121,15 @@ const Funtion_Auth = async (user) => {
         // let responce_Values = await responce.json();
         // return responce_Values;
         let code = responce.status;
+        console.log("return "+responce.status);
         let responce_Values = await responce.json();
         var data = {
             "code" : code,
             "responce" : responce_Values
         }
+        console.log("response value  "+responce_Values);
+        console.log("datas "+JSON.stringify(data));
+
         return data;
 
 

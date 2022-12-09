@@ -13,6 +13,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setCartItems } from '../../redux/actions';
 import AwesomeAlert from 'react-native-awesome-alerts';
 
+// import FAB from '../../componet/FAB/FAB';
+
+import {FONT_BOLD,FONT_LIGHT} from '../../assert/key/key';
+
 const BannerTile = () => {
     return (
         <ZigzagView
@@ -239,6 +243,7 @@ function Home_Tab_Screen({...props}) {
     const [visbile, setVisible] = useState((items.foodItems.length > 0) ? true : false);
 
     const [totals, setTolats] = useState(items.totalPrice);
+    //const [totals, setTolats] = useState(0);
 
     const [menuList, setMenuList] = useState([]);
     const [dealsList, setDealsList] = useState([]);
@@ -262,6 +267,7 @@ function Home_Tab_Screen({...props}) {
         console.log("calling aginss");
         setVisible((items.foodItems.length > 0) ? true : false);
         setTolats(items.totalPrice);
+        //setTolats((items != undefined) ? items.totalPrice : 0);
 
         getMenuInfo();
         getDealsInfo();
@@ -360,6 +366,7 @@ function Home_Tab_Screen({...props}) {
                     //alert("tranding list " + JSON.stringify(response));
                     //console.log("tranding list " + JSON.stringify(response));
                     if (response.code == '200') {
+                        console.log("datass "+JSON.stringify(response.responce));
                         setTrandingList(response.responce.data);
                     } else if (response.code == '406') {
                         setModelTitel("Error");
@@ -443,6 +450,7 @@ function Home_Tab_Screen({...props}) {
                     </View>
                 </View> : null
             }
+            {/* <FAB/> */}
         </View>
 
     );
@@ -508,7 +516,7 @@ const Styles = StyleSheet.create({
 
     },
     Btn_ui_Bold: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 26,
         color: '#FFF',
         letterSpacing: 0.25,
@@ -537,13 +545,13 @@ const Styles = StyleSheet.create({
         justifyContent: 'center',
     },
     menu_titel: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 18,
         color: '#000',
         letterSpacing: 0.25,
     },
     menu_titel_scond: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 14,
         color: '#EB1F25',
         letterSpacing: 0.25,
@@ -577,7 +585,7 @@ const Styles = StyleSheet.create({
 
     },
     menu_item_name: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 12,
         color: '#000',
         letterSpacing: 0.25,
@@ -641,13 +649,13 @@ const Styles = StyleSheet.create({
 
     },
     Btn_ui: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 14,
         color: '#FFF',
         letterSpacing: 0.25,
     },
     details_ui: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 12,
         color: '#000',
         letterSpacing: 0.25,
@@ -688,13 +696,13 @@ const Styles = StyleSheet.create({
         //backgroundColor:'#EB1F25'
     },
     itemText: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 14,
         color: '#fff',
         letterSpacing: 0.04,
     },
     totalText: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 14,
         color: '#fff',
         letterSpacing: 0.04,

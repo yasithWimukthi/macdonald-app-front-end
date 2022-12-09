@@ -3,6 +3,7 @@ import { View, Image, StyleSheet, Text, TouchableOpacity, } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/AntDesign';
 
+import {FONT_BOLD,FONT_LIGHT} from '../../assert/key/key';
 
 const SingleFaqTile = ({titel}) => {
     return(
@@ -87,19 +88,19 @@ const Styles = StyleSheet.create({
         justifyContent: 'center',
     },
     FAQTitelText : {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD,// 'NexaTextDemo-Bold',
         fontSize: 24,
         color: '#000',
         letterSpacing: 0.04,
     },
     FAQSubText : {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, //'NexaTextDemo-Light',
         fontSize: 13,
         color: '#000',
         letterSpacing: 0.04,
     },
     FAQSubMainText : {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 16,
         color: '#000',
         letterSpacing: 0.04,
@@ -134,7 +135,7 @@ const Styles = StyleSheet.create({
         justifyContent: 'center',
     },
     FAQSingleText : {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT , //'NexaTextDemo-Light',
         fontSize: 16,
         color: '#000',
         letterSpacing: 0.04,

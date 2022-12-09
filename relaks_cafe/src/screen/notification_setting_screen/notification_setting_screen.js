@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { View, Image, StyleSheet, Text,TouchableOpacity, SafeAreaView} from 'react-native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/AntDesign';
-
+import {FONT_BOLD,FONT_LIGHT} from '../../assert/key/key';
 
 const TitelTikeView = () => {
     return(
@@ -102,7 +102,7 @@ const Styles = StyleSheet.create({
         justifyContent:'center'
     },
     defulat_text: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 21,
         color: '#000',
         letterSpacing: 0.3,
@@ -128,7 +128,7 @@ const Styles = StyleSheet.create({
         marginBottom:hp('1%'),
     },
     condition_text: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 14,
         color: '#000',
         letterSpacing: 0.04,
@@ -172,7 +172,7 @@ const Styles = StyleSheet.create({
         alignItems:'center'
     },
     brtn_text_content : {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 16,
         color: '#000'
     },

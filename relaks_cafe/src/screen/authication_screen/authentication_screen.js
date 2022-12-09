@@ -10,6 +10,8 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
+import {FONT_BOLD,FONT_LIGHT} from '../../assert/key/key';
+
 const Tab = createMaterialTopTabNavigator();
 
 const authenticationscreen = () => {

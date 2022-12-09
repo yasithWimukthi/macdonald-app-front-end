@@ -13,6 +13,8 @@ import { setCartItems } from '../../redux/actions';
 
 import BottomBarView from '../../componet/bootmTabBar';
 
+import {FONT_BOLD,FONT_LIGHT} from '../../assert/key/key';
+
 const FeaturesMenuItem = ({ imageUrl, MenuName, singleInfo, mealInfo }) => {
     return (
         <ZigzagView
@@ -306,25 +308,25 @@ const Styles = StyleSheet.create({
         marginBottom: 5
     },
     FeatureTextInfo: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 13,
         color: 'red',
         letterSpacing: 0.04,
     },
     MenuNameTextInfo: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD,// 'NexaTextDemo-Bold',
         fontSize: 15,
         color: '#000',
         letterSpacing: 0.04,
     },
     MenuTextInfo: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 12,
         color: '#000',
         letterSpacing: 0.04,
     },
     MenuInfoTextInfo: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 13,
         color: '#000',
         letterSpacing: 0.04,
@@ -357,7 +359,7 @@ const Styles = StyleSheet.create({
         marginLeft: wp('3%')
     },
     SingleMenuNameTextInfo: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 13,
         color: '#000',
         letterSpacing: 0.04,
@@ -397,13 +399,13 @@ const Styles = StyleSheet.create({
         justifyContent: 'center',
     },
     itemText: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 14,
         color: '#fff',
         letterSpacing: 0.04,
     },
     totalText: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD,// 'NexaTextDemo-Bold',
         fontSize: 14,
         color: '#fff',
         letterSpacing: 0.04,
@@ -429,7 +431,7 @@ const Styles = StyleSheet.create({
         alignItems:'center'
     },
     NoItemTextTextInfo: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 18,
         color: 'red',
         letterSpacing: 0.04,

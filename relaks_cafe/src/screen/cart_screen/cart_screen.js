@@ -9,6 +9,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setCartItems } from '../../redux/actions';
 import AwesomeAlert from 'react-native-awesome-alerts';
 
+import {FONT_BOLD,FONT_LIGHT} from '../../assert/key/key';
+
 const Details_View = () => {
     const { address } = useSelector(state => state.userReducer);
 
@@ -308,7 +310,7 @@ const ItemTile = ({ portionList }) => {
                                                                                     setQty(qty - 1);
                                                                                 }
                                                                             }}>
-                                                                                <Icon color="#000" name="minuscircle" size={20} />
+                                                                                <Icon color="#000" name="minuscircle" size={30} />
                                                                             </TouchableOpacity>
                                                                         </View>
                                                                         <View style={[Styles.Qty_single_tite, { borderWidth: 2, borderColor: '#f5f5f5', borderRadius: 5 }]}>
@@ -316,7 +318,7 @@ const ItemTile = ({ portionList }) => {
                                                                         </View>
                                                                         <View style={Styles.Qty_single_tite}>
                                                                             <TouchableOpacity onPress={() => { setQty(qty + 1); }}>
-                                                                                <Icon color="#000" name="pluscircle" size={20} />
+                                                                                <Icon color="#000" name="pluscircle" size={30} />
                                                                             </TouchableOpacity>
                                                                         </View>
                                                                     </View>
@@ -586,33 +588,33 @@ const Styles = StyleSheet.create({
         justifyContent: 'center',
     },
     cartInfos: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT,//'NexaTextDemo-Light',
         fontSize: 16,
         color: '#000',
         letterSpacing: 0.04,
     },
     subCartInfo: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, //'NexaTextDemo-Light',
         fontSize: 14,
         color: '#000',
         letterSpacing: 0.04,
     },
     chageText: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 14,
         color: 'red',
         letterSpacing: 0.04,
         textDecorationColor: 'red'
     },
     productInfo: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD,//'NexaTextDemo-Bold',
         fontSize: 16,
         color: '#000',
         marginLeft: 4,
         letterSpacing: 0.04,
     },
     productInfo_sub: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 14,
         color: '#000',
         marginLeft: 4,
@@ -626,7 +628,7 @@ const Styles = StyleSheet.create({
         alignItems: 'flex-end'
     },
     qty_input_text: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, //'NexaTextDemo-Light',
         fontSize: 14,
         color: '#000',
         letterSpacing: 0.04,
@@ -644,14 +646,14 @@ const Styles = StyleSheet.create({
         justifyContent: 'center',
     },
     Qty_single_tite: {
-        width: wp('10%'),
-        height: hp('3%'),
+        width: wp('12%'),
+        height: hp('5%'),
         justifyContent: 'center',
         alignItems: 'center',
-        margin: 3
+        margin: 1
     },
     qty_text: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD,// 'NexaTextDemo-Bold',
         fontSize: 14,
         color: '#000',
         letterSpacing: 0.04,
@@ -700,7 +702,7 @@ const Styles = StyleSheet.create({
         alignItems: 'center'
     },
     brtn_text_content: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, //'NexaTextDemo-Bold',
         fontSize: 16,
         color: '#000'
     },

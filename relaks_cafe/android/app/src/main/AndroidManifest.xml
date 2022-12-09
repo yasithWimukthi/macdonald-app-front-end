@@ -26,17 +26,18 @@
         android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode"
         android:launchMode="singleTask"
         android:windowSoftInputMode="adjustResize"
+        android:screenOrientation="portrait"
         android:exported="true">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
 
-        <intent-filter android:label="relakscafe">
+       <intent-filter android:label="relakscafe">
           <action android:name="android.intent.action.VIEW" />
           <category android:name="android.intent.category.DEFAULT" />
           <category android:name="android.intent.category.BROWSABLE" />
-          <data android:scheme="https" android:host="api.relaksradiocafe.com" android:pathPrefix="/api/v1/auth/google/success"  />
+          <data android:scheme="relakscafe" android:host="googleauth" />
         </intent-filter>
       </activity>
 
@@ -59,7 +60,7 @@
 
       <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCaZDYPgOzkSkZWWwid3jXDOe0irJz_wVo"/>
+            android:value="AIzaSyA7Q8FqMcSRt8I4n3zcv8yhCxdAhLlvaB4"/>
 
     </application>
 </manifest>

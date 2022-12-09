@@ -5,6 +5,8 @@ import Icon from 'react-native-vector-icons/AntDesign';
 
 import app_logo from '../../assert/images/splash_app_logo.png';
 
+import {FONT_BOLD, FONT_LIGHT} from '../../assert/key/key';
+
 const TitelContainer = () => {
     return(
         <View style={Styles.tittelContainer}>
@@ -111,14 +113,14 @@ const Styles = StyleSheet.create({
         justifyContent: 'center',
     },
     mainTitelText : {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 16,
         color: '#FFF',
         letterSpacing: 0.3,
         marginBottom:wp('3%')
     },
     subInfoText : {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 13,
         color: '#FFF',
         letterSpacing: 0.2,
@@ -141,7 +143,7 @@ const Styles = StyleSheet.create({
         height: 40,
         borderBottomColor: '#000',
         borderBottomWidth: 1,
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         color: '#000'
     },
     formTitelHolder : {
@@ -166,19 +168,19 @@ const Styles = StyleSheet.create({
 
     },
     FormITitelInfoText : {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 15,
         color: '#000',
         letterSpacing: 0.2,
     },
     FormBtnInfoText : {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 15,
         color: 'blue',
         letterSpacing: 0.2,
     },
     FormSubInfoText : {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 13,
         color: '#000',
         letterSpacing: 0.2,

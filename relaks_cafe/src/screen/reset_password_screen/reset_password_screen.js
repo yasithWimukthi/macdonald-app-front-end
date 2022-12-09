@@ -11,6 +11,8 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import NetInfo from "@react-native-community/netinfo";
 
+import {FONT_BOLD,FONT_LIGHT} from '../../assert/key/key';
+
 const TitelView = () => {
     return (
         <View style={Styles.textContainer}>
@@ -281,7 +283,7 @@ const Styles = StyleSheet.create({
         height: 40,
         borderBottomColor: '#000',
         borderBottomWidth: 1,
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily:  FONT_LIGHT, //'NexaTextDemo-Light',
         color: '#000'
     },
     icon: {
@@ -325,12 +327,12 @@ const Styles = StyleSheet.create({
         alignItems: 'center'
     },
     brtn_text_content: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD,// 'NexaTextDemo-Bold',
         fontSize: 16,
         color: '#000'
     },
     reset_text_content: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 18,
         color: '#000'
     },

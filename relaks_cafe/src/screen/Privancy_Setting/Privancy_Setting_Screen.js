@@ -2,7 +2,8 @@ import React, { PropTypes, Component } from 'react';
 import { View, Image, StyleSheet, Text, TouchableOpacity, TextInput } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/AntDesign';
-import ToggleSwitch from 'toggle-switch-react-native'
+import ToggleSwitch from 'toggle-switch-react-native';
+import {FONT_BOLD,FONT_LIGHT} from '../../assert/key/key';
 
 const TitelView = () => {
     return (
@@ -124,14 +125,14 @@ const Styles = StyleSheet.create({
         justifyContent: 'center'
     },
     defulat_text: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 21,
         color: '#000',
         letterSpacing: 0.3,
 
     },
     defulat_text_sub: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 15,
         color: '#000',
         letterSpacing: 0.3,
@@ -162,13 +163,13 @@ const Styles = StyleSheet.create({
         justifyContent: 'center',
     },
     decriptionText: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 12,
         color: '#000',
         letterSpacing: 0.2,
     },
     decriptionTextUnderLine: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 12,
         color: '#EB1F25',
         letterSpacing: 0.2,
@@ -211,13 +212,13 @@ const Styles = StyleSheet.create({
         alignItems:'flex-end'
     },
     subtextBold : {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD,// 'NexaTextDemo-Bold',
         fontSize: 15,
         color: '#000',
         letterSpacing: 0.2,
     },
     subtextlight : {
-        fontFamily: 'NexaTextDemo-light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-light',
         fontSize: 13,
         color: '#000',
         letterSpacing: 0.2,
@@ -243,7 +244,7 @@ const Styles = StyleSheet.create({
 
     },
     righttextlight : {
-        fontFamily: 'NexaTextDemo-light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-light',
         fontSize: 14,
         color: '#EB1F25',
         letterSpacing: 0.2,

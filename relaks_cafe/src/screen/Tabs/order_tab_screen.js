@@ -15,6 +15,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import { setCartItems } from '../../redux/actions';
 
+import {FONT_BOLD,FONT_LIGHT} from '../../assert/key/key';
+
 const OderHeader = () => {
 
     const { address,items } = useSelector(state => state.userReducer);
@@ -44,7 +46,7 @@ const OderHeader = () => {
                             <Text style={Styles.titelText}>Order</Text>
                         </View>
                         <View style={Styles.titelHederIconContent}>
-                            <Icon color="#000" name="search1" size={25} />
+                            {/* <Icon color="#000" name="search1" size={25} /> */}
                         </View>
                     </View>
                     <View style={Styles.toggleHederHolder}>
@@ -339,7 +341,7 @@ const Styles = StyleSheet.create({
         alignItems: 'flex-end'
     },
     titelText: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 18,
         color: '#000',
         letterSpacing: 0.25,
@@ -363,19 +365,19 @@ const Styles = StyleSheet.create({
         justifyContent: 'center'
     },
     titelTextLight: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 11,
         color: '#000',
         letterSpacing: 0.35,
     },
     titelTextBold: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 14,
         color: '#000',
         letterSpacing: 0.25,
     },
     underLineTextBold: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 13,
         color: '#EB1F25',
         textDecorationLine: 'underline',
@@ -414,7 +416,7 @@ const Styles = StyleSheet.create({
         justifyContent: 'center',
     },
     titelTextScrolle: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 21,
         color: '#000',
         letterSpacing: 0.25,
@@ -432,7 +434,7 @@ const Styles = StyleSheet.create({
         justifyContent: 'center',
     },
     titelTextScrolleUnder: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 15,
         color: '#EB1F25',
         letterSpacing: 0.25,
@@ -479,7 +481,7 @@ const Styles = StyleSheet.create({
         justifyContent: 'center',
     },
     MenuTextBold: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 24,
         color: '#000',
         letterSpacing: 0.25,
@@ -540,13 +542,13 @@ const Styles = StyleSheet.create({
         //backgroundColor:'#EB1F25'
     },
     itemText: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 14,
         color: '#fff',
         letterSpacing: 0.04,
     },
     totalText: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD,// 'NexaTextDemo-Bold',
         fontSize: 14,
         color: '#fff',
         letterSpacing: 0.04,

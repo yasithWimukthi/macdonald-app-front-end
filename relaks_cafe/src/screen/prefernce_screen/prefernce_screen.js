@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { View, Image, StyleSheet, Text, SafeAreaView } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/AntDesign';
+import { FONT_BOLD,FONT_LIGHT } from '../../assert/key/key';
 
 
 const TitelView = () => {
@@ -106,7 +107,7 @@ const Styles = StyleSheet.create({
         flexDirection: 'row'
     },
     defulat_text: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 21,
         color: '#000',
         letterSpacing: 0.3,
@@ -124,7 +125,7 @@ const Styles = StyleSheet.create({
         justifyContent: 'center'
     },
     defulat_text_Info: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT ,// 'NexaTextDemo-Light',
         fontSize: 15,
         color: '#000',
         letterSpacing: 0.3,

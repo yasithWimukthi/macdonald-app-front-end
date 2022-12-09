@@ -12,6 +12,8 @@ import AwesomeAlert from 'react-native-awesome-alerts';
 import { useSelector, useDispatch } from 'react-redux';
 import { setCartItems } from '../../redux/actions';
 
+import {FONT_BOLD,FONT_LIGHT} from '../../assert/key/key';
+
 const MenuTitel = () => {
     return (
         <View style={Styles.menuTitel}>
@@ -229,7 +231,7 @@ const Styles = StyleSheet.create({
         justifyContent: 'center',
     },
     menuTextTitel: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 21,
         color: '#000',
         letterSpacing: 0.04,
@@ -262,7 +264,7 @@ const Styles = StyleSheet.create({
         alignItems: 'center'
     },
     menuItemTextName: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily:  FONT_LIGHT, //'NexaTextDemo-Light',
         fontSize: 15,
         color: '#000',
         letterSpacing: 0.04,
@@ -302,13 +304,13 @@ const Styles = StyleSheet.create({
         justifyContent: 'center',
     },
     itemText: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT,// 'NexaTextDemo-Light',
         fontSize: 14,
         color: '#fff',
         letterSpacing: 0.04,
     },
     totalText: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD,// 'NexaTextDemo-Bold',
         fontSize: 14,
         color: '#fff',
         letterSpacing: 0.04,

@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import { useSelector, useDispatch } from 'react-redux';
 import { setAddressInfo } from '../../redux/actions';
 import { StoreAddressInfo } from '../../assert/storeage/data_store';
+import {FONT_BOLD,FONT_LIGHT} from '../../assert/key/key';
 
 const SearchTileView = () => {
     return (
@@ -200,7 +201,7 @@ const Styles = StyleSheet.create({
         justifyContent: 'center',
     },
     textView: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 15,
         color: '#000',
         letterSpacing: 0.04,

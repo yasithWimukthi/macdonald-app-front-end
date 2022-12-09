@@ -12,6 +12,8 @@ import { setCartItems } from '../../redux/actions';
 import { Actions } from 'react-native-router-flux';
 import AwesomeAlert from 'react-native-awesome-alerts';
 
+import {FONT_BOLD,FONT_LIGHT} from '../../assert/key/key';
+
 
 const TitelsComponet = () => {
     return (
@@ -282,7 +284,7 @@ const Styles = StyleSheet.create({
         height: hp('3%'),
     },
     titelUI: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD,// 'NexaTextDemo-Bold',
         fontSize: 18,
         color: '#000',
         letterSpacing: 0.25,
@@ -331,13 +333,13 @@ const Styles = StyleSheet.create({
 
     },
     Btn_ui: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 14,
         color: '#FFF',
         letterSpacing: 0.25,
     },
     details_ui: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 12,
         color: '#000',
         letterSpacing: 0.25,
@@ -368,19 +370,19 @@ const Styles = StyleSheet.create({
         justifyContent: 'center',
     },
     bannertextBold: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 13,
         color: '#000',
         letterSpacing: 0.25,
     },
     bannertextLight: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 13,
         color: '#000',
         letterSpacing: 0.25,
     },
     bannertextLightInfo: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 12,
         color: '#000',
         letterSpacing: 0.25,
@@ -421,13 +423,13 @@ const Styles = StyleSheet.create({
         //backgroundColor:'#EB1F25'
     },
     itemText: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 14,
         color: '#fff',
         letterSpacing: 0.04,
     },
     totalText: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 14,
         color: '#fff',
         letterSpacing: 0.04,

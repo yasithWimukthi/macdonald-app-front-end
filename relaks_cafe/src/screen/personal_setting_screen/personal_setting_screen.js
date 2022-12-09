@@ -8,6 +8,7 @@ import AwesomeAlert from 'react-native-awesome-alerts';
 import { setUserInfo } from '../../redux/actions';
 import { StoreUserInfo } from '../../assert/storeage/data_store';
 import { Actions } from 'react-native-router-flux';
+import {FONT_BOLD,FONT_LIGHT} from '../../assert/key/key';
 
 const TitelView = () => {
     return (
@@ -354,21 +355,21 @@ const Styles = StyleSheet.create({
         justifyContent: 'center'
     },
     defulat_text: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 21,
         color: '#000',
         letterSpacing: 0.3,
 
     },
     defulat_text_label: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 15,
         color: '#000',
         letterSpacing: 0.3,
 
     },
     defulat_text_Info: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 15,
         color: '#000',
         letterSpacing: 0.3,
@@ -410,7 +411,7 @@ const Styles = StyleSheet.create({
         alignItems: 'center'
     },
     brtn_text_content: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 16,
         color: '#000'
     },
@@ -425,7 +426,7 @@ const Styles = StyleSheet.create({
         height: 40,
         borderBottomColor: '#000',
         borderBottomWidth: 1,
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         color: '#000'
     },
     boxView: {

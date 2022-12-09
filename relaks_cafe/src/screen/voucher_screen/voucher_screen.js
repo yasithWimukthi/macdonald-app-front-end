@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { View, Image, StyleSheet, Text, TouchableOpacity,TextInput } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/AntDesign';
+import {FONT_BOLD,FONT_LIGHT} from '../../assert/key/key';
 
 
 const TitelContainer = () => {
@@ -108,14 +109,14 @@ const Styles = StyleSheet.create({
         justifyContent: 'center',
     },
     titel_text_Info: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 21,
         color: '#000',
         letterSpacing: 0.3,
 
     },
     titel_sub_text_Info: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 16,
         color: '#000',
         letterSpacing: 0.3,
@@ -146,7 +147,7 @@ const Styles = StyleSheet.create({
         borderBottomWidth: 1
     },
     input_text_Info: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 12,
         color: '#000',
         letterSpacing: 0.3,
@@ -165,7 +166,7 @@ const Styles = StyleSheet.create({
         justifyContent: 'center',
     },
     subTextHyperText: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 14,
         color: '#000',
         letterSpacing: 0.04,
@@ -209,7 +210,7 @@ const Styles = StyleSheet.create({
         alignItems:'center'
     },
     brtn_text_content : {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 16,
         color: '#000'
     },

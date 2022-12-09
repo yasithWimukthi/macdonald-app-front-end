@@ -15,6 +15,8 @@ import { setUserInfo } from '../../redux/actions';
 
 import { StoreUserInfo } from '../../assert/storeage/data_store';
 
+import {FONT_BOLD,FONT_LIGHT} from '../../assert/key/key';
+
 const TitelView = () => {
     return (
         <View style={Styles.titelContainer}>
@@ -503,12 +505,12 @@ const Styles = StyleSheet.create({
         height: hp('7%'),
     },
     titelText: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD,// 'NexaTextDemo-Bold',
         fontSize: 28,
         color: '#000',
     },
     requredText: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT,// 'NexaTextDemo-Light',
         fontSize: 14,
         color: '#000',
     },
@@ -549,7 +551,7 @@ const Styles = StyleSheet.create({
         height: 40,
         borderBottomColor: '#000',
         borderBottomWidth: 1,
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         color: '#000'
     },
     icon: {
@@ -568,12 +570,12 @@ const Styles = StyleSheet.create({
         justifyContent: 'center',
     },
     insturtionTitel: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 16,
         color: '#000',
     },
     insturtionDetails: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 14,
         color: '#000',
     },
@@ -608,7 +610,7 @@ const Styles = StyleSheet.create({
         justifyContent: 'center'
     },
     preferCheckBox_text_content: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT, // 'NexaTextDemo-Light',
         fontSize: 13,
         color: '#000',
         letterSpacing: 0.05,
@@ -679,12 +681,12 @@ const Styles = StyleSheet.create({
         alignItems: 'center'
     },
     brtn_text_content: {
-        fontFamily: 'NexaTextDemo-Bold',
+        fontFamily: FONT_BOLD, // 'NexaTextDemo-Bold',
         fontSize: 16,
         color: '#000'
     },
     hiyperlink_text: {
-        fontFamily: 'NexaTextDemo-Light',
+        fontFamily: FONT_LIGHT,// 'NexaTextDemo-Light',
         fontSize: 14,
         color: '#EB1F25',
         textDecorationLine: 'underline'
